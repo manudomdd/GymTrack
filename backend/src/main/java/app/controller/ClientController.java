@@ -12,8 +12,10 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
+import app.dto.DashboardClientDTO;
 
 @RestController
 @RequestMapping("/api/client")
@@ -193,6 +195,44 @@ public class ClientController {
             } else {
                 return ResponseEntity.badRequest().body("Código de entrenador inválido");
             }
+        }
+        return ResponseEntity.status(401).build();
+    }
+
+    /**
+     * Endpoint para obtener los datos del Dashboard del Cliente
+     */
+    @GetMapping("/dashboard")
+    public ResponseEntity<DashboardClientDTO> getDashboard(Authentication auth) {
+        Optional<User> userOpt = userRepo.findByEmail(auth.getName());
+        if (userOpt.isPresent()) {
+            User user = userOpt.get();
+            Long userId = user.getId();
+            
+            // Entrenamientos: count distinct dates in WorkoutSession
+            List<WorkoutSession> sessions = workoutService.getSessionsByUser(userId);
+            long entrenamientos = sessions.stream().map(WorkoutSession::getDate).distinct().count();
+            
+            // Pasos de hoy
+            LocalDate hoy = LocalDate.now();
+            List<StepLog> steps = healthService.getStepLogs(userId);
+            int pasosHoy = steps.stream()
+                .filter(s -> s.getDate() != null && s.getDate().equals(hoy))
+                .mapToInt(StepLog::getSteps)
+                .sum();
+            
+            // Calorias (mocked as pasos * 0.04)
+            int calorias = (int) (pasosHoy * 0.04);
+            
+            // Horas de sueño hoy
+            List<SleepLog> sleeps = healthService.getSleepLogs(userId);
+            double horasSueno = sleeps.stream()
+                .filter(s -> s.getDate() != null && s.getDate().equals(hoy))
+                .mapToDouble(SleepLog::getHoursSlept)
+                .sum();
+                
+            DashboardClientDTO dto = new DashboardClientDTO((int) entrenamientos, pasosHoy, calorias, horasSueno);
+            return ResponseEntity.ok(dto);
         }
         return ResponseEntity.status(401).build();
     }

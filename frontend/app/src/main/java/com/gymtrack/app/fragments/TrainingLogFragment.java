@@ -38,13 +38,16 @@ import java.util.Map;
  *
  * Flujo de registro (cliente):
  * 1. Pulsar "+ Añadir Entrenamiento".
- * 2. Introducir nombre del ejercicio y grupo muscular (cabecera común a todas las series).
- * 3. Pulsar "+ Añadir Serie" para añadir filas individuales (Peso, Reps, RIR, Comentario).
+ * 2. Introducir nombre del ejercicio y grupo muscular (cabecera común a todas
+ * las series).
+ * 3. Pulsar "+ Añadir Serie" para añadir filas individuales (Peso, Reps, RIR,
+ * Comentario).
  * 4. Al guardar, se empaquetan todas las series en un JsonArray y se envían a
- *    POST /api/client/workouts/batch.
+ * POST /api/client/workouts/batch.
  *
  * Vista del entrenador: modo solo lectura (btnAdd oculto).
- * Lee de GET /api/trainer/client/{clientId}/workouts y muestra cada serie como card.
+ * Lee de GET /api/trainer/client/{clientId}/workouts y muestra cada serie como
+ * card.
  */
 public class TrainingLogFragment extends Fragment {
 
@@ -78,7 +81,8 @@ public class TrainingLogFragment extends Fragment {
         Button btnNext = view.findViewById(R.id.btn_next_month);
         Button btnAdd = view.findViewById(R.id.btn_add_workout);
 
-        // En modo entrenador (se recibe CLIENT_ID como argumento) ocultamos el botón de añadir
+        // En modo entrenador (se recibe CLIENT_ID como argumento) ocultamos el botón de
+        // añadir
         long clientId = getArguments() != null ? getArguments().getLong("CLIENT_ID", -1) : -1;
         if (clientId != -1) {
             btnAdd.setVisibility(View.GONE);
@@ -88,8 +92,14 @@ public class TrainingLogFragment extends Fragment {
         rvWorkouts.setLayoutManager(new LinearLayoutManager(requireContext()));
         rvWorkouts.setAdapter(adapter);
 
-        btnPrev.setOnClickListener(v -> { selectedDate.add(Calendar.MONTH, -1); refreshCalendar(); });
-        btnNext.setOnClickListener(v -> { selectedDate.add(Calendar.MONTH, 1); refreshCalendar(); });
+        btnPrev.setOnClickListener(v -> {
+            selectedDate.add(Calendar.MONTH, -1);
+            refreshCalendar();
+        });
+        btnNext.setOnClickListener(v -> {
+            selectedDate.add(Calendar.MONTH, 1);
+            refreshCalendar();
+        });
         btnAdd.setOnClickListener(v -> showAddWorkoutDialog());
 
         refreshCalendar();
@@ -134,7 +144,8 @@ public class TrainingLogFragment extends Fragment {
             tvDay.setGravity(android.view.Gravity.CENTER);
             tvDay.setPadding(4, 8, 4, 8);
 
-            if (isSelected) tvDay.setBackgroundResource(R.drawable.bg_avatar_magenta);
+            if (isSelected)
+                tvDay.setBackgroundResource(R.drawable.bg_avatar_magenta);
 
             GridLayout.LayoutParams params = new GridLayout.LayoutParams();
             params.width = 0;
@@ -181,13 +192,14 @@ public class TrainingLogFragment extends Fragment {
 
     /**
      * Diálogo con dos partes:
-     *   - Cabecera fija: Nombre ejercicio + Grupo muscular
-     *   - Contenedor dinámico: filas de series añadidas con "+ Añadir Serie"
+     * - Cabecera fija: Nombre ejercicio + Grupo muscular
+     * - Contenedor dinámico: filas de series añadidas con "+ Añadir Serie"
      *
      * Cada fila contiene: Serie N (auto), Peso, Reps, RIR, Comentario.
      */
     private void showAddWorkoutDialog() {
-        // Inflamos el diálogo en un ScrollView para poder hacer scroll cuando hay muchas series
+        // Inflamos el diálogo en un ScrollView para poder hacer scroll cuando hay
+        // muchas series
         ScrollView scrollWrapper = new ScrollView(requireContext());
         View dialogView = LayoutInflater.from(requireContext())
                 .inflate(R.layout.dialog_add_workout, null);
@@ -199,7 +211,7 @@ public class TrainingLogFragment extends Fragment {
         Button btnAddSeries = dialogView.findViewById(R.id.btn_add_series);
 
         // Spinner de grupos musculares
-        String[] groups = {"Pecho", "Espalda", "Hombro", "Bíceps", "Tríceps", "Cuádriceps", "Femorales"};
+        String[] groups = { "Pecho", "Espalda", "Hombro", "Bíceps", "Tríceps", "Cuádriceps", "Femorales" };
         android.widget.ArrayAdapter<String> spinnerAdapter = new android.widget.ArrayAdapter<>(
                 requireContext(), android.R.layout.simple_spinner_item, groups);
         spinnerAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
@@ -219,7 +231,8 @@ public class TrainingLogFragment extends Fragment {
                 .setNegativeButton("Cancelar", null)
                 .setPositiveButton("Guardar", (dialog, which) -> {
                     String exercise = etExercise.getText() != null
-                            ? etExercise.getText().toString().trim() : "";
+                            ? etExercise.getText().toString().trim()
+                            : "";
                     if (exercise.isEmpty()) {
                         Toast.makeText(requireContext(),
                                 "Introduce el nombre del ejercicio", Toast.LENGTH_SHORT).show();
@@ -247,7 +260,7 @@ public class TrainingLogFragment extends Fragment {
                         JsonObject serie = new JsonObject();
                         serie.addProperty("exercise", exercise);
                         serie.addProperty("muscleGroup", muscleGroup);
-                        serie.addProperty("seriesNumber", i + 1);  // 1-indexed
+                        serie.addProperty("seriesNumber", i + 1); // 1-indexed
                         serie.addProperty("peso", parseDoubleOrZero(etPeso));
                         serie.addProperty("reps", parseOrZero(etReps));
                         serie.addProperty("rir", parseOrZero(etRir));
@@ -284,8 +297,7 @@ public class TrainingLogFragment extends Fragment {
      * Guard: si el token es null (sesión expirada), muestra error y aborta.
      */
     private void saveWorkoutBatchToBackend(JsonArray seriesArray) {
-        com.gymtrack.app.network.AuthRepository auth =
-                new com.gymtrack.app.network.AuthRepository(requireContext());
+        com.gymtrack.app.network.AuthRepository auth = new com.gymtrack.app.network.AuthRepository(requireContext());
 
         String token = auth.getToken();
         if (token == null) {
@@ -308,7 +320,8 @@ public class TrainingLogFragment extends Fragment {
                         .post(body).build();
 
                 try (okhttp3.Response response = client.newCall(request).execute()) {
-                    if (getActivity() == null) return;
+                    if (getActivity() == null)
+                        return;
                     getActivity().runOnUiThread(() -> {
                         if (response.isSuccessful()) {
                             Toast.makeText(getContext(),
@@ -326,7 +339,8 @@ public class TrainingLogFragment extends Fragment {
                     });
                 }
             } catch (IOException e) {
-                if (getActivity() == null) return;
+                if (getActivity() == null)
+                    return;
                 getActivity().runOnUiThread(
                         () -> Toast.makeText(getContext(),
                                 "Error de conexión", Toast.LENGTH_SHORT).show());
@@ -335,21 +349,21 @@ public class TrainingLogFragment extends Fragment {
     }
 
     /**
-     * GET /api/client/workouts  (cliente)
-     * GET /api/trainer/client/{id}/workouts  (entrenador en modo lectura)
+     * GET /api/client/workouts (cliente)
+     * GET /api/trainer/client/{id}/workouts (entrenador en modo lectura)
      *
      * Parseo robusto: todos los campos opcionales se comprueban con isJsonNull()
      * para evitar NullPointerException si el cliente dejó algún campo vacío.
      */
     private void fetchWorkoutsFromBackend() {
-        com.gymtrack.app.network.AuthRepository auth =
-                new com.gymtrack.app.network.AuthRepository(requireContext());
+        com.gymtrack.app.network.AuthRepository auth = new com.gymtrack.app.network.AuthRepository(requireContext());
         okhttp3.OkHttpClient client = new okhttp3.OkHttpClient();
 
         new Thread(() -> {
             try {
                 long clientId = getArguments() != null
-                        ? getArguments().getLong("CLIENT_ID", -1) : -1;
+                        ? getArguments().getLong("CLIENT_ID", -1)
+                        : -1;
                 String url = clientId != -1
                         ? "http://10.0.2.2:8080/api/trainer/client/" + clientId + "/workouts"
                         : "http://10.0.2.2:8080/api/client/workouts";
@@ -362,8 +376,7 @@ public class TrainingLogFragment extends Fragment {
                 try (okhttp3.Response response = client.newCall(request).execute()) {
                     if (response.isSuccessful() && response.body() != null) {
                         String json = response.body().string();
-                        JsonArray array =
-                                com.google.gson.JsonParser.parseString(json).getAsJsonArray();
+                        JsonArray array = com.google.gson.JsonParser.parseString(json).getAsJsonArray();
 
                         workoutSessions.clear();
                         for (JsonElement el : array) {
@@ -397,7 +410,8 @@ public class TrainingLogFragment extends Fragment {
                             workoutSessions.add(map);
                         }
 
-                        if (getActivity() == null) return;
+                        if (getActivity() == null)
+                            return;
                         getActivity().runOnUiThread(this::refreshWorkoutList);
                     }
                 }
@@ -410,46 +424,63 @@ public class TrainingLogFragment extends Fragment {
     // ─── Helpers de parseo robusto ───────────────────────────────────────────
 
     private String safeGetString(JsonObject obj, String key, String fallback) {
-        if (!obj.has(key) || obj.get(key).isJsonNull()) return fallback;
+        if (!obj.has(key) || obj.get(key).isJsonNull())
+            return fallback;
         return obj.get(key).getAsString();
     }
 
     private int safeGetInt(JsonObject obj, String key, int fallback) {
         try {
-            if (!obj.has(key) || obj.get(key).isJsonNull()) return fallback;
+            if (!obj.has(key) || obj.get(key).isJsonNull())
+                return fallback;
             return obj.get(key).getAsInt();
-        } catch (Exception e) { return fallback; }
+        } catch (Exception e) {
+            return fallback;
+        }
     }
 
     private double safeGetDouble(JsonObject obj, String key, double fallback) {
         try {
-            if (!obj.has(key) || obj.get(key).isJsonNull()) return fallback;
+            if (!obj.has(key) || obj.get(key).isJsonNull())
+                return fallback;
             return obj.get(key).getAsDouble();
-        } catch (Exception e) { return fallback; }
+        } catch (Exception e) {
+            return fallback;
+        }
     }
 
     private long safeGetLong(JsonObject obj, String key, long fallback) {
         try {
-            if (!obj.has(key) || obj.get(key).isJsonNull()) return fallback;
+            if (!obj.has(key) || obj.get(key).isJsonNull())
+                return fallback;
             return obj.get(key).getAsLong();
-        } catch (Exception e) { return fallback; }
+        } catch (Exception e) {
+            return fallback;
+        }
     }
 
     private int parseOrZero(TextInputEditText et) {
-        try { return et.getText() != null ? Integer.parseInt(et.getText().toString()) : 0; }
-        catch (NumberFormatException e) { return 0; }
+        try {
+            return et.getText() != null ? Integer.parseInt(et.getText().toString()) : 0;
+        } catch (NumberFormatException e) {
+            return 0;
+        }
     }
 
     private double parseDoubleOrZero(TextInputEditText et) {
-        try { return et.getText() != null ? Double.parseDouble(et.getText().toString()) : 0.0; }
-        catch (NumberFormatException e) { return 0.0; }
+        try {
+            return et.getText() != null ? Double.parseDouble(et.getText().toString()) : 0.0;
+        } catch (NumberFormatException e) {
+            return 0.0;
+        }
     }
 
     // ─── Adapter ──────────────────────────────────────────────────────────────
 
     /**
      * Adaptador para mostrar cada serie individual en el RecyclerView.
-     * Funciona tanto para el cliente (modo escritura) como para el entrenador (modo lectura).
+     * Funciona tanto para el cliente (modo escritura) como para el entrenador (modo
+     * lectura).
      */
     private static class WorkoutAdapter extends RecyclerView.Adapter<WorkoutAdapter.VH> {
 
@@ -516,7 +547,9 @@ public class TrainingLogFragment extends Fragment {
         }
 
         @Override
-        public int getItemCount() { return data.size(); }
+        public int getItemCount() {
+            return data.size();
+        }
 
         static class VH extends RecyclerView.ViewHolder {
             TextView tvMuscleGroup, tvExercise, tvSets, tvPeso, tvReps, tvRir, tvComment;

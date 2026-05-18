@@ -5,6 +5,7 @@ import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import java.io.IOException;
 import java.util.concurrent.TimeUnit;
+import com.gymtrack.app.network.dto.DashboardClientDTO;
 import okhttp3.MediaType;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
@@ -91,6 +92,34 @@ public class ClientRepository {
                         callback.onSuccess(respBody);
                     } else {
                         callback.onError(respBody.isEmpty() ? "Código inválido" : respBody);
+                    }
+                }
+            } catch (IOException e) {
+                callback.onError(e.getMessage());
+            }
+        }).start();
+    }
+
+    public interface ClientDashboardCallback {
+        void onSuccess(DashboardClientDTO dashboard);
+        void onError(String message);
+    }
+
+    public void getClientDashboard(ClientDashboardCallback callback) {
+        new Thread(() -> {
+            try {
+                Request request = new Request.Builder()
+                        .url(BASE_URL + "/dashboard")
+                        .addHeader("Authorization", "Bearer " + authRepository.getToken())
+                        .get()
+                        .build();
+
+                try (Response response = client.newCall(request).execute()) {
+                    if (response.isSuccessful() && response.body() != null) {
+                        DashboardClientDTO dashboard = gson.fromJson(response.body().string(), DashboardClientDTO.class);
+                        callback.onSuccess(dashboard);
+                    } else {
+                        callback.onError("Error al obtener dashboard: " + response.code());
                     }
                 }
             } catch (IOException e) {

@@ -10,10 +10,13 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDate;
+import java.time.temporal.ChronoUnit;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import app.dto.DashboardTrainerDTO;
 
 @RestController
 @RequestMapping("/api/trainer")
@@ -148,5 +151,45 @@ public class TrainerController {
             }
         }
         return ResponseEntity.status(403).build();
+    }
+
+    /**
+     * Obtiene los datos para el Dashboard del entrenador.
+     */
+    @GetMapping("/dashboard")
+    public ResponseEntity<DashboardTrainerDTO> getDashboard(Authentication auth) {
+        Optional<User> trainerOpt = userRepo.findByEmail(auth.getName());
+        if (trainerOpt.isPresent()) {
+            User trainer = trainerOpt.get();
+            List<User> clients = userRepo.findByTrainerId(trainer.getId());
+            
+            int clientesTotales = clients.size();
+            int activosHoy = 0;
+            int entrenamientos = 0;
+            int estaSemana = 0;
+            
+            LocalDate hoy = LocalDate.now();
+            
+            for (User client : clients) {
+                List<WorkoutSession> sessions = workoutService.getSessionsByUser(client.getId());
+                long distinctDates = sessions.stream().filter(s -> s.getDate() != null).map(WorkoutSession::getDate).distinct().count();
+                entrenamientos += distinctDates;
+                
+                boolean isActivoHoy = sessions.stream().anyMatch(s -> s.getDate() != null && s.getDate().equals(hoy));
+                if (isActivoHoy) activosHoy++;
+                
+                long workoutsThisWeek = sessions.stream()
+                    .filter(s -> s.getDate() != null)
+                    .map(WorkoutSession::getDate)
+                    .distinct()
+                    .filter(d -> ChronoUnit.DAYS.between(d, hoy) <= 7 && ChronoUnit.DAYS.between(d, hoy) >= 0)
+                    .count();
+                estaSemana += workoutsThisWeek;
+            }
+            
+            DashboardTrainerDTO dto = new DashboardTrainerDTO(clientesTotales, activosHoy, entrenamientos, estaSemana);
+            return ResponseEntity.ok(dto);
+        }
+        return ResponseEntity.status(401).build();
     }
 }

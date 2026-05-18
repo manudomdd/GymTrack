@@ -4,7 +4,8 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
+import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -12,6 +13,8 @@ import androidx.fragment.app.Fragment;
 
 import com.gymtrack.app.HomeActivity;
 import com.gymtrack.app.R;
+import com.gymtrack.app.network.ClientRepository;
+import com.gymtrack.app.network.dto.DashboardClientDTO;
 
 /**
  * Fragment del Dashboard principal del usuario cliente.
@@ -21,6 +24,12 @@ import com.gymtrack.app.R;
  * para navegar a Registro de Entrenamiento y Métricas.
  */
 public class DashboardFragment extends Fragment {
+
+    private TextView tvEntrenamientos;
+    private TextView tvPasos;
+    private TextView tvCalorias;
+    private TextView tvSueno;
+    private ClientRepository clientRepository;
 
     @Nullable
     @Override
@@ -34,20 +43,36 @@ public class DashboardFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        Button btnNewTraining = view.findViewById(R.id.btn_new_training);
-        Button btnSeeMetrics = view.findViewById(R.id.btn_see_metrics);
+        tvEntrenamientos = view.findViewById(R.id.tv_entrenamientos);
+        tvPasos = view.findViewById(R.id.tv_pasos);
+        tvCalorias = view.findViewById(R.id.tv_calorias);
+        tvSueno = view.findViewById(R.id.tv_sueno);
 
-        // Navegar a Registro de Entrenamiento
-        btnNewTraining.setOnClickListener(v -> {
-            if (getActivity() instanceof HomeActivity) {
-                ((HomeActivity) getActivity()).loadFragment(new TrainingLogFragment());
+        clientRepository = new ClientRepository(requireContext());
+        fetchDashboardData();
+    }
+    
+    private void fetchDashboardData() {
+        clientRepository.getClientDashboard(new ClientRepository.ClientDashboardCallback() {
+            @Override
+            public void onSuccess(DashboardClientDTO dashboard) {
+                if (getActivity() != null) {
+                    getActivity().runOnUiThread(() -> {
+                        tvEntrenamientos.setText(String.valueOf(dashboard.getEntrenamientos()));
+                        tvPasos.setText(String.valueOf(dashboard.getPasosHoy()));
+                        tvCalorias.setText(String.valueOf(dashboard.getCalorias()));
+                        tvSueno.setText(String.format("%.1f h", dashboard.getHorasSueno()));
+                    });
+                }
             }
-        });
 
-        // Navegar a Parámetros de Salud
-        btnSeeMetrics.setOnClickListener(v -> {
-            if (getActivity() instanceof HomeActivity) {
-                ((HomeActivity) getActivity()).loadFragment(new HealthFragment());
+            @Override
+            public void onError(String message) {
+                if (getActivity() != null) {
+                    getActivity().runOnUiThread(() -> 
+                        Toast.makeText(getContext(), "Error: " + message, Toast.LENGTH_SHORT).show()
+                    );
+                }
             }
         });
     }

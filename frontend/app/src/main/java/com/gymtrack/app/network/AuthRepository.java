@@ -10,6 +10,7 @@ import java.io.IOException;
 import java.lang.reflect.Type;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
+import com.gymtrack.app.network.dto.DashboardTrainerDTO;
 
 import okhttp3.MediaType;
 import okhttp3.OkHttpClient;
@@ -188,6 +189,34 @@ public class AuthRepository {
                         callback.onSuccess(health);
                     } else {
                         callback.onError("Error al obtener datos de salud: " + response.code());
+                    }
+                }
+            } catch (IOException e) {
+                callback.onError("Error de conexión: " + e.getMessage());
+            }
+        }).start();
+    }
+
+    public interface TrainerDashboardCallback {
+        void onSuccess(DashboardTrainerDTO dashboard);
+        void onError(String message);
+    }
+
+    public void getTrainerDashboard(TrainerDashboardCallback callback) {
+        new Thread(() -> {
+            try {
+                Request request = new Request.Builder()
+                        .url("http://10.0.2.2:8080/api/trainer/dashboard")
+                        .addHeader("Authorization", "Bearer " + getToken())
+                        .get()
+                        .build();
+
+                try (Response response = client.newCall(request).execute()) {
+                    if (response.isSuccessful() && response.body() != null) {
+                        DashboardTrainerDTO dashboard = gson.fromJson(response.body().string(), DashboardTrainerDTO.class);
+                        callback.onSuccess(dashboard);
+                    } else {
+                        callback.onError("Error al obtener dashboard: " + response.code());
                     }
                 }
             } catch (IOException e) {
