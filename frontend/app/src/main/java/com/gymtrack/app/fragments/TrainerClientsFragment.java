@@ -78,7 +78,7 @@ public class TrainerClientsFragment extends Fragment {
         layoutEmpty = view.findViewById(R.id.layout_empty);
         TextInputEditText etSearch = view.findViewById(R.id.et_search);
 
-        adapter = new ClientAdapter(new ArrayList<>(), this::openClientDiary, this::openBiomarkers);
+        adapter = new ClientAdapter(new ArrayList<>(), this::openClientDiary, this::openBiomarkers, this::openAiAssistant);
         rvClients.setLayoutManager(new LinearLayoutManager(requireContext()));
         rvClients.setAdapter(adapter);
 
@@ -185,6 +185,18 @@ public class TrainerClientsFragment extends Fragment {
         startActivity(intent);
     }
 
+    private void openAiAssistant(Map<String, Object> client) {
+        Object idObj = client.get("id");
+        long clientId = idObj instanceof Number ? ((Number) idObj).longValue() : -1;
+        if (clientId == -1) return;
+
+        android.content.Intent intent = new android.content.Intent(requireContext(),
+                com.gymtrack.app.AIChatActivity.class);
+        intent.putExtra("CLIENT_ID", clientId);
+        intent.putExtra("CLIENT_NAME", (String) client.get("nombre"));
+        startActivity(intent);
+    }
+
     // ─── Interfaces ────────────────────────────────────────────────────────────
 
     interface OnClientClick {
@@ -198,12 +210,14 @@ public class TrainerClientsFragment extends Fragment {
         private List<Map<String, Object>> data;
         private final OnClientClick diaryListener;
         private final OnClientClick biomarkerListener;
+        private final OnClientClick aiListener;
 
         ClientAdapter(List<Map<String, Object>> data,
-                OnClientClick diaryListener, OnClientClick biomarkerListener) {
+                OnClientClick diaryListener, OnClientClick biomarkerListener, OnClientClick aiListener) {
             this.data = data;
             this.diaryListener = diaryListener;
             this.biomarkerListener = biomarkerListener;
+            this.aiListener = aiListener;
         }
 
         void updateData(List<Map<String, Object>> newData) {
@@ -246,6 +260,8 @@ public class TrainerClientsFragment extends Fragment {
             });
 
             h.btnBiomarkers.setOnClickListener(v -> biomarkerListener.onClick(c));
+            
+            h.btnAiAssistant.setOnClickListener(v -> aiListener.onClick(c));
         }
 
         @Override
@@ -256,7 +272,7 @@ public class TrainerClientsFragment extends Fragment {
         static class VH extends RecyclerView.ViewHolder {
             TextView tvName, tvEmail, tvAvatarLetter, tvRutina,
                     tvLastWorkout, tvPeso, tvAltura, tvEdad;
-            Button btnDiary, btnMetrics, btnBiomarkers;
+            Button btnDiary, btnMetrics, btnBiomarkers, btnAiAssistant;
 
             VH(@NonNull View v) {
                 super(v);
@@ -271,6 +287,7 @@ public class TrainerClientsFragment extends Fragment {
                 btnDiary = v.findViewById(R.id.btn_diary);
                 btnMetrics = v.findViewById(R.id.btn_metrics);
                 btnBiomarkers = v.findViewById(R.id.btn_biomarkers);
+                btnAiAssistant = v.findViewById(R.id.btn_ai_assistant);
             }
         }
     }

@@ -59,13 +59,19 @@
 
         <Space android:layout_width="wrap_content" android:layout_height="12dp"/>
 
-        <!-- Botones de acción -->
-        <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="horizontal">
-            <Button android:id="@+id/btn_diary" style="@style/Widget.GymTrack.Button.Outline" android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:text="Diario" android:textSize="12sp" android:padding="4dp"/>
-            <Space android:layout_width="8dp" android:layout_height="wrap_content"/>
-            <Button android:id="@+id/btn_metrics" style="@style/Widget.GymTrack.Button.Outline" android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:text="Métricas" android:textSize="12sp" android:padding="4dp"/>
-            <Space android:layout_width="8dp" android:layout_height="wrap_content"/>
-            <Button android:id="@+id/btn_biomarkers" style="@style/Widget.GymTrack.Button.Outline" android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:text="Biomarcadores" android:textSize="12sp" android:padding="4dp"/>
+        <!-- Botones de acción (2x2 Grid) -->
+        <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="vertical">
+            <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="horizontal">
+                <Button android:id="@+id/btn_diary" style="@style/Widget.GymTrack.Button.Outline" android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:text="Diario" android:textSize="12sp" android:padding="4dp"/>
+                <Space android:layout_width="8dp" android:layout_height="wrap_content"/>
+                <Button android:id="@+id/btn_metrics" style="@style/Widget.GymTrack.Button.Outline" android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:text="Métricas" android:textSize="12sp" android:padding="4dp"/>
+            </LinearLayout>
+            <Space android:layout_width="wrap_content" android:layout_height="8dp"/>
+            <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="horizontal">
+                <Button android:id="@+id/btn_biomarkers" style="@style/Widget.GymTrack.Button.Outline" android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:text="Biomarcadores" android:textSize="12sp" android:padding="4dp"/>
+                <Space android:layout_width="8dp" android:layout_height="wrap_content"/>
+                <Button android:id="@+id/btn_ai_assistant" style="@style/Widget.GymTrack.Button.Outline" android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:text="Asistente IA" android:textSize="12sp" android:padding="4dp"/>
+            </LinearLayout>
         </LinearLayout>
 
     </LinearLayout>

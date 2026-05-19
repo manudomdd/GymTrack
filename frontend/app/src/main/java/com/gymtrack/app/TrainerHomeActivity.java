@@ -58,6 +58,9 @@ public class TrainerHomeActivity extends AppCompatActivity {
                 loadFragment(new TrainerDashboardFragment());
             } else if (id == R.id.nav_clients) {
                 loadFragment(new TrainerClientsFragment());
+            } else if (id == R.id.nav_general_assistant) {
+                Intent intent = new Intent(this, AIGeneralChatActivity.class);
+                startActivity(intent);
             } else if (id == R.id.nav_profile) {
                 loadFragment(new TrainerProfileFragment());
             } else if (id == R.id.nav_logout) {

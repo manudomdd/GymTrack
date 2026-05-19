@@ -45,6 +45,14 @@
             android:name=".TrainerBiomarkersActivity"
             android:windowSoftInputMode="adjustPan" />
 
+        <activity
+            android:name=".AIChatActivity"
+            android:windowSoftInputMode="adjustResize" />
+
+        <activity
+            android:name=".AIGeneralChatActivity"
+            android:windowSoftInputMode="adjustResize" />
+
         <service
             android:name=".services.StepCounterService"
             android:exported="false"
