@@ -122,6 +122,7 @@ public class TrainerClientsFragment extends Fragment {
                             map.put("peso", obj.get("peso").getAsDouble());
                             map.put("altura", obj.get("altura").getAsInt());
                             map.put("edad", obj.has("edad") && !obj.get("edad").isJsonNull() ? obj.get("edad").getAsInt() : 0);
+                            map.put("ultimoGrupoMuscular", obj.has("ultimoGrupoMuscular") && !obj.get("ultimoGrupoMuscular").isJsonNull() ? obj.get("ultimoGrupoMuscular").getAsString() : "Ninguno");
                             allClients.add(map);
                         }
 
@@ -243,9 +244,17 @@ public class TrainerClientsFragment extends Fragment {
             h.tvAvatarLetter.setText(nombre.substring(0, 1).toUpperCase());
             h.tvPeso.setText(c.get("peso") + " kg");
             h.tvAltura.setText(c.get("altura") + " cm");
-            h.tvRutina.setText("—");
             h.tvEdad.setText(c.get("edad") + " años");
-            h.tvLastWorkout.setText("—");
+            
+            String lastWorkoutStr = "Ninguno";
+            try {
+                if (c.containsKey("ultimoGrupoMuscular") && c.get("ultimoGrupoMuscular") != null) {
+                    lastWorkoutStr = (String) c.get("ultimoGrupoMuscular");
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            h.tvLastWorkout.setText(lastWorkoutStr);
 
             h.btnDiary.setOnClickListener(v -> diaryListener.onClick(c));
 
@@ -269,8 +278,50 @@ public class TrainerClientsFragment extends Fragment {
             return data.size();
         }
 
+        private String formatLastWorkoutDate(String dateStr) {
+            if (dateStr == null || dateStr.trim().isEmpty()) {
+                return "Sin entrenamientos";
+            }
+            try {
+                java.time.LocalDate date = java.time.LocalDate.parse(dateStr);
+                java.time.LocalDate hoy = java.time.LocalDate.now();
+                if (date.equals(hoy)) {
+                    return "Hoy";
+                } else if (date.equals(hoy.minusDays(1))) {
+                    return "Ayer";
+                } else {
+                    java.time.format.DateTimeFormatter formatter = java.time.format.DateTimeFormatter.ofPattern("dd/MM/yyyy");
+                    return date.format(formatter);
+                }
+            } catch (Exception e) {
+                try {
+                    SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd", Locale.US);
+                    java.util.Date date = sdf.parse(dateStr);
+                    Calendar cal = Calendar.getInstance();
+                    cal.setTime(date);
+                    
+                    Calendar today = Calendar.getInstance();
+                    Calendar yesterday = Calendar.getInstance();
+                    yesterday.add(Calendar.DAY_OF_YEAR, -1);
+                    
+                    if (cal.get(Calendar.YEAR) == today.get(Calendar.YEAR) &&
+                        cal.get(Calendar.DAY_OF_YEAR) == today.get(Calendar.DAY_OF_YEAR)) {
+                        return "Hoy";
+                    } else if (cal.get(Calendar.YEAR) == yesterday.get(Calendar.YEAR) &&
+                               cal.get(Calendar.DAY_OF_YEAR) == yesterday.get(Calendar.DAY_OF_YEAR)) {
+                        return "Ayer";
+                    } else {
+                        SimpleDateFormat outFmt = new SimpleDateFormat("dd/MM/yyyy", Locale.US);
+                        return outFmt.format(date);
+                    }
+                } catch (Exception ex) {
+                    return dateStr;
+                }
+            }
+        }
+
         static class VH extends RecyclerView.ViewHolder {
-            TextView tvName, tvEmail, tvAvatarLetter, tvRutina,
+            TextView tvName, tvEmail, tvAvatarLetter,
                     tvLastWorkout, tvPeso, tvAltura, tvEdad;
             Button btnDiary, btnMetrics, btnBiomarkers, btnAiAssistant;
 
@@ -279,7 +330,6 @@ public class TrainerClientsFragment extends Fragment {
                 tvName = v.findViewById(R.id.tv_client_name);
                 tvEmail = v.findViewById(R.id.tv_client_email);
                 tvAvatarLetter = v.findViewById(R.id.tv_avatar_letter);
-                tvRutina = v.findViewById(R.id.tv_rutina);
                 tvLastWorkout = v.findViewById(R.id.tv_last_workout);
                 tvPeso = v.findViewById(R.id.tv_peso);
                 tvAltura = v.findViewById(R.id.tv_altura);

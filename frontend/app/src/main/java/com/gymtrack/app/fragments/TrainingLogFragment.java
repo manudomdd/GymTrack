@@ -88,7 +88,9 @@ public class TrainingLogFragment extends Fragment {
             btnAdd.setVisibility(View.GONE);
         }
 
-        adapter = new WorkoutAdapter(new ArrayList<>());
+        adapter = new WorkoutAdapter(new ArrayList<>(), clientId != -1, sessionId -> {
+            deleteWorkoutSeries(sessionId);
+        });
         rvWorkouts.setLayoutManager(new LinearLayoutManager(requireContext()));
         rvWorkouts.setAdapter(adapter);
 
@@ -101,6 +103,13 @@ public class TrainingLogFragment extends Fragment {
             refreshCalendar();
         });
         btnAdd.setOnClickListener(v -> showAddWorkoutDialog());
+
+        Button btnSaveFeedback = view.findViewById(R.id.btn_save_feedback);
+        com.google.android.material.textfield.TextInputEditText etTrainerFeedback = view.findViewById(R.id.et_trainer_feedback);
+        btnSaveFeedback.setOnClickListener(v -> {
+            String feedback = etTrainerFeedback.getText() != null ? etTrainerFeedback.getText().toString().trim() : "";
+            saveFeedbackToBackend(clientId, feedback);
+        });
 
         refreshCalendar();
         fetchWorkoutsFromBackend();
@@ -174,6 +183,7 @@ public class TrainingLogFragment extends Fragment {
     /** Filtra y muestra las series para el día seleccionado */
     private void refreshWorkoutList() {
         List<Map<String, Object>> filtered = new ArrayList<>();
+        String currentFeedback = null;
         for (Map<String, Object> w : workoutSessions) {
             Calendar wDate = (Calendar) w.get("date");
             if (wDate != null
@@ -181,11 +191,46 @@ public class TrainingLogFragment extends Fragment {
                     && wDate.get(Calendar.MONTH) == selectedDate.get(Calendar.MONTH)
                     && wDate.get(Calendar.DAY_OF_MONTH) == selectedDate.get(Calendar.DAY_OF_MONTH)) {
                 filtered.add(w);
+                if (w.containsKey("feedbackEntrenador") && w.get("feedbackEntrenador") != null) {
+                    currentFeedback = (String) w.get("feedbackEntrenador");
+                }
             }
         }
         adapter.updateData(filtered);
         rvWorkouts.setVisibility(filtered.isEmpty() ? View.GONE : View.VISIBLE);
         layoutEmpty.setVisibility(filtered.isEmpty() ? View.VISIBLE : View.GONE);
+
+        long clientId = getArguments() != null ? getArguments().getLong("CLIENT_ID", -1) : -1;
+        boolean isTrainerMode = (clientId != -1);
+
+        if (getView() != null) {
+            androidx.cardview.widget.CardView cardTrainer = getView().findViewById(R.id.card_trainer_feedback);
+            androidx.cardview.widget.CardView cardClient = getView().findViewById(R.id.card_client_feedback);
+
+            if (isTrainerMode) {
+                cardClient.setVisibility(View.GONE);
+                if (!filtered.isEmpty()) {
+                    cardTrainer.setVisibility(View.VISIBLE);
+                    com.google.android.material.textfield.TextInputEditText etTrainerFeedback = getView().findViewById(R.id.et_trainer_feedback);
+                    if (etTrainerFeedback != null) {
+                        etTrainerFeedback.setText(currentFeedback != null ? currentFeedback : "");
+                    }
+                } else {
+                    cardTrainer.setVisibility(View.GONE);
+                }
+            } else {
+                cardTrainer.setVisibility(View.GONE);
+                if (currentFeedback != null && !currentFeedback.trim().isEmpty()) {
+                    cardClient.setVisibility(View.VISIBLE);
+                    TextView tvClientFeedback = getView().findViewById(R.id.tv_client_feedback);
+                    if (tvClientFeedback != null) {
+                        tvClientFeedback.setText(currentFeedback);
+                    }
+                } else {
+                    cardClient.setVisibility(View.GONE);
+                }
+            }
+        }
     }
 
     // ─── Diálogo dinámico de añadir entrenamiento ─────────────────────────────
@@ -349,6 +394,86 @@ public class TrainingLogFragment extends Fragment {
     }
 
     /**
+     * DELETE /api/client/workouts/{id}
+     * Elimina la serie individual especificada y refresca la lista.
+     */
+    private void deleteWorkoutSeries(long sessionId) {
+        com.gymtrack.app.network.AuthRepository auth = new com.gymtrack.app.network.AuthRepository(requireContext());
+        String token = auth.getToken();
+        if (token == null) return;
+
+        okhttp3.OkHttpClient client = new okhttp3.OkHttpClient();
+
+        new Thread(() -> {
+            try {
+                okhttp3.Request request = new okhttp3.Request.Builder()
+                        .url("http://10.0.2.2:8080/api/client/workouts/" + sessionId)
+                        .addHeader("Authorization", "Bearer " + token)
+                        .delete().build();
+
+                try (okhttp3.Response response = client.newCall(request).execute()) {
+                    if (getActivity() == null) return;
+                    getActivity().runOnUiThread(() -> {
+                        if (response.isSuccessful()) {
+                            Toast.makeText(getContext(), "Serie eliminada", Toast.LENGTH_SHORT).show();
+                            fetchWorkoutsFromBackend();
+                        } else {
+                            Toast.makeText(getContext(), "Error al eliminar (" + response.code() + ")", Toast.LENGTH_SHORT).show();
+                        }
+                    });
+                }
+            } catch (IOException e) {
+                if (getActivity() == null) return;
+                getActivity().runOnUiThread(() -> Toast.makeText(getContext(), "Error de conexión", Toast.LENGTH_SHORT).show());
+            }
+        }).start();
+    }
+
+    /**
+     * PUT /api/trainer/client/{clientId}/feedback?date=yyyy-MM-dd
+     * Guarda el feedback del entrenador para este cliente y fecha.
+     */
+    private void saveFeedbackToBackend(long clientId, String feedback) {
+        com.gymtrack.app.network.AuthRepository auth = new com.gymtrack.app.network.AuthRepository(requireContext());
+        String token = auth.getToken();
+        if (token == null) return;
+
+        okhttp3.OkHttpClient client = new okhttp3.OkHttpClient();
+        String dateStr = new SimpleDateFormat("yyyy-MM-dd", Locale.US).format(selectedDate.getTime());
+
+        new Thread(() -> {
+            try {
+                JsonObject bodyJson = new JsonObject();
+                bodyJson.addProperty("feedback", feedback);
+
+                okhttp3.RequestBody body = okhttp3.RequestBody.create(
+                        bodyJson.toString(),
+                        okhttp3.MediaType.get("application/json; charset=utf-8"));
+
+                okhttp3.Request request = new okhttp3.Request.Builder()
+                        .url("http://10.0.2.2:8080/api/trainer/client/" + clientId + "/feedback?date=" + dateStr)
+                        .addHeader("Authorization", "Bearer " + token)
+                        .put(body).build();
+
+                try (okhttp3.Response response = client.newCall(request).execute()) {
+                    if (getActivity() == null) return;
+                    getActivity().runOnUiThread(() -> {
+                        if (response.isSuccessful()) {
+                            Toast.makeText(getContext(), "Feedback guardado correctamente", Toast.LENGTH_SHORT).show();
+                            fetchWorkoutsFromBackend();
+                        } else {
+                            Toast.makeText(getContext(), "Error al guardar feedback (" + response.code() + ")", Toast.LENGTH_SHORT).show();
+                        }
+                    });
+                }
+            } catch (IOException e) {
+                if (getActivity() == null) return;
+                getActivity().runOnUiThread(() -> Toast.makeText(getContext(), "Error de conexión", Toast.LENGTH_SHORT).show());
+            }
+        }).start();
+    }
+
+    /**
      * GET /api/client/workouts (cliente)
      * GET /api/trainer/client/{id}/workouts (entrenador en modo lectura)
      *
@@ -397,6 +522,9 @@ public class TrainingLogFragment extends Fragment {
 
                             // Comentario puede ser null si el usuario lo dejó vacío
                             map.put("comment", safeGetString(obj, "comment", ""));
+
+                            // Feedback del entrenador
+                            map.put("feedbackEntrenador", safeGetString(obj, "feedbackEntrenador", null));
 
                             // Fecha
                             String dateStr = safeGetString(obj, "date", null);
@@ -482,12 +610,20 @@ public class TrainingLogFragment extends Fragment {
      * Funciona tanto para el cliente (modo escritura) como para el entrenador (modo
      * lectura).
      */
+    public interface OnWorkoutDeleteListener {
+        void onDelete(long sessionId);
+    }
+
     private static class WorkoutAdapter extends RecyclerView.Adapter<WorkoutAdapter.VH> {
 
         private List<Map<String, Object>> data;
+        private final boolean isTrainerMode;
+        private final OnWorkoutDeleteListener deleteListener;
 
-        WorkoutAdapter(List<Map<String, Object>> data) {
+        WorkoutAdapter(List<Map<String, Object>> data, boolean isTrainerMode, OnWorkoutDeleteListener deleteListener) {
             this.data = data;
+            this.isTrainerMode = isTrainerMode;
+            this.deleteListener = deleteListener;
         }
 
         void updateData(List<Map<String, Object>> newData) {
@@ -539,11 +675,25 @@ public class TrainingLogFragment extends Fragment {
                 holder.tvComment.setVisibility(View.GONE);
             }
 
-            // Botón editar oculto; eliminar disponible para futura implementación
+            // Botón editar oculto; eliminar disponible para el cliente, oculto para el entrenador
             holder.btnEdit.setVisibility(View.GONE);
-            holder.btnDelete.setOnClickListener(
-                    v -> Toast.makeText(v.getContext(),
-                            "Eliminar en desarrollo", Toast.LENGTH_SHORT).show());
+            if (isTrainerMode) {
+                holder.btnDelete.setVisibility(View.GONE);
+            } else {
+                holder.btnDelete.setVisibility(View.VISIBLE);
+                holder.btnDelete.setOnClickListener(v -> {
+                    Object idObj = w.get("id");
+                    long sessionId = idObj instanceof Number ? ((Number) idObj).longValue() : -1;
+                    if (sessionId == -1) return;
+
+                    new AlertDialog.Builder(v.getContext())
+                            .setTitle("Eliminar serie")
+                            .setMessage("¿Estás seguro de que deseas eliminar esta serie?")
+                            .setPositiveButton("Eliminar", (dialog, which) -> deleteListener.onDelete(sessionId))
+                            .setNegativeButton("Cancelar", null)
+                            .show();
+                });
+            }
         }
 
         @Override

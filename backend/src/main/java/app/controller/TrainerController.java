@@ -35,10 +35,49 @@ public class TrainerController {
      * Obtiene los clientes asignados a un entrenador determinado.
      */
     @GetMapping("/clients")
-    public ResponseEntity<List<User>> getClients(Authentication auth) {
+    public ResponseEntity<List<app.dto.ClientSummaryDTO>> getClients(Authentication auth) {
         Optional<User> trainerOpt = userRepo.findByEmail(auth.getName());
         if (trainerOpt.isPresent()) {
-            return ResponseEntity.ok(userRepo.findByTrainerId(trainerOpt.get().getId()));
+            List<User> clients = userRepo.findByTrainerId(trainerOpt.get().getId());
+            List<app.dto.ClientSummaryDTO> dtoList = clients.stream().map(client -> {
+                String ultimoGrupo = "Ninguno";
+                try {
+                    List<WorkoutSession> sessions = workoutService.getSessionsByUser(client.getId());
+                    if (sessions != null && !sessions.isEmpty()) {
+                        LocalDate lastWorkout = sessions.stream()
+                                .map(WorkoutSession::getDate)
+                                .filter(d -> d != null)
+                                .max(LocalDate::compareTo)
+                                .orElse(null);
+
+                        if (lastWorkout != null) {
+                            java.util.List<String> groups = sessions.stream()
+                                    .filter(s -> lastWorkout.equals(s.getDate()))
+                                    .map(WorkoutSession::getMuscleGroup)
+                                    .filter(g -> g != null && !g.trim().isEmpty())
+                                    .distinct()
+                                    .collect(java.util.stream.Collectors.toList());
+                            if (!groups.isEmpty()) {
+                                ultimoGrupo = String.join(", ", groups);
+                            }
+                        }
+                    }
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    ultimoGrupo = "Error";
+                }
+
+                return new app.dto.ClientSummaryDTO(
+                        client.getId(),
+                        client.getNombre() != null ? client.getNombre() : "—",
+                        client.getEmail() != null ? client.getEmail() : "—",
+                        client.getPeso(),
+                        client.getAltura(),
+                        client.getEdad(),
+                        ultimoGrupo
+                );
+            }).collect(java.util.stream.Collectors.toList());
+            return ResponseEntity.ok(dtoList);
         }
         return ResponseEntity.status(401).build();
     }
@@ -191,5 +230,37 @@ public class TrainerController {
             return ResponseEntity.ok(dto);
         }
         return ResponseEntity.status(401).build();
+    }
+
+    /**
+     * Guarda o actualiza el feedback del entrenador para un cliente en un día determinado.
+     */
+    @PutMapping("/client/{clientId}/feedback")
+    public ResponseEntity<?> updateClientFeedback(
+            Authentication auth,
+            @PathVariable Long clientId,
+            @RequestParam("date") String dateStr,
+            @RequestBody Map<String, String> body) {
+        Optional<User> trainerOpt = userRepo.findByEmail(auth.getName());
+        Optional<User> clientOpt = userRepo.findById(clientId);
+
+        if (trainerOpt.isPresent() && clientOpt.isPresent()) {
+            User client = clientOpt.get();
+            if (client.getTrainer() != null && client.getTrainer().getId().equals(trainerOpt.get().getId())) {
+                LocalDate date = LocalDate.parse(dateStr);
+                String feedback = body.get("feedback");
+
+                List<WorkoutSession> sessions = workoutService.getSessionsByUserAndDate(clientId, date);
+                if (sessions.isEmpty()) {
+                    return ResponseEntity.badRequest().body("No hay series registradas en esta fecha para dejar feedback.");
+                }
+                for (WorkoutSession session : sessions) {
+                    session.setFeedbackEntrenador(feedback);
+                    workoutService.saveSession(session);
+                }
+                return ResponseEntity.ok().build();
+            }
+        }
+        return ResponseEntity.status(403).build();
     }
 }

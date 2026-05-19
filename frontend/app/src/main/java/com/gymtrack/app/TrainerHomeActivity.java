@@ -83,7 +83,7 @@ public class TrainerHomeActivity extends AppCompatActivity {
     }
 
     private void showLogoutDialog() {
-        new AlertDialog.Builder(this)
+        new com.google.android.material.dialog.MaterialAlertDialogBuilder(this, R.style.Theme_GymTrack_Dialog)
                 .setTitle("Cerrar Sesión")
                 .setMessage("¿Estás seguro de que quieres cerrar sesión?")
                 .setNegativeButton("Cancelar", null)

@@ -33,6 +33,9 @@ public class WorkoutSession {
     private double peso; // Carga utilizada
     private String comment;
 
+    @Column(name = "feedback_entrenador")
+    private String feedbackEntrenador;
+
     public WorkoutSession() {
     }
 
@@ -114,6 +117,14 @@ public class WorkoutSession {
 
     public void setComment(String comment) {
         this.comment = comment;
+    }
+
+    public String getFeedbackEntrenador() {
+        return feedbackEntrenador;
+    }
+
+    public void setFeedbackEntrenador(String feedbackEntrenador) {
+        this.feedbackEntrenador = feedbackEntrenador;
     }
 
 }

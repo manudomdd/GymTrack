@@ -95,6 +95,100 @@
                 <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="No hay entrenamientos registrados" android:textColor="@color/white_54"/>
             </LinearLayout>
 
+            <!-- Sección de Feedback (Entrenador) -->
+            <androidx.cardview.widget.CardView
+                android:id="@+id/card_trainer_feedback"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                app:cardBackgroundColor="@color/input_field_bg"
+                app:cardCornerRadius="12dp"
+                android:visibility="gone">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:padding="16dp">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Feedback del Entrenador"
+                        android:textSize="14sp"
+                        android:textStyle="bold"
+                        android:textColor="@color/magenta"/>
+
+                    <Space android:layout_width="wrap_content" android:layout_height="8dp"/>
+
+                    <com.google.android.material.textfield.TextInputLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        app:hintTextColor="@color/white_54"
+                        app:boxStrokeColor="@color/magenta"
+                        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox">
+
+                        <com.google.android.material.textfield.TextInputEditText
+                            android:id="@+id/et_trainer_feedback"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:hint="Escribe tus comentarios aquí..."
+                            android:textColor="@color/white"
+                            android:inputType="textMultiLine"
+                            android:minLines="2"
+                            android:gravity="top|start"
+                            android:textSize="14sp"/>
+                    </com.google.android.material.textfield.TextInputLayout>
+
+                    <Space android:layout_width="wrap_content" android:layout_height="12dp"/>
+
+                    <Button
+                        android:id="@+id/btn_save_feedback"
+                        style="@style/Widget.GymTrack.Button.Purple"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Guardar Feedback"
+                        android:textSize="12sp"
+                        android:padding="8dp"/>
+                </LinearLayout>
+            </androidx.cardview.widget.CardView>
+
+            <!-- Sección de Feedback (Cliente - Nota del Entrenador) -->
+            <androidx.cardview.widget.CardView
+                android:id="@+id/card_client_feedback"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                app:cardBackgroundColor="@color/input_field_bg"
+                app:cardCornerRadius="12dp"
+                android:visibility="gone">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:padding="16dp">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Nota del Entrenador"
+                        android:textSize="14sp"
+                        android:textStyle="bold"
+                        android:textColor="@color/magenta"/>
+
+                    <Space android:layout_width="wrap_content" android:layout_height="8dp"/>
+
+                    <TextView
+                        android:id="@+id/tv_client_feedback"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text=""
+                        android:textColor="@color/white"
+                        android:textSize="14sp"/>
+                </LinearLayout>
+            </androidx.cardview.widget.CardView>
+
             <Space android:layout_width="wrap_content" android:layout_height="16dp"/>
 
         </LinearLayout>

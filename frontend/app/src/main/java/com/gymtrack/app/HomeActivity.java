@@ -141,7 +141,7 @@ public class HomeActivity extends AppCompatActivity {
 
     /** Muestra el diálogo de confirmación de cierre de sesión */
     private void showLogoutDialog() {
-        new AlertDialog.Builder(this)
+        new com.google.android.material.dialog.MaterialAlertDialogBuilder(this, R.style.Theme_GymTrack_Dialog)
                 .setTitle("Cerrar Sesión")
                 .setMessage("¿Estás seguro de que quieres cerrar sesión?")
                 .setNegativeButton("Cancelar", null)

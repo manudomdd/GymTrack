@@ -27,16 +27,10 @@
 
         <Space android:layout_width="wrap_content" android:layout_height="12dp"/>
 
-        <!-- Rutina + Último entrenamiento -->
-        <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="horizontal" android:background="@drawable/bg_badge_purple" android:padding="12dp">
-            <LinearLayout android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:orientation="vertical">
-                <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Rutina" android:textSize="12sp" android:textColor="@color/white_54"/>
-                <TextView android:id="@+id/tv_rutina" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Push/Pull/Legs" android:textSize="14sp" android:textStyle="bold" android:textColor="@color/white"/>
-            </LinearLayout>
-            <LinearLayout android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:orientation="vertical" android:gravity="end">
-                <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Último Entreno" android:textSize="12sp" android:textColor="@color/white_54"/>
-                <TextView android:id="@+id/tv_last_workout" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Ayer" android:textSize="14sp" android:textStyle="bold" android:textColor="@color/white"/>
-            </LinearLayout>
+        <!-- Último entrenamiento -->
+        <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="vertical" android:gravity="center" android:background="@drawable/bg_badge_purple" android:padding="12dp">
+            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Último Grupo Entrenado" android:textSize="12sp" android:textColor="@color/white_54"/>
+            <TextView android:id="@+id/tv_last_workout" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Ninguno" android:textSize="14sp" android:textStyle="bold" android:textColor="@color/white"/>
         </LinearLayout>
 
         <Space android:layout_width="wrap_content" android:layout_height="12dp"/>

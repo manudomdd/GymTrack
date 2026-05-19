@@ -144,6 +144,28 @@ public class ClientController {
     }
 
     /**
+     * Permite al cliente eliminar una serie concreta por su ID.
+     * Solo el propietario de la serie puede eliminarla.
+     */
+    @DeleteMapping("/workouts/{id}")
+    public ResponseEntity<?> deleteWorkoutSession(Authentication auth, @PathVariable Long id) {
+        Optional<User> userOpt = userRepo.findByEmail(auth.getName());
+        if (userOpt.isEmpty()) {
+            return ResponseEntity.status(401).build();
+        }
+        Optional<WorkoutSession> sessionOpt = workoutService.findById(id);
+        if (sessionOpt.isEmpty()) {
+            return ResponseEntity.notFound().build();
+        }
+        WorkoutSession session = sessionOpt.get();
+        if (!session.getUser().getId().equals(userOpt.get().getId())) {
+            return ResponseEntity.status(403).build();
+        }
+        workoutService.deleteSession(id);
+        return ResponseEntity.ok().build();
+    }
+
+    /**
      * Metodo para añadir un registro de sueño (numero de 1 a 10 calidad de sueño, con numero de horas dormidas).
      * @param auth
      * @param log

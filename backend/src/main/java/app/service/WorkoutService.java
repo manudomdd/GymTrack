@@ -101,4 +101,12 @@ public class WorkoutService {
 
         return metrics;
     }
+
+    public void deleteSession(Long id) {
+        repository.deleteById(id);
+    }
+
+    public List<WorkoutSession> getSessionsByUserAndDate(Long userId, java.time.LocalDate date) {
+        return repository.findByUserIdAndDate(userId, date);
+    }
 }
