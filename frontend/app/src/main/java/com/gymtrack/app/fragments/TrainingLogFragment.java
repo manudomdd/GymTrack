@@ -1,19 +1,23 @@
 package com.gymtrack.app.fragments;
 
 import android.os.Bundle;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.GridLayout;
 import android.widget.LinearLayout;
 import android.widget.ScrollView;
+import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
+import androidx.cardview.widget.CardView;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -22,7 +26,9 @@ import com.google.android.material.textfield.TextInputEditText;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
 import com.gymtrack.app.R;
+import com.gymtrack.app.network.AuthRepository;
 
 import java.io.IOException;
 import java.text.SimpleDateFormat;
@@ -32,6 +38,12 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+
+import okhttp3.MediaType;
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.RequestBody;
+import okhttp3.Response;
 
 /**
  * Fragment para el registro de entrenamientos.
@@ -105,7 +117,7 @@ public class TrainingLogFragment extends Fragment {
         btnAdd.setOnClickListener(v -> showAddWorkoutDialog());
 
         Button btnSaveFeedback = view.findViewById(R.id.btn_save_feedback);
-        com.google.android.material.textfield.TextInputEditText etTrainerFeedback = view.findViewById(R.id.et_trainer_feedback);
+        TextInputEditText etTrainerFeedback = view.findViewById(R.id.et_trainer_feedback);
         btnSaveFeedback.setOnClickListener(v -> {
             String feedback = etTrainerFeedback.getText() != null ? etTrainerFeedback.getText().toString().trim() : "";
             saveFeedbackToBackend(clientId, feedback);
@@ -150,7 +162,7 @@ public class TrainingLogFragment extends Fragment {
             tvDay.setText(String.valueOf(day));
             tvDay.setTextColor(isSelected ? 0xFF0F0014 : 0xFFFFFFFF);
             tvDay.setTextSize(14);
-            tvDay.setGravity(android.view.Gravity.CENTER);
+            tvDay.setGravity(Gravity.CENTER);
             tvDay.setPadding(4, 8, 4, 8);
 
             if (isSelected)
@@ -204,14 +216,14 @@ public class TrainingLogFragment extends Fragment {
         boolean isTrainerMode = (clientId != -1);
 
         if (getView() != null) {
-            androidx.cardview.widget.CardView cardTrainer = getView().findViewById(R.id.card_trainer_feedback);
-            androidx.cardview.widget.CardView cardClient = getView().findViewById(R.id.card_client_feedback);
+            CardView cardTrainer = getView().findViewById(R.id.card_trainer_feedback);
+            CardView cardClient = getView().findViewById(R.id.card_client_feedback);
 
             if (isTrainerMode) {
                 cardClient.setVisibility(View.GONE);
                 if (!filtered.isEmpty()) {
                     cardTrainer.setVisibility(View.VISIBLE);
-                    com.google.android.material.textfield.TextInputEditText etTrainerFeedback = getView().findViewById(R.id.et_trainer_feedback);
+                    TextInputEditText etTrainerFeedback = getView().findViewById(R.id.et_trainer_feedback);
                     if (etTrainerFeedback != null) {
                         etTrainerFeedback.setText(currentFeedback != null ? currentFeedback : "");
                     }
@@ -251,13 +263,12 @@ public class TrainingLogFragment extends Fragment {
         scrollWrapper.addView(dialogView);
 
         TextInputEditText etExercise = dialogView.findViewById(R.id.et_exercise);
-        android.widget.Spinner spinnerMuscleGroup = dialogView.findViewById(R.id.spinner_muscle_group);
+        Spinner spinnerMuscleGroup = dialogView.findViewById(R.id.spinner_muscle_group);
         LinearLayout containerSeries = dialogView.findViewById(R.id.container_series);
         Button btnAddSeries = dialogView.findViewById(R.id.btn_add_series);
 
-        // Spinner de grupos musculares
         String[] groups = { "Pecho", "Espalda", "Hombro", "Bíceps", "Tríceps", "Cuádriceps", "Femorales" };
-        android.widget.ArrayAdapter<String> spinnerAdapter = new android.widget.ArrayAdapter<>(
+        ArrayAdapter<String> spinnerAdapter = new ArrayAdapter<>(
                 requireContext(), android.R.layout.simple_spinner_item, groups);
         spinnerAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinnerMuscleGroup.setAdapter(spinnerAdapter);
@@ -342,7 +353,7 @@ public class TrainingLogFragment extends Fragment {
      * Guard: si el token es null (sesión expirada), muestra error y aborta.
      */
     private void saveWorkoutBatchToBackend(JsonArray seriesArray) {
-        com.gymtrack.app.network.AuthRepository auth = new com.gymtrack.app.network.AuthRepository(requireContext());
+        AuthRepository auth = new AuthRepository(requireContext());
 
         String token = auth.getToken();
         if (token == null) {
@@ -352,19 +363,19 @@ public class TrainingLogFragment extends Fragment {
             return;
         }
 
-        okhttp3.OkHttpClient client = new okhttp3.OkHttpClient();
+        OkHttpClient client = new OkHttpClient();
 
         new Thread(() -> {
             try {
-                okhttp3.RequestBody body = okhttp3.RequestBody.create(
+                RequestBody body = RequestBody.create(
                         seriesArray.toString(),
-                        okhttp3.MediaType.get("application/json; charset=utf-8"));
-                okhttp3.Request request = new okhttp3.Request.Builder()
+                        MediaType.get("application/json; charset=utf-8"));
+                Request request = new Request.Builder()
                         .url("http://10.0.2.2:8080/api/client/workouts/batch")
                         .addHeader("Authorization", "Bearer " + token)
                         .post(body).build();
 
-                try (okhttp3.Response response = client.newCall(request).execute()) {
+                try (Response response = client.newCall(request).execute()) {
                     if (getActivity() == null)
                         return;
                     getActivity().runOnUiThread(() -> {
@@ -398,20 +409,20 @@ public class TrainingLogFragment extends Fragment {
      * Elimina la serie individual especificada y refresca la lista.
      */
     private void deleteWorkoutSeries(long sessionId) {
-        com.gymtrack.app.network.AuthRepository auth = new com.gymtrack.app.network.AuthRepository(requireContext());
+        AuthRepository auth = new AuthRepository(requireContext());
         String token = auth.getToken();
         if (token == null) return;
 
-        okhttp3.OkHttpClient client = new okhttp3.OkHttpClient();
+        OkHttpClient client = new OkHttpClient();
 
         new Thread(() -> {
             try {
-                okhttp3.Request request = new okhttp3.Request.Builder()
+                Request request = new Request.Builder()
                         .url("http://10.0.2.2:8080/api/client/workouts/" + sessionId)
                         .addHeader("Authorization", "Bearer " + token)
                         .delete().build();
 
-                try (okhttp3.Response response = client.newCall(request).execute()) {
+                try (Response response = client.newCall(request).execute()) {
                     if (getActivity() == null) return;
                     getActivity().runOnUiThread(() -> {
                         if (response.isSuccessful()) {
@@ -434,11 +445,11 @@ public class TrainingLogFragment extends Fragment {
      * Guarda el feedback del entrenador para este cliente y fecha.
      */
     private void saveFeedbackToBackend(long clientId, String feedback) {
-        com.gymtrack.app.network.AuthRepository auth = new com.gymtrack.app.network.AuthRepository(requireContext());
+        AuthRepository auth = new AuthRepository(requireContext());
         String token = auth.getToken();
         if (token == null) return;
 
-        okhttp3.OkHttpClient client = new okhttp3.OkHttpClient();
+        OkHttpClient client = new OkHttpClient();
         String dateStr = new SimpleDateFormat("yyyy-MM-dd", Locale.US).format(selectedDate.getTime());
 
         new Thread(() -> {
@@ -446,16 +457,16 @@ public class TrainingLogFragment extends Fragment {
                 JsonObject bodyJson = new JsonObject();
                 bodyJson.addProperty("feedback", feedback);
 
-                okhttp3.RequestBody body = okhttp3.RequestBody.create(
+                RequestBody body = RequestBody.create(
                         bodyJson.toString(),
-                        okhttp3.MediaType.get("application/json; charset=utf-8"));
+                        MediaType.get("application/json; charset=utf-8"));
 
-                okhttp3.Request request = new okhttp3.Request.Builder()
+                Request request = new Request.Builder()
                         .url("http://10.0.2.2:8080/api/trainer/client/" + clientId + "/feedback?date=" + dateStr)
                         .addHeader("Authorization", "Bearer " + token)
                         .put(body).build();
 
-                try (okhttp3.Response response = client.newCall(request).execute()) {
+                try (Response response = client.newCall(request).execute()) {
                     if (getActivity() == null) return;
                     getActivity().runOnUiThread(() -> {
                         if (response.isSuccessful()) {
@@ -481,8 +492,8 @@ public class TrainingLogFragment extends Fragment {
      * para evitar NullPointerException si el cliente dejó algún campo vacío.
      */
     private void fetchWorkoutsFromBackend() {
-        com.gymtrack.app.network.AuthRepository auth = new com.gymtrack.app.network.AuthRepository(requireContext());
-        okhttp3.OkHttpClient client = new okhttp3.OkHttpClient();
+        AuthRepository auth = new AuthRepository(requireContext());
+        OkHttpClient client = new OkHttpClient();
 
         new Thread(() -> {
             try {
@@ -493,15 +504,15 @@ public class TrainingLogFragment extends Fragment {
                         ? "http://10.0.2.2:8080/api/trainer/client/" + clientId + "/workouts"
                         : "http://10.0.2.2:8080/api/client/workouts";
 
-                okhttp3.Request request = new okhttp3.Request.Builder()
+                Request request = new Request.Builder()
                         .url(url)
                         .addHeader("Authorization", "Bearer " + auth.getToken())
                         .get().build();
 
-                try (okhttp3.Response response = client.newCall(request).execute()) {
+                try (Response response = client.newCall(request).execute()) {
                     if (response.isSuccessful() && response.body() != null) {
                         String json = response.body().string();
-                        JsonArray array = com.google.gson.JsonParser.parseString(json).getAsJsonArray();
+                        JsonArray array = JsonParser.parseString(json).getAsJsonArray();
 
                         workoutSessions.clear();
                         for (JsonElement el : array) {
@@ -554,7 +565,10 @@ public class TrainingLogFragment extends Fragment {
     private String safeGetString(JsonObject obj, String key, String fallback) {
         if (!obj.has(key) || obj.get(key).isJsonNull())
             return fallback;
-        return obj.get(key).getAsString();
+        JsonElement el = obj.get(key);
+        if (!el.isJsonPrimitive())
+            return fallback;
+        return el.getAsString();
     }
 
     private int safeGetInt(JsonObject obj, String key, int fallback) {

@@ -3,21 +3,28 @@ package com.gymtrack.app;
 import android.content.Intent;
 import android.os.Bundle;
 
+import android.Manifest;
+import android.content.pm.PackageManager;
+import android.os.Build;
 import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.Fragment;
 import androidx.annotation.NonNull;
 
+import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.android.material.navigation.NavigationView;
 import com.gymtrack.app.fragments.DashboardFragment;
 import com.gymtrack.app.fragments.TrainingLogFragment;
 import com.gymtrack.app.fragments.ClientProfileFragment;
 import com.gymtrack.app.fragments.HealthFragment;
 import com.gymtrack.app.network.AuthRepository;
+import com.gymtrack.app.services.StepCounterService;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -86,13 +93,13 @@ public class HomeActivity extends AppCompatActivity {
 
     private void checkPermissionsAndStartService() {
         String[] permissions;
-        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.TIRAMISU) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
             permissions = new String[]{
-                    android.Manifest.permission.ACTIVITY_RECOGNITION,
-                    android.Manifest.permission.POST_NOTIFICATIONS
+                    Manifest.permission.ACTIVITY_RECOGNITION,
+                    Manifest.permission.POST_NOTIFICATIONS
             };
-        } else if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.Q) {
-            permissions = new String[]{android.Manifest.permission.ACTIVITY_RECOGNITION};
+        } else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+            permissions = new String[]{Manifest.permission.ACTIVITY_RECOGNITION};
         } else {
             startStepService();
             return;
@@ -100,21 +107,21 @@ public class HomeActivity extends AppCompatActivity {
 
         List<String> listPermissionsNeeded = new ArrayList<>();
         for (String p : permissions) {
-            if (androidx.core.content.ContextCompat.checkSelfPermission(this, p) != android.content.pm.PackageManager.PERMISSION_GRANTED) {
+            if (ContextCompat.checkSelfPermission(this, p) != PackageManager.PERMISSION_GRANTED) {
                 listPermissionsNeeded.add(p);
             }
         }
 
         if (!listPermissionsNeeded.isEmpty()) {
-            androidx.core.app.ActivityCompat.requestPermissions(this, listPermissionsNeeded.toArray(new String[0]), 100);
+            ActivityCompat.requestPermissions(this, listPermissionsNeeded.toArray(new String[0]), 100);
         } else {
             startStepService();
         }
     }
 
     private void startStepService() {
-        Intent serviceIntent = new Intent(this, com.gymtrack.app.services.StepCounterService.class);
-        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
+        Intent serviceIntent = new Intent(this, StepCounterService.class);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             startForegroundService(serviceIntent);
         } else {
             startService(serviceIntent);
@@ -141,7 +148,7 @@ public class HomeActivity extends AppCompatActivity {
 
     /** Muestra el diálogo de confirmación de cierre de sesión */
     private void showLogoutDialog() {
-        new com.google.android.material.dialog.MaterialAlertDialogBuilder(this, R.style.Theme_GymTrack_Dialog)
+        new MaterialAlertDialogBuilder(this, R.style.Theme_GymTrack_Dialog)
                 .setTitle("Cerrar Sesión")
                 .setMessage("¿Estás seguro de que quieres cerrar sesión?")
                 .setNegativeButton("Cancelar", null)

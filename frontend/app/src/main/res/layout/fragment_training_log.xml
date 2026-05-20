@@ -6,7 +6,7 @@
     android:orientation="vertical"
     android:background="@color/deep_purple">
 
-    <ScrollView
+    <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1"
@@ -192,7 +192,7 @@
             <Space android:layout_width="wrap_content" android:layout_height="16dp"/>
 
         </LinearLayout>
-    </ScrollView>
+    </androidx.core.widget.NestedScrollView>
 
     <!-- Botón Añadir fijo al fondo -->
     <Button

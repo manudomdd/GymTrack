@@ -264,9 +264,6 @@ public class ClientController {
         return ResponseEntity.status(401).build();
     }
 
-    /**
-     * Suscribe al cliente autenticado para recibir notificaciones en tiempo real vía SSE.
-     */
     @GetMapping(value = "/notifications/sse", produces = "text/event-stream")
     public SseEmitter subscribeToNotifications(Authentication auth) {
         Optional<User> userOpt = userRepo.findByEmail(auth.getName());

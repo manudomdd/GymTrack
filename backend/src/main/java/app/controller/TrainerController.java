@@ -1,9 +1,12 @@
 package app.controller;
 
+import app.dto.ClientSummaryDTO;
+import app.dto.DashboardTrainerDTO;
 import app.entity.User;
 import app.entity.WorkoutSession;
 import app.repository.UserRepository;
 import app.service.HealthService;
+import app.service.NotificationService;
 import app.service.WorkoutService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -16,8 +19,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
-import app.dto.DashboardTrainerDTO;
-import app.service.NotificationService;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/api/trainer")
@@ -39,11 +41,11 @@ public class TrainerController {
      * Obtiene los clientes asignados a un entrenador determinado.
      */
     @GetMapping("/clients")
-    public ResponseEntity<List<app.dto.ClientSummaryDTO>> getClients(Authentication auth) {
+    public ResponseEntity<List<ClientSummaryDTO>> getClients(Authentication auth) {
         Optional<User> trainerOpt = userRepo.findByEmail(auth.getName());
         if (trainerOpt.isPresent()) {
             List<User> clients = userRepo.findByTrainerId(trainerOpt.get().getId());
-            List<app.dto.ClientSummaryDTO> dtoList = clients.stream().map(client -> {
+            List<ClientSummaryDTO> dtoList = clients.stream().map(client -> {
                 String ultimoGrupo = "Ninguno";
                 try {
                     List<WorkoutSession> sessions = workoutService.getSessionsByUser(client.getId());
@@ -55,12 +57,12 @@ public class TrainerController {
                                 .orElse(null);
 
                         if (lastWorkout != null) {
-                            java.util.List<String> groups = sessions.stream()
+                            List<String> groups = sessions.stream()
                                     .filter(s -> lastWorkout.equals(s.getDate()))
                                     .map(WorkoutSession::getMuscleGroup)
                                     .filter(g -> g != null && !g.trim().isEmpty())
                                     .distinct()
-                                    .collect(java.util.stream.Collectors.toList());
+                                    .collect(Collectors.toList());
                             if (!groups.isEmpty()) {
                                 ultimoGrupo = String.join(", ", groups);
                             }
@@ -71,7 +73,7 @@ public class TrainerController {
                     ultimoGrupo = "Error";
                 }
 
-                return new app.dto.ClientSummaryDTO(
+                return new ClientSummaryDTO(
                         client.getId(),
                         client.getNombre() != null ? client.getNombre() : "—",
                         client.getEmail() != null ? client.getEmail() : "—",
@@ -80,7 +82,7 @@ public class TrainerController {
                         client.getEdad(),
                         ultimoGrupo
                 );
-            }).collect(java.util.stream.Collectors.toList());
+            }).collect(Collectors.toList());
             return ResponseEntity.ok(dtoList);
         }
         return ResponseEntity.status(401).build();
@@ -263,7 +265,6 @@ public class TrainerController {
                     workoutService.saveSession(session);
                 }
                 
-                // Enviar la notificación en tiempo real vía SSE
                 notificationService.sendNotification(clientId, "Tu entrenador ha dejado un nuevo comentario en tu entrenamiento de la fecha: " + dateStr);
 
                 return ResponseEntity.ok().build();

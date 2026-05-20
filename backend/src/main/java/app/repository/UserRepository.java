@@ -1,5 +1,6 @@
 package app.repository;
 
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -13,7 +14,7 @@ public interface UserRepository extends JpaRepository<User, Long> {
 	// ya sabe que tiene que hacer un "SELECT * FROM users WHERE email = ?" en MySQL.
 	Optional<User> findByEmail(String email); 
 
-	java.util.List<User> findByTrainerId(Long trainerId);
+	List<User> findByTrainerId(Long trainerId);
 	
 	Optional<User> findByTrainerCode(String trainerCode);
 }

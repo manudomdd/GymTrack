@@ -18,6 +18,12 @@ import androidx.annotation.Nullable;
 import androidx.core.app.NotificationCompat;
 
 import com.gymtrack.app.R;
+import com.gymtrack.app.network.AuthRepository;
+
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+import java.net.HttpURLConnection;
+import java.net.URL;
 
 public class StepCounterService extends Service implements SensorEventListener {
     private SensorManager sensorManager;
@@ -116,33 +122,31 @@ public class StepCounterService extends Service implements SensorEventListener {
 
     private void startNotificationListener() {
         new Thread(() -> {
-            java.io.BufferedReader reader = null;
-            java.net.HttpURLConnection conn = null;
+            BufferedReader reader = null;
+            HttpURLConnection conn = null;
             try {
-                com.gymtrack.app.network.AuthRepository authRepository = new com.gymtrack.app.network.AuthRepository(this);
+                AuthRepository authRepository = new AuthRepository(this);
                 String token = authRepository.getToken();
                 if (token == null) {
-                    // Si no hay token, esperar 10 segundos y reintentar
                     try { Thread.sleep(10000); } catch (InterruptedException ignored) {}
                     startNotificationListener();
                     return;
                 }
 
-                java.net.URL url = new java.net.URL("http://10.0.2.2:8080/api/client/notifications/sse");
-                conn = (java.net.HttpURLConnection) url.openConnection();
+                URL url = new URL("http://10.0.2.2:8080/api/client/notifications/sse");
+                conn = (HttpURLConnection) url.openConnection();
                 conn.setRequestMethod("GET");
                 conn.setRequestProperty("Authorization", "Bearer " + token);
                 conn.setRequestProperty("Accept", "text/event-stream");
-                conn.setReadTimeout(0); // Timeout infinito para canal de persistencia
+                conn.setReadTimeout(0);
 
                 int responseCode = conn.getResponseCode();
                 if (responseCode == 200) {
-                    reader = new java.io.BufferedReader(new java.io.InputStreamReader(conn.getInputStream()));
+                    reader = new BufferedReader(new InputStreamReader(conn.getInputStream()));
                     String line;
                     while ((line = reader.readLine()) != null) {
                         if (line.startsWith("data:")) {
                             String data = line.substring(5).trim();
-                            // Ignorar el mensaje de conexión inicial
                             if (!data.contains("Conexión de notificaciones establecida con éxito")) {
                                 showSystemNotification("GymTrack", data);
                             }
@@ -157,7 +161,6 @@ public class StepCounterService extends Service implements SensorEventListener {
                 } catch (Exception ignored) {}
                 if (conn != null) conn.disconnect();
 
-                // Reintentar conexión tras 5 segundos ante caídas
                 try {
                     Thread.sleep(5000);
                 } catch (InterruptedException ignored) {}

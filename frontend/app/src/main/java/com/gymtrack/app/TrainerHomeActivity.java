@@ -11,6 +11,7 @@ import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.Fragment;
 
+import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.android.material.navigation.NavigationView;
 import com.gymtrack.app.fragments.TrainerClientsFragment;
 import com.gymtrack.app.fragments.TrainerDashboardFragment;
@@ -83,7 +84,7 @@ public class TrainerHomeActivity extends AppCompatActivity {
     }
 
     private void showLogoutDialog() {
-        new com.google.android.material.dialog.MaterialAlertDialogBuilder(this, R.style.Theme_GymTrack_Dialog)
+        new MaterialAlertDialogBuilder(this, R.style.Theme_GymTrack_Dialog)
                 .setTitle("Cerrar Sesión")
                 .setMessage("¿Estás seguro de que quieres cerrar sesión?")
                 .setNegativeButton("Cancelar", null)

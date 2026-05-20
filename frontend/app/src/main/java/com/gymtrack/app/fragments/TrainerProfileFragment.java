@@ -5,6 +5,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -29,7 +30,7 @@ import okhttp3.Response;
  */
 public class TrainerProfileFragment extends Fragment {
 
-    private android.widget.TextView tvName, tvEmail, tvCode;
+    private TextView tvName, tvEmail, tvCode;
 
     @Nullable
     @Override

@@ -1,6 +1,7 @@
 package com.gymtrack.app.fragments;
 
 import android.app.DatePickerDialog;
+import android.content.Intent;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.InputType;
@@ -28,11 +29,17 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
+import com.gymtrack.app.AIChatActivity;
 import com.gymtrack.app.R;
+import com.gymtrack.app.TrainerBiomarkersActivity;
+import com.gymtrack.app.TrainerClientMetricsActivity;
+import com.gymtrack.app.TrainerHomeActivity;
 import com.gymtrack.app.network.AuthRepository;
 
 import java.io.IOException;
 import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.HashMap;
@@ -169,8 +176,8 @@ public class TrainerClientsFragment extends Fragment {
         fragment.setArguments(args);
 
         // Assumes the parent activity has a loadFragment method
-        if (getActivity() instanceof com.gymtrack.app.TrainerHomeActivity) {
-            ((com.gymtrack.app.TrainerHomeActivity) getActivity()).loadFragment(fragment);
+        if (getActivity() instanceof TrainerHomeActivity) {
+            ((TrainerHomeActivity) getActivity()).loadFragment(fragment);
         }
     }
 
@@ -179,8 +186,8 @@ public class TrainerClientsFragment extends Fragment {
         long clientId = idObj instanceof Number ? ((Number) idObj).longValue() : -1;
         if (clientId == -1) return;
 
-        android.content.Intent intent = new android.content.Intent(requireContext(),
-                com.gymtrack.app.TrainerBiomarkersActivity.class);
+        Intent intent = new Intent(requireContext(),
+                TrainerBiomarkersActivity.class);
         intent.putExtra("CLIENT_ID", clientId);
         intent.putExtra("CLIENT_NAME", (String) client.get("nombre"));
         startActivity(intent);
@@ -191,8 +198,8 @@ public class TrainerClientsFragment extends Fragment {
         long clientId = idObj instanceof Number ? ((Number) idObj).longValue() : -1;
         if (clientId == -1) return;
 
-        android.content.Intent intent = new android.content.Intent(requireContext(),
-                com.gymtrack.app.AIChatActivity.class);
+        Intent intent = new Intent(requireContext(),
+                AIChatActivity.class);
         intent.putExtra("CLIENT_ID", clientId);
         intent.putExtra("CLIENT_NAME", (String) client.get("nombre"));
         startActivity(intent);
@@ -259,8 +266,8 @@ public class TrainerClientsFragment extends Fragment {
             h.btnDiary.setOnClickListener(v -> diaryListener.onClick(c));
 
             h.btnMetrics.setOnClickListener(v -> {
-                android.content.Intent intent = new android.content.Intent(v.getContext(),
-                        com.gymtrack.app.TrainerClientMetricsActivity.class);
+                Intent intent = new Intent(v.getContext(),
+                        TrainerClientMetricsActivity.class);
                 Object idObj = c.get("id");
                 long id = idObj instanceof Number ? ((Number) idObj).longValue() : -1L;
                 intent.putExtra("CLIENT_ID", id);
@@ -283,14 +290,14 @@ public class TrainerClientsFragment extends Fragment {
                 return "Sin entrenamientos";
             }
             try {
-                java.time.LocalDate date = java.time.LocalDate.parse(dateStr);
-                java.time.LocalDate hoy = java.time.LocalDate.now();
+                LocalDate date = LocalDate.parse(dateStr);
+                LocalDate hoy = LocalDate.now();
                 if (date.equals(hoy)) {
                     return "Hoy";
                 } else if (date.equals(hoy.minusDays(1))) {
                     return "Ayer";
                 } else {
-                    java.time.format.DateTimeFormatter formatter = java.time.format.DateTimeFormatter.ofPattern("dd/MM/yyyy");
+                    DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
                     return date.format(formatter);
                 }
             } catch (Exception e) {

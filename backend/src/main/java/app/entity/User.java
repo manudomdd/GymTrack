@@ -3,6 +3,7 @@ package app.entity;
 import java.util.Collection;
 
 import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import jakarta.persistence.Entity;
@@ -102,7 +103,7 @@ public class User implements UserDetails {
 		String role = (tipoUsuario != null)
 				? "ROLE_" + tipoUsuario.name()
 				: "ROLE_CLIENTE";
-		return java.util.List.of(new org.springframework.security.core.authority.SimpleGrantedAuthority(role));
+		return List.of(new SimpleGrantedAuthority(role));
 	}
 
 	@Override

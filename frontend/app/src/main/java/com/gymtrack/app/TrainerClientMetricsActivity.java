@@ -1,5 +1,6 @@
 package com.gymtrack.app;
 
+import android.graphics.Typeface;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -122,7 +123,7 @@ public class TrainerClientMetricsActivity extends AppCompatActivity {
         tv.setText(title);
         tv.setTextColor(getResources().getColor(R.color.magenta));
         tv.setTextSize(18);
-        tv.setTypeface(null, android.graphics.Typeface.BOLD);
+        tv.setTypeface(null, Typeface.BOLD);
         tv.setPadding(0, 24, 0, 16);
         parent.addView(tv);
     }

@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
+import android.os.Build;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -24,7 +25,9 @@ import com.gymtrack.app.network.AuthRepository;
 import com.gymtrack.app.services.StepCounterService;
 
 import java.io.IOException;
-
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.Locale;
 import java.util.concurrent.TimeUnit;
 import okhttp3.MediaType;
 import okhttp3.OkHttpClient;
@@ -91,8 +94,8 @@ public class HealthFragment extends Fragment {
         log.addProperty("hoursSlept", hours);   // Corregido: era "hours" → no coincidía con SleepLog.hoursSlept
         log.addProperty("score", quality);       // Corregido: era "quality" → no coincidía con SleepLog.score
 
-        String currentDate = new java.text.SimpleDateFormat("yyyy-MM-dd", java.util.Locale.US)
-                .format(new java.util.Date());
+        String currentDate = new SimpleDateFormat("yyyy-MM-dd", Locale.US)
+                .format(new Date());
         log.addProperty("date", currentDate);
 
         saveSleepToBackend(log);
@@ -137,7 +140,7 @@ public class HealthFragment extends Fragment {
     @Override
     public void onStart() {
         super.onStart();
-        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.TIRAMISU) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
             requireContext().registerReceiver(stepsReceiver, new IntentFilter(StepCounterService.ACTION_STEPS_UPDATED),
                     Context.RECEIVER_NOT_EXPORTED);
         } else {

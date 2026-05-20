@@ -1,6 +1,7 @@
 package com.gymtrack.app;
 
 import android.graphics.Color;
+import android.graphics.Typeface;
 import android.os.Bundle;
 import android.view.Gravity;
 import android.view.View;
@@ -154,7 +155,7 @@ public class TrainerBiomarkersActivity extends AppCompatActivity {
             if (isSelected) {
                 tvDay.setBackgroundResource(R.drawable.bg_badge_purple);
                 tvDay.setTextColor(Color.WHITE);
-                tvDay.setTypeface(null, android.graphics.Typeface.BOLD);
+                tvDay.setTypeface(null, Typeface.BOLD);
             } else {
                 tvDay.setBackgroundColor(Color.TRANSPARENT);
                 tvDay.setTextColor(Color.parseColor("#8AFFFFFF"));

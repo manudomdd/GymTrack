@@ -5,6 +5,7 @@ import app.repository.WorkoutSessionRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
 import java.util.HashMap;
 import java.util.List;
@@ -106,7 +107,7 @@ public class WorkoutService {
         repository.deleteById(id);
     }
 
-    public List<WorkoutSession> getSessionsByUserAndDate(Long userId, java.time.LocalDate date) {
+    public List<WorkoutSession> getSessionsByUserAndDate(Long userId, LocalDate date) {
         return repository.findByUserIdAndDate(userId, date);
     }
 }

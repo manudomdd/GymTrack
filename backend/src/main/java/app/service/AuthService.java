@@ -1,13 +1,17 @@
 package app.service;
 
 import app.dto.LoginRequest;
+import app.dto.LoginResponse;
 import app.dto.RegisterRequest;
+import app.entity.TipoUsuario;
 import app.entity.User;
 import app.repository.UserRepository;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+
+import java.util.UUID;
 
 @Service
 public class AuthService {
@@ -39,10 +43,10 @@ public class AuthService {
         newUser.setPeso(request.getPeso());
         newUser.setTipoUsuario(request.getTipoUsuario());
 
-        if (request.getTipoUsuario() == app.entity.TipoUsuario.ENTRENADOR) {
-            String code = "TR-" + java.util.UUID.randomUUID().toString().substring(0, 6).toUpperCase();
+        if (request.getTipoUsuario() == TipoUsuario.ENTRENADOR) {
+            String code = "TR-" + UUID.randomUUID().toString().substring(0, 6).toUpperCase();
             newUser.setTrainerCode(code);
-        } else if (request.getTipoUsuario() == app.entity.TipoUsuario.CLIENTE && request.getTrainerCode() != null) {
+        } else if (request.getTipoUsuario() == TipoUsuario.CLIENTE && request.getTrainerCode() != null) {
             userRepository.findByTrainerCode(request.getTrainerCode()).ifPresent(newUser::setTrainer);
         }
 
@@ -58,6 +62,6 @@ public class AuthService {
                 .orElseThrow(() -> new RuntimeException("Usuario no encontrado"));
 
         String token = jwtService.generarToken(usuario);
-        return new app.dto.LoginResponse(token, usuario.getTipoUsuario());
+        return new LoginResponse(token, usuario.getTipoUsuario());
     }
 }
