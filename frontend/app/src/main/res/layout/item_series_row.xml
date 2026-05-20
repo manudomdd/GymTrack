@@ -39,7 +39,7 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:hint="Peso (kg)">
+            android:hint="Peso Total (kg)">
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/et_serie_peso"
                 android:layout_width="match_parent"

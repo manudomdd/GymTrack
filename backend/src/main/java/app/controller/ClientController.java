@@ -143,7 +143,7 @@ public class ClientController {
             return ResponseEntity.status(403).build();
         }
         session.setReps(update.getReps());
-        session.setPeso(update.getPeso());
+        session.setPesoTotal(update.getPesoTotal());
         session.setRir(update.getRir());
         return ResponseEntity.ok(workoutService.saveSession(session));
     }

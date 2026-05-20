@@ -22,8 +22,8 @@ public class AuthController {
     
     /**
      * Endpoint principal para el registro de nuevos usuarios. 
-     * @param request
-     * @return
+     * @param request Datos necesarios para el registro del usuario.
+     * @return Mensaje de confirmacion o error.
      */
     @PostMapping("/register")
     public ResponseEntity<?> registrar(@Valid @RequestBody RegisterRequest request) {
@@ -38,8 +38,8 @@ public class AuthController {
     
     /**
      * Endpoint para incio de sesión tanto de usuarios como entrenadores.
-     * @param request
-     * @return
+     * @param request Datos necesarios para el inicio de sesión.
+     * @return Tokan y datos del usuario en caso de encontrar una coincidencia. 
      */
     @PostMapping("/login")
     public ResponseEntity<?> login(@RequestBody LoginRequest request) {

@@ -22,6 +22,13 @@ public class IAController {
     @Autowired
     private IAService iaService;
 
+    /**
+     * Endpoint para iniciar un chat especifico con la IA.
+     * @param auth Entrenador autenticado.
+     * @param clientId ID del cliente en concreto.
+     * @param request Mensaje enviado por el entrenador.
+     * @return Respuesta de la IA en formato JSON.
+     */
     @PostMapping("/client/{clientId}/ai-chat")
     public ResponseEntity<Map<String, String>> chatWithAI(
             Authentication auth,
@@ -33,7 +40,7 @@ public class IAController {
 
         if (trainerOpt.isPresent() && clientOpt.isPresent()) {
             User client = clientOpt.get();
-            // Validar que el cliente esté vinculado al entrenador autenticado
+            // Comprobación de que el cliente está vinculado al entrenador autenticado.
             if (client.getTrainer() != null
                     && client.getTrainer().getId().equals(trainerOpt.get().getId())) {
                 
@@ -53,6 +60,12 @@ public class IAController {
         return ResponseEntity.status(403).build();
     }
 
+    /**
+     * Endpoint especifico para iniciar un chat general con la IA.
+     * @param auth Entrenador autenticado
+     * @param request Mensaje enviado a la IA.
+     * @return Respuesta de la IA en formato JSON.
+     */
     @PostMapping("/chat-general")
     public ResponseEntity<Map<String, String>> chatGeneral(
             Authentication auth,

@@ -6,27 +6,11 @@
     El botón "+ Añadir Serie" añade nuevas filas item_series_row.xml.
 -->
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="vertical"
-    android:padding="4dp">
-
-    <!-- ══ CABECERA: Ejercicio ══ -->
-    <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/til_exercise"
-        style="@style/Widget.GymTrack.TextInputLayout"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:hint="Nombre del Ejercicio">
-        <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/et_exercise"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:textColor="@color/white"
-            android:inputType="text" />
-    </com.google.android.material.textfield.TextInputLayout>
-
-    <Space android:layout_width="wrap_content" android:layout_height="12dp"/>
+    android:padding="24dp">
 
     <!-- ══ CABECERA: Grupo Muscular ══ -->
     <TextView
@@ -34,14 +18,65 @@
         android:layout_height="wrap_content"
         android:text="Grupo Muscular"
         android:textColor="@color/white_54"
-        android:textSize="12sp" />
+        android:textSize="12sp"
+        android:layout_marginBottom="4dp" />
 
-    <Spinner
-        android:id="@+id/spinner_muscle_group"
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/til_muscle_group"
+        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
         android:layout_width="match_parent"
-        android:layout_height="50dp"
-        android:layout_marginTop="5dp"
-        android:background="@drawable/bg_input_field" />
+        android:layout_height="wrap_content"
+        android:hint="Grupo Muscular"
+        app:boxBackgroundColor="@color/deep_purple"
+        app:boxStrokeColor="@color/magenta"
+        app:hintTextColor="@color/white_54"
+        app:boxCornerRadiusBottomEnd="15dp"
+        app:boxCornerRadiusBottomStart="15dp"
+        app:boxCornerRadiusTopEnd="15dp"
+        app:boxCornerRadiusTopStart="15dp">
+
+        <AutoCompleteTextView
+            android:id="@+id/spinner_muscle_group"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:inputType="none"
+            android:textColor="@color/white"
+            android:popupBackground="@drawable/bg_input_field" />
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <Space android:layout_width="wrap_content" android:layout_height="12dp"/>
+
+    <!-- ══ CABECERA: Ejercicio ══ -->
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Ejercicio"
+        android:textColor="@color/white_54"
+        android:textSize="12sp"
+        android:layout_marginBottom="4dp" />
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/til_exercise"
+        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Ejercicio"
+        app:boxBackgroundColor="@color/deep_purple"
+        app:boxStrokeColor="@color/magenta"
+        app:hintTextColor="@color/white_54"
+        app:boxCornerRadiusBottomEnd="15dp"
+        app:boxCornerRadiusBottomStart="15dp"
+        app:boxCornerRadiusTopEnd="15dp"
+        app:boxCornerRadiusTopStart="15dp">
+
+        <AutoCompleteTextView
+            android:id="@+id/spinner_exercise"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:inputType="none"
+            android:textColor="@color/white"
+            android:popupBackground="@drawable/bg_input_field" />
+    </com.google.android.material.textfield.TextInputLayout>
 
     <Space android:layout_width="wrap_content" android:layout_height="16dp"/>
 

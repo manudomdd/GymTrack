@@ -10,6 +10,7 @@ import android.widget.Button;
 import android.widget.GridLayout;
 import android.widget.LinearLayout;
 import android.widget.ScrollView;
+import android.widget.AutoCompleteTextView;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -262,16 +263,33 @@ public class TrainingLogFragment extends Fragment {
                 .inflate(R.layout.dialog_add_workout, null);
         scrollWrapper.addView(dialogView);
 
-        TextInputEditText etExercise = dialogView.findViewById(R.id.et_exercise);
-        Spinner spinnerMuscleGroup = dialogView.findViewById(R.id.spinner_muscle_group);
+        AutoCompleteTextView spinnerExercise = dialogView.findViewById(R.id.spinner_exercise);
+        AutoCompleteTextView spinnerMuscleGroup = dialogView.findViewById(R.id.spinner_muscle_group);
         LinearLayout containerSeries = dialogView.findViewById(R.id.container_series);
         Button btnAddSeries = dialogView.findViewById(R.id.btn_add_series);
 
-        String[] groups = { "Pecho", "Espalda", "Hombro", "Bíceps", "Tríceps", "Cuádriceps", "Femorales" };
+        String[] groups = { "Pecho", "Espalda", "Hombros", "Cuadriceps", "Femoral", "Biceps", "Triceps" };
         ArrayAdapter<String> spinnerAdapter = new ArrayAdapter<>(
-                requireContext(), android.R.layout.simple_spinner_item, groups);
-        spinnerAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                requireContext(), R.layout.item_dropdown, groups);
         spinnerMuscleGroup.setAdapter(spinnerAdapter);
+
+        Map<String, String[]> exerciseCatalog = new HashMap<>();
+        exerciseCatalog.put("Pecho", new String[]{"Press banca", "Press inclinado barra", "Press inclinado mancuernas", "Peck deck", "Aperturas en poleas"});
+        exerciseCatalog.put("Espalda", new String[]{"Peso muerto", "Remo con barra", "Remo con mancuerna", "Jalon al pecho", "Remo gironda"});
+        exerciseCatalog.put("Hombros", new String[]{"Press militar", "Elevaciones laterales"});
+        exerciseCatalog.put("Cuadriceps", new String[]{"Sentadilla", "Prensa", "Extensiones de cuadriceps", "Hack squat"});
+        exerciseCatalog.put("Femoral", new String[]{"Curl femoral sentado", "Curl femoral tumbado"});
+        exerciseCatalog.put("Biceps", new String[]{"Curl con barra", "Curl con mancuernas", "Curl banco scott"});
+        exerciseCatalog.put("Triceps", new String[]{"Extension triceps", "Press frances", "Overhead extension"});
+
+        spinnerMuscleGroup.setOnItemClickListener((parent, view, position, id) -> {
+            String selectedGroup = groups[position];
+            String[] exercises = exerciseCatalog.get(selectedGroup);
+            if (exercises == null) exercises = new String[0];
+            ArrayAdapter<String> exerciseAdapter = new ArrayAdapter<>(requireContext(), R.layout.item_dropdown, exercises);
+            spinnerExercise.setAdapter(exerciseAdapter);
+            spinnerExercise.setText("", false);
+        });
 
         // Lista que rastrea las vistas de cada serie añadida
         final List<View> seriesViews = new ArrayList<>();
@@ -286,12 +304,10 @@ public class TrainingLogFragment extends Fragment {
                 .setView(scrollWrapper)
                 .setNegativeButton("Cancelar", null)
                 .setPositiveButton("Guardar", (dialog, which) -> {
-                    String exercise = etExercise.getText() != null
-                            ? etExercise.getText().toString().trim()
-                            : "";
+                    String exercise = spinnerExercise.getText().toString();
                     if (exercise.isEmpty()) {
                         Toast.makeText(requireContext(),
-                                "Introduce el nombre del ejercicio", Toast.LENGTH_SHORT).show();
+                                "Selecciona un ejercicio", Toast.LENGTH_SHORT).show();
                         return;
                     }
                     if (seriesViews.isEmpty()) {
@@ -300,7 +316,7 @@ public class TrainingLogFragment extends Fragment {
                         return;
                     }
 
-                    String muscleGroup = spinnerMuscleGroup.getSelectedItem().toString();
+                    String muscleGroup = spinnerMuscleGroup.getText().toString();
                     String dateStr = new SimpleDateFormat("yyyy-MM-dd", Locale.US)
                             .format(selectedDate.getTime());
 
@@ -317,7 +333,7 @@ public class TrainingLogFragment extends Fragment {
                         serie.addProperty("exercise", exercise);
                         serie.addProperty("muscleGroup", muscleGroup);
                         serie.addProperty("seriesNumber", i + 1); // 1-indexed
-                        serie.addProperty("peso", parseDoubleOrZero(etPeso));
+                        serie.addProperty("pesoTotal", parseDoubleOrZero(etPeso));
                         serie.addProperty("reps", parseOrZero(etReps));
                         serie.addProperty("rir", parseOrZero(etRir));
                         serie.addProperty("comment",
@@ -527,7 +543,7 @@ public class TrainingLogFragment extends Fragment {
                             // seriesNumber: número ordinal de la serie (campo "seriesNumber" en JSON)
                             map.put("seriesNumber", safeGetInt(obj, "seriesNumber", 1));
 
-                            map.put("peso", safeGetDouble(obj, "peso", 0.0));
+                            map.put("pesoTotal", safeGetDouble(obj, "pesoTotal", 0.0));
                             map.put("reps", safeGetInt(obj, "reps", 0));
                             map.put("rir", safeGetInt(obj, "rir", 0));
 
@@ -669,7 +685,7 @@ public class TrainingLogFragment extends Fragment {
             holder.tvSets.setText(seriesNum != null ? String.valueOf(seriesNum) : "—");
 
             // Peso
-            Object peso = w.get("peso");
+            Object peso = w.get("pesoTotal");
             holder.tvPeso.setText(peso != null ? String.valueOf(peso) : "—");
 
             // Repeticiones

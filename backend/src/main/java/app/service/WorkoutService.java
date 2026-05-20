@@ -55,21 +55,19 @@ public class WorkoutService {
     public Map<String, Double> calculateProgressMetrics(Long userId) {
         List<WorkoutSession> allSessions = repository.findByUserId(userId);
 
-        // Grupos musculares con peso registrado
-        Set<String> muscleGroups = allSessions.stream()
-                .filter(s -> s.getMuscleGroup() != null && s.getPeso() > 0)
-                .map(WorkoutSession::getMuscleGroup)
-                .collect(Collectors.toSet());
+        // Agrupar por "MuscleGroup - Exercise"
+        Map<String, List<WorkoutSession>> groupedSessions = allSessions.stream()
+                .filter(s -> s.getMuscleGroup() != null && s.getExercise() != null && s.getPesoTotal() != null && s.getPesoTotal() > 0)
+                .collect(Collectors.groupingBy(s -> s.getMuscleGroup() + " - " + s.getExercise()));
 
         Map<String, Double> metrics = new HashMap<>();
 
-        for (String group : muscleGroups) {
-            // Sesiones del grupo ordenadas por fecha (query de BD)
-            List<WorkoutSession> sessions = repository
-                    .findByUserIdAndMuscleGroupOrderByDateAsc(userId, group)
-                    .stream()
-                    .filter(s -> s.getPeso() > 0)
-                    .collect(Collectors.toList());
+        for (Map.Entry<String, List<WorkoutSession>> entry : groupedSessions.entrySet()) {
+            String key = entry.getKey();
+            List<WorkoutSession> sessions = entry.getValue();
+
+            // Ordenar por fecha ASC
+            sessions.sort((a, b) -> a.getDate().compareTo(b.getDate()));
 
             if (sessions.size() < 2) continue;
 
@@ -86,7 +84,7 @@ public class WorkoutService {
 
             for (WorkoutSession s : sessions) {
                 double x = ChronoUnit.DAYS.between(first.getDate(), s.getDate());
-                double y = s.getPeso();
+                double y = s.getPesoTotal();
                 sumX += x;
                 sumY += y;
                 sumXY += x * y;
@@ -94,10 +92,10 @@ public class WorkoutService {
             }
 
             double denominator = (n * sumX2) - (sumX * sumX);
-            if (denominator == 0) continue; // Todos en la misma fecha (no debería ocurrir tras el check anterior)
+            if (denominator == 0) continue; 
 
             double slope = ((n * sumXY) - (sumX * sumY)) / denominator;
-            metrics.put(group, slope);
+            metrics.put(key, slope);
         }
 
         return metrics;

@@ -30,7 +30,8 @@ public class WorkoutSession {
 
     private int reps;
     private int rir;
-    private double peso; // Carga utilizada
+    @Column(name = "peso_total")
+    private Double pesoTotal; // Carga utilizada
     private String comment;
 
     @Column(name = "feedback_entrenador")
@@ -103,12 +104,12 @@ public class WorkoutSession {
         this.rir = rir;
     }
 
-    public double getPeso() {
-        return peso;
+    public Double getPesoTotal() {
+        return pesoTotal;
     }
 
-    public void setPeso(double peso) {
-        this.peso = peso;
+    public void setPesoTotal(Double pesoTotal) {
+        this.pesoTotal = pesoTotal;
     }
 
     public String getComment() {

@@ -58,7 +58,7 @@ public class IAService {
             for (WorkoutSession s : recentSessions) {
                 entrenamientosStr.append(String.format("- %s | %s (%s): Serie %d -> %.1f kg x %d reps (RIR: %d). Comentario: %s\n",
                         s.getDate(), s.getExercise(), s.getMuscleGroup(), s.getSeriesNumber(),
-                        s.getPeso(), s.getReps(), s.getRir(), s.getComment() != null ? s.getComment() : "Ninguno"));
+                        s.getPesoTotal() != null ? s.getPesoTotal() : 0.0, s.getReps(), s.getRir(), s.getComment() != null ? s.getComment() : "Ninguno"));
             }
         }
 
