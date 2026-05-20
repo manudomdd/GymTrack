@@ -35,6 +35,9 @@ public class StepCounterService extends Service implements SensorEventListener {
         if (sensorManager != null) {
             stepSensor = sensorManager.getDefaultSensor(Sensor.TYPE_STEP_COUNTER);
         }
+        
+        // Iniciar la escucha de notificaciones SSE en segundo plano de manera persistente
+        startNotificationListener();
     }
 
     @Override
@@ -108,6 +111,85 @@ public class StepCounterService extends Service implements SensorEventListener {
             if (manager != null) {
                 manager.createNotificationChannel(channel);
             }
+        }
+    }
+
+    private void startNotificationListener() {
+        new Thread(() -> {
+            java.io.BufferedReader reader = null;
+            java.net.HttpURLConnection conn = null;
+            try {
+                com.gymtrack.app.network.AuthRepository authRepository = new com.gymtrack.app.network.AuthRepository(this);
+                String token = authRepository.getToken();
+                if (token == null) {
+                    // Si no hay token, esperar 10 segundos y reintentar
+                    try { Thread.sleep(10000); } catch (InterruptedException ignored) {}
+                    startNotificationListener();
+                    return;
+                }
+
+                java.net.URL url = new java.net.URL("http://10.0.2.2:8080/api/client/notifications/sse");
+                conn = (java.net.HttpURLConnection) url.openConnection();
+                conn.setRequestMethod("GET");
+                conn.setRequestProperty("Authorization", "Bearer " + token);
+                conn.setRequestProperty("Accept", "text/event-stream");
+                conn.setReadTimeout(0); // Timeout infinito para canal de persistencia
+
+                int responseCode = conn.getResponseCode();
+                if (responseCode == 200) {
+                    reader = new java.io.BufferedReader(new java.io.InputStreamReader(conn.getInputStream()));
+                    String line;
+                    while ((line = reader.readLine()) != null) {
+                        if (line.startsWith("data:")) {
+                            String data = line.substring(5).trim();
+                            // Ignorar el mensaje de conexión inicial
+                            if (!data.contains("Conexión de notificaciones establecida con éxito")) {
+                                showSystemNotification("GymTrack", data);
+                            }
+                        }
+                    }
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            } finally {
+                try {
+                    if (reader != null) reader.close();
+                } catch (Exception ignored) {}
+                if (conn != null) conn.disconnect();
+
+                // Reintentar conexión tras 5 segundos ante caídas
+                try {
+                    Thread.sleep(5000);
+                } catch (InterruptedException ignored) {}
+                startNotificationListener();
+            }
+        }).start();
+    }
+
+    private void showSystemNotification(String title, String message) {
+        NotificationManager manager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+        String channelId = "gymtrack_coach_notifications";
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            NotificationChannel channel = new NotificationChannel(
+                    channelId,
+                    "Notificaciones de Entrenador",
+                    NotificationManager.IMPORTANCE_DEFAULT);
+            channel.setDescription("Notificaciones sobre comentarios y feedback de tu entrenador");
+            if (manager != null) {
+                manager.createNotificationChannel(channel);
+            }
+        }
+
+        NotificationCompat.Builder builder = new NotificationCompat.Builder(this, channelId)
+                .setSmallIcon(R.mipmap.ic_launcher)
+                .setContentTitle(title)
+                .setContentText(message)
+                .setPriority(NotificationCompat.PRIORITY_DEFAULT)
+                .setAutoCancel(true);
+
+        if (manager != null) {
+            manager.notify((int) System.currentTimeMillis(), builder.build());
         }
     }
 }

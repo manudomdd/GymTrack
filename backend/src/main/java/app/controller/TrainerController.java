@@ -17,6 +17,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import app.dto.DashboardTrainerDTO;
+import app.service.NotificationService;
 
 @RestController
 @RequestMapping("/api/trainer")
@@ -24,6 +25,9 @@ public class TrainerController {
 
     @Autowired
     private UserRepository userRepo;
+
+    @Autowired
+    private NotificationService notificationService;
 
     @Autowired
     private WorkoutService workoutService;
@@ -258,6 +262,10 @@ public class TrainerController {
                     session.setFeedbackEntrenador(feedback);
                     workoutService.saveSession(session);
                 }
+                
+                // Enviar la notificación en tiempo real vía SSE
+                notificationService.sendNotification(clientId, "Tu entrenador ha dejado un nuevo comentario en tu entrenamiento de la fecha: " + dateStr);
+
                 return ResponseEntity.ok().build();
             }
         }

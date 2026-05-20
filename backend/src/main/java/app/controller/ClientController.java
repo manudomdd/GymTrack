@@ -16,6 +16,8 @@ import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 import app.dto.DashboardClientDTO;
+import app.service.NotificationService;
+import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
 
 @RestController
 @RequestMapping("/api/client")
@@ -23,6 +25,9 @@ public class ClientController {
 
     @Autowired
     private UserRepository userRepo;
+
+    @Autowired
+    private NotificationService notificationService;
 
     @Autowired
     private WorkoutService workoutService;
@@ -257,5 +262,17 @@ public class ClientController {
             return ResponseEntity.ok(dto);
         }
         return ResponseEntity.status(401).build();
+    }
+
+    /**
+     * Suscribe al cliente autenticado para recibir notificaciones en tiempo real vía SSE.
+     */
+    @GetMapping(value = "/notifications/sse", produces = "text/event-stream")
+    public SseEmitter subscribeToNotifications(Authentication auth) {
+        Optional<User> userOpt = userRepo.findByEmail(auth.getName());
+        if (userOpt.isPresent()) {
+            return notificationService.subscribe(userOpt.get().getId());
+        }
+        return null;
     }
 }
