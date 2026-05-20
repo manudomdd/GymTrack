@@ -46,12 +46,8 @@ public class TrainerProfileFragment extends Fragment {
         tvName = view.findViewById(R.id.tv_trainer_name);
         tvEmail = view.findViewById(R.id.tv_trainer_email);
         tvCode = view.findViewById(R.id.tv_trainer_code);
-        Button btnEdit = view.findViewById(R.id.btn_edit_profile);
         
         fetchTrainerProfile();
-
-        btnEdit.setOnClickListener(v ->
-                Toast.makeText(requireContext(), "Editar perfil en desarrollo", Toast.LENGTH_SHORT).show());
     }
 
     private void fetchTrainerProfile() {
