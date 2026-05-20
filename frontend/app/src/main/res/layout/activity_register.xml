@@ -114,6 +114,25 @@
                         android:inputType="textPassword" />
                 </com.google.android.material.textfield.TextInputLayout>
 
+                <Space android:layout_width="wrap_content" android:layout_height="15dp" />
+
+                <!-- Fecha de Nacimiento -->
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/til_fecha_nacimiento"
+                    style="@style/Widget.GymTrack.TextInputLayout"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="Fecha de Nacimiento">
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/et_fecha_nacimiento"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:textColor="@color/white"
+                        android:inputType="none"
+                        android:focusable="false"
+                        android:clickable="true" />
+                </com.google.android.material.textfield.TextInputLayout>
+
                 <Space android:layout_width="wrap_content" android:layout_height="25dp" />
 
                 <!-- Rol de Usuario -->

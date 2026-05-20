@@ -38,7 +38,9 @@ public class AuthService {
         newUser.setNombre(request.getNombre());
         newUser.setEmail(request.getEmail());
         newUser.setPassword(passwordEncoder.encode(request.getPassword()));
-        newUser.setEdad(request.getEdad());
+        if (request.getFechaNacimiento() != null && !request.getFechaNacimiento().isEmpty()) {
+            newUser.setFechaNacimiento(java.time.LocalDate.parse(request.getFechaNacimiento()));
+        }
         newUser.setAltura(request.getAltura());
         newUser.setPeso(request.getPeso());
         newUser.setTipoUsuario(request.getTipoUsuario());

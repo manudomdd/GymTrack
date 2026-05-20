@@ -1,8 +1,10 @@
 package com.gymtrack.app;
 
+import android.app.DatePickerDialog;
 import android.graphics.Typeface;
 import android.graphics.drawable.GradientDrawable;
 import android.os.Bundle;
+import java.util.Calendar;
 import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,6 +15,9 @@ import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.google.android.material.datepicker.CalendarConstraints;
+import com.google.android.material.datepicker.DateValidatorPointBackward;
+import com.google.android.material.datepicker.MaterialDatePicker;
 import com.google.android.material.slider.Slider;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.textfield.TextInputEditText;
@@ -30,7 +35,7 @@ import java.util.Map;
  */
 public class RegisterActivity extends AppCompatActivity {
 
-    private TextInputEditText etNombre, etEmail, etPassword, etPeso, etAltura;
+    private TextInputEditText etNombre, etEmail, etPassword, etPeso, etAltura, etFechaNacimiento;
     private Slider sliderNeat;
     private TextView tvNeatLabel;
     private Button btnRegister, btnGoLogin;
@@ -57,6 +62,7 @@ public class RegisterActivity extends AppCompatActivity {
         etPassword = findViewById(R.id.et_password);
         etPeso = findViewById(R.id.et_peso);
         etAltura = findViewById(R.id.et_altura);
+        etFechaNacimiento = findViewById(R.id.et_fecha_nacimiento);
         sliderNeat = findViewById(R.id.slider_neat);
         tvNeatLabel = findViewById(R.id.tv_neat_label);
         btnRegister = findViewById(R.id.btn_register);
@@ -81,6 +87,38 @@ public class RegisterActivity extends AppCompatActivity {
             tvNeatLabel.setText("NIVEL DE ACTIVIDAD FISICA DIARIA: " + NEAT_LABELS[neatValue]);
         });
 
+        // Date Picker para Fecha de Nacimiento
+        etFechaNacimiento.setOnClickListener(v -> {
+            Calendar calendar = Calendar.getInstance();
+            calendar.add(Calendar.YEAR, -18); // 18 años por defecto
+            long defaultSelection = calendar.getTimeInMillis();
+
+            Calendar maxDate = Calendar.getInstance();
+            maxDate.add(Calendar.YEAR, -10); // Opcional: no permitir fechas futuras (min 10 años)
+            long maxSelection = maxDate.getTimeInMillis();
+
+            CalendarConstraints.Builder constraintsBuilder = new CalendarConstraints.Builder()
+                    .setValidator(DateValidatorPointBackward.before(maxSelection));
+
+            MaterialDatePicker<Long> datePicker = MaterialDatePicker.Builder.datePicker()
+                    .setTitleText("SELECCIONA TU FECHA DE NACIMIENTO")
+                    .setSelection(defaultSelection)
+                    .setCalendarConstraints(constraintsBuilder.build())
+                    .build();
+
+            datePicker.addOnPositiveButtonClickListener(selection -> {
+                Calendar selectedCal = Calendar.getInstance();
+                selectedCal.setTimeInMillis(selection);
+                String date = String.format("%04d-%02d-%02d", 
+                        selectedCal.get(Calendar.YEAR), 
+                        selectedCal.get(Calendar.MONTH) + 1, 
+                        selectedCal.get(Calendar.DAY_OF_MONTH));
+                etFechaNacimiento.setText(date);
+            });
+
+            datePicker.show(getSupportFragmentManager(), "DATE_PICKER");
+        });
+
         btnRegister.setOnClickListener(v -> handleRegister());
         btnGoLogin.setOnClickListener(v -> finish());
     }
@@ -90,11 +128,12 @@ public class RegisterActivity extends AppCompatActivity {
         String nombre = getText(etNombre);
         String email = getText(etEmail);
         String password = getText(etPassword);
+        String fechaNacimiento = getText(etFechaNacimiento);
         String pesoStr = getText(etPeso);
         String alturaStr = getText(etAltura);
 
         if (nombre.isEmpty() || email.isEmpty() || password.isEmpty()
-                || pesoStr.isEmpty() || alturaStr.isEmpty()) {
+                || fechaNacimiento.isEmpty() || pesoStr.isEmpty() || alturaStr.isEmpty()) {
             showSnackbar("Por favor, rellena todos los campos", false);
             return;
         }
@@ -121,6 +160,7 @@ public class RegisterActivity extends AppCompatActivity {
         userData.put("nombre", nombre);
         userData.put("email", email);
         userData.put("password", password);
+        userData.put("fechaNacimiento", fechaNacimiento);
         userData.put("peso", peso);
         userData.put("altura", altura);
         userData.put("neat", neatValue);

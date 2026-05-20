@@ -7,7 +7,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
-import android.widget.GridLayout;
 import android.widget.LinearLayout;
 import android.widget.ScrollView;
 import android.widget.AutoCompleteTextView;
@@ -66,7 +65,7 @@ public class TrainingLogFragment extends Fragment {
 
     private Calendar selectedDate = Calendar.getInstance();
     private TextView tvMonthYear;
-    private GridLayout gridDays;
+    private LinearLayout calendarContainer;
     private RecyclerView rvWorkouts;
     private LinearLayout layoutEmpty;
     private WorkoutAdapter adapter;
@@ -87,7 +86,7 @@ public class TrainingLogFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
 
         tvMonthYear = view.findViewById(R.id.tv_month_year);
-        gridDays = view.findViewById(R.id.grid_days);
+        calendarContainer = view.findViewById(R.id.grid_days);
         rvWorkouts = view.findViewById(R.id.rv_workouts);
         layoutEmpty = view.findViewById(R.id.layout_empty);
         Button btnPrev = view.findViewById(R.id.btn_prev_month);
@@ -136,52 +135,61 @@ public class TrainingLogFragment extends Fragment {
         String cap = fmt.format(selectedDate.getTime());
         tvMonthYear.setText(cap.substring(0, 1).toUpperCase() + cap.substring(1));
 
-        gridDays.removeAllViews();
+        calendarContainer.removeAllViews();
 
         Calendar firstDayCal = (Calendar) selectedDate.clone();
         firstDayCal.set(Calendar.DAY_OF_MONTH, 1);
         int dayOfWeek = firstDayCal.get(Calendar.DAY_OF_WEEK);
         // Calendar.SUNDAY = 1, MONDAY = 2... ajustamos para que Lunes sea columna 0
-        int emptySlots = dayOfWeek == Calendar.SUNDAY ? 6 : dayOfWeek - 2;
-
-        for (int i = 0; i < emptySlots; i++) {
-            TextView empty = new TextView(requireContext());
-            GridLayout.LayoutParams params = new GridLayout.LayoutParams();
-            params.width = 0;
-            params.columnSpec = GridLayout.spec(GridLayout.UNDEFINED, 1, 1f);
-            empty.setLayoutParams(params);
-            gridDays.addView(empty);
-        }
+        int startCol = dayOfWeek == Calendar.SUNDAY ? 6 : dayOfWeek - 2;
 
         int daysInMonth = selectedDate.getActualMaximum(Calendar.DAY_OF_MONTH);
 
-        for (int day = 1; day <= daysInMonth; day++) {
-            final int d = day;
-            boolean isSelected = isSameDay(selectedDate, day);
+        // Construimos fila a fila con LinearLayout (mismo peso que cabecera)
+        int totalCells = startCol + daysInMonth;
+        int numRows = (int) Math.ceil(totalCells / 7.0);
 
-            TextView tvDay = new TextView(requireContext());
-            tvDay.setText(String.valueOf(day));
-            tvDay.setTextColor(isSelected ? 0xFF0F0014 : 0xFFFFFFFF);
-            tvDay.setTextSize(14);
-            tvDay.setGravity(Gravity.CENTER);
-            tvDay.setPadding(4, 8, 4, 8);
+        for (int row = 0; row < numRows; row++) {
+            LinearLayout rowLayout = new LinearLayout(requireContext());
+            rowLayout.setOrientation(LinearLayout.HORIZONTAL);
+            LinearLayout.LayoutParams rowParams = new LinearLayout.LayoutParams(
+                    LinearLayout.LayoutParams.MATCH_PARENT,
+                    LinearLayout.LayoutParams.WRAP_CONTENT);
+            rowLayout.setLayoutParams(rowParams);
 
-            if (isSelected)
-                tvDay.setBackgroundResource(R.drawable.bg_avatar_magenta);
+            for (int col = 0; col < 7; col++) {
+                int cellIndex = row * 7 + col;
+                int day = cellIndex - startCol + 1;
 
-            GridLayout.LayoutParams params = new GridLayout.LayoutParams();
-            params.width = 0;
-            params.columnSpec = GridLayout.spec(GridLayout.UNDEFINED, 1, 1f);
-            params.setMargins(2, 2, 2, 2);
-            tvDay.setLayoutParams(params);
+                TextView tvDay = new TextView(requireContext());
+                LinearLayout.LayoutParams cellParams = new LinearLayout.LayoutParams(
+                        0, LinearLayout.LayoutParams.WRAP_CONTENT, 1f);
+                tvDay.setLayoutParams(cellParams);
+                tvDay.setGravity(Gravity.CENTER);
+                tvDay.setPadding(4, 10, 4, 10);
+                tvDay.setTextSize(14);
 
-            tvDay.setOnClickListener(v -> {
-                selectedDate.set(Calendar.DAY_OF_MONTH, d);
-                refreshCalendar();
-                refreshWorkoutList();
-            });
+                if (day >= 1 && day <= daysInMonth) {
+                    final int d = day;
+                    boolean isSelected = isSameDay(selectedDate, day);
+                    tvDay.setText(String.valueOf(day));
+                    tvDay.setTextColor(isSelected ? 0xFF0F0014 : 0xFFFFFFFF);
+                    if (isSelected)
+                        tvDay.setBackgroundResource(R.drawable.bg_avatar_magenta);
+                    tvDay.setOnClickListener(v -> {
+                        selectedDate.set(Calendar.DAY_OF_MONTH, d);
+                        refreshCalendar();
+                        refreshWorkoutList();
+                    });
+                } else {
+                    // Celda vacía
+                    tvDay.setText("");
+                }
 
-            gridDays.addView(tvDay);
+                rowLayout.addView(tvDay);
+            }
+
+            calendarContainer.addView(rowLayout);
         }
 
         refreshWorkoutList();

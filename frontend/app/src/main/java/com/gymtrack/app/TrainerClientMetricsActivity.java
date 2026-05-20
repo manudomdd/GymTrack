@@ -176,7 +176,7 @@ public class TrainerClientMetricsActivity extends AppCompatActivity {
             color = 0xFFFFA726; // orange
         }
         
-        tvSlope.setText(String.format("Evolución de Carga: %+.2f kg/día", slope));
+        tvSlope.setText(String.format("Evolución: %+.2f kg/día", slope));
         tvEval.setText(evaluation);
         tvEval.setBackgroundTintList(ColorStateList.valueOf(color));
         

@@ -1,6 +1,9 @@
 package app.entity;
 
 import java.util.Collection;
+import java.time.LocalDate;
+import java.time.Period;
+import jakarta.persistence.Transient;
 
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -35,7 +38,8 @@ public class User implements UserDetails {
     private String nombre;
     private String email;
     private String password;
-    private int edad; 
+    @jakarta.persistence.Column(name = "fecha_nacimiento")
+    private LocalDate fechaNacimiento; 
     @Enumerated(EnumType.STRING)
     private TipoUsuario tipoUsuario; 
     private double peso; 
@@ -111,12 +115,24 @@ public class User implements UserDetails {
 		return this.email;
 	}
 
+	public LocalDate getFechaNacimiento() {
+		return fechaNacimiento;
+	}
+
+	public void setFechaNacimiento(LocalDate fechaNacimiento) {
+		this.fechaNacimiento = fechaNacimiento;
+	}
+
+	@Transient
 	public int getEdad() {
-		return edad;
+		if (fechaNacimiento != null) {
+			return Period.between(fechaNacimiento, LocalDate.now()).getYears();
+		}
+		return 0;
 	}
 
 	public void setEdad(int edad) {
-		this.edad = edad;
+		// Setter vacío porque edad es calculada dinámicamente
 	}
 
 	public TipoUsuario getTipoUsuario() {

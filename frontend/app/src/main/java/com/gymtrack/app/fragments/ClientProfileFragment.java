@@ -37,6 +37,8 @@ public class ClientProfileFragment extends Fragment {
 
         etNombre = view.findViewById(R.id.et_nombre);
         etEdad = view.findViewById(R.id.et_edad);
+        etEdad.setEnabled(false);
+        etEdad.setFocusable(false);
         etPeso = view.findViewById(R.id.et_peso);
         etAltura = view.findViewById(R.id.et_altura);
         etTrainerCode = view.findViewById(R.id.et_trainer_code);
@@ -84,18 +86,16 @@ public class ClientProfileFragment extends Fragment {
 
     private void handleUpdateProfile() {
         String nombre = etNombre.getText().toString().trim();
-        String edadStr = etEdad.getText().toString().trim();
         String pesoStr = etPeso.getText().toString().trim();
         String alturaStr = etAltura.getText().toString().trim();
 
-        if (nombre.isEmpty() || edadStr.isEmpty() || pesoStr.isEmpty() || alturaStr.isEmpty()) {
+        if (nombre.isEmpty() || pesoStr.isEmpty() || alturaStr.isEmpty()) {
             Toast.makeText(getContext(), "Por favor, completa todos los campos", Toast.LENGTH_SHORT).show();
             return;
         }
 
         JsonObject data = new JsonObject();
         data.addProperty("nombre", nombre);
-        data.addProperty("edad", Integer.parseInt(edadStr));
         data.addProperty("peso", Double.parseDouble(pesoStr));
         data.addProperty("altura", Integer.parseInt(alturaStr));
 

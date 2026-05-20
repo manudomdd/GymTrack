@@ -7,7 +7,7 @@ public class RegisterRequest {
 	private String nombre; 
 	private String email; 
 	private String password;
-	private int edad; 
+	private String fechaNacimiento; 
 	private TipoUsuario tipoUsuario; 
 	private double peso; 
 	private int altura; 
@@ -92,12 +92,12 @@ public class RegisterRequest {
 		this.neat = neat;
 	}
 
-	public int getEdad() {
-		return edad;
+	public String getFechaNacimiento() {
+		return fechaNacimiento;
 	}
 
-	public void setEdad(int edad) {
-		this.edad = edad;
+	public void setFechaNacimiento(String fechaNacimiento) {
+		this.fechaNacimiento = fechaNacimiento;
 	} 
 	
 	

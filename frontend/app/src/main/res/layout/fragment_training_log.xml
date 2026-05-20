@@ -52,12 +52,12 @@
 
                     <Space android:layout_width="wrap_content" android:layout_height="8dp"/>
 
-                    <!-- Grid de días (se rellena dinámicamente) -->
-                    <GridLayout
+                    <!-- Grid de días (se rellena dinámicamente como filas) -->
+                    <LinearLayout
                         android:id="@+id/grid_days"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:columnCount="7" />
+                        android:orientation="vertical" />
 
                 </LinearLayout>
             </androidx.cardview.widget.CardView>

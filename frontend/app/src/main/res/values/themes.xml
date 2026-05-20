@@ -18,6 +18,9 @@
         <!-- Dialogs -->
         <item name="alertDialogTheme">@style/Theme.GymTrack.Dialog</item>
         <item name="materialAlertDialogTheme">@style/Theme.GymTrack.Dialog</item>
+        <!-- MaterialDatePicker: hereda colores del tema sin romper su layout interno -->
+        <item name="materialCalendarTheme">@style/Theme.GymTrack.MaterialCalendar</item>
+        <item name="materialCalendarFullscreenTheme">@style/Theme.GymTrack.MaterialCalendar</item>
     </style>
 
     <style name="Theme.GymTrack.Dialog" parent="ThemeOverlay.MaterialComponents.MaterialAlertDialog">
@@ -77,6 +80,17 @@
         <item name="boxCornerRadiusBottomStart">15dp</item>
         <item name="boxCornerRadiusTopEnd">15dp</item>
         <item name="boxCornerRadiusTopStart">15dp</item>
+    </style>
+
+    <!-- Estilo para el Calendario Moderno (MaterialDatePicker) -->
+    <style name="Theme.GymTrack.MaterialCalendar" parent="ThemeOverlay.MaterialComponents.MaterialCalendar">
+        <item name="colorPrimary">@color/magenta</item>
+        <item name="colorOnPrimary">@color/white</item>
+        <item name="colorSurface">@color/input_field_bg</item>
+        <item name="colorOnSurface">@color/white</item>
+        <item name="android:textColorPrimary">@color/white</item>
+        <item name="android:textColorSecondary">@color/white_54</item>
+        <item name="colorControlActivated">@color/magenta</item>
     </style>
 
 </resources>

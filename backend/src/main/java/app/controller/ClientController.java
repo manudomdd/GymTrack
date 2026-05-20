@@ -53,7 +53,6 @@ public class ClientController {
         if (userOpt.isPresent()) {
             User user = userOpt.get();
             user.setNombre(updateData.getNombre());
-            user.setEdad(updateData.getEdad());
             user.setPeso(updateData.getPeso());
             user.setAltura(updateData.getAltura());
 
