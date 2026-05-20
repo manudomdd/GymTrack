@@ -18,7 +18,9 @@ import com.gymtrack.app.network.AuthRepository;
 
 import android.content.res.ColorStateList;
 import android.view.LayoutInflater;
+import java.util.HashSet;
 import java.util.Map;
+import java.util.Set;
 
 /**
  * Pantalla de métricas de un cliente específico, accesible desde el perfil del entrenador.
@@ -32,6 +34,7 @@ public class TrainerClientMetricsActivity extends AppCompatActivity {
     private LinearLayout metricsContainer;
     private LinearLayout healthContainer;
     private AuthRepository authRepository;
+    private Map<String, Double> allMetrics;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -67,15 +70,8 @@ public class TrainerClientMetricsActivity extends AppCompatActivity {
             @Override
             public void onSuccess(Map<String, Double> metrics) {
                 runOnUiThread(() -> {
-                    metricsContainer.removeAllViews();
-                    addSectionHeader(metricsContainer, "📈 Progresión de carga por grupo muscular");
-                    if (metrics.isEmpty()) {
-                        addInfoRow(metricsContainer, "Sin datos suficientes aún", 0xFFAAAAAA);
-                        return;
-                    }
-                    for (Map.Entry<String, Double> entry : metrics.entrySet()) {
-                        addMetricView(entry.getKey(), entry.getValue());
-                    }
+                    allMetrics = metrics;
+                    showMuscleGroups();
                 });
             }
 
@@ -87,29 +83,100 @@ public class TrainerClientMetricsActivity extends AppCompatActivity {
         });
     }
 
-    private void addMetricView(String muscleGroup, double slope) {
+    private void showMuscleGroups() {
+        metricsContainer.removeAllViews();
+        addSectionHeader(metricsContainer, "Selecciona un Grupo Muscular");
+
+        if (allMetrics == null) {
+            // Wait for metrics to load or fail gracefully
+            return;
+        }
+
+        String[] allGroups = {"Pecho", "Espalda", "Hombros", "Cuadriceps", "Femoral", "Biceps", "Triceps"};
+        
+        int heightPx = (int) (64 * getResources().getDisplayMetrics().density);
+        int marginPx = (int) (16 * getResources().getDisplayMetrics().density);
+
+        for (String group : allGroups) {
+            Button btnGroup = new Button(this);
+            btnGroup.setText(group.toUpperCase());
+            btnGroup.setBackgroundResource(R.drawable.bg_input_field);
+            btnGroup.setTextColor(getResources().getColor(R.color.white));
+            btnGroup.setTextSize(16);
+            btnGroup.setTypeface(null, Typeface.BOLD);
+            
+            LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(
+                    LinearLayout.LayoutParams.MATCH_PARENT,
+                    heightPx
+            );
+            params.setMargins(0, 0, 0, marginPx);
+            btnGroup.setLayoutParams(params);
+            
+            btnGroup.setOnClickListener(v -> showExercisesForGroup(group));
+            
+            metricsContainer.addView(btnGroup);
+        }
+    }
+
+    private void showExercisesForGroup(String group) {
+        metricsContainer.removeAllViews();
+        
+        Button btnBackGroup = new Button(this);
+        btnBackGroup.setText("Volver a Grupos Musculares");
+        btnBackGroup.setBackgroundResource(R.drawable.bg_input_field);
+        btnBackGroup.setTextColor(getResources().getColor(R.color.magenta));
+        btnBackGroup.setTypeface(null, Typeface.BOLD);
+        
+        LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(
+                LinearLayout.LayoutParams.MATCH_PARENT,
+                LinearLayout.LayoutParams.WRAP_CONTENT
+        );
+        params.setMargins(0, 0, 0, 24);
+        btnBackGroup.setLayoutParams(params);
+        btnBackGroup.setOnClickListener(v -> showMuscleGroups());
+        
+        metricsContainer.addView(btnBackGroup);
+        
+        addSectionHeader(metricsContainer, "Evolución: " + group.toUpperCase());
+        
+        boolean hasExercises = false;
+        for (Map.Entry<String, Double> entry : allMetrics.entrySet()) {
+            String key = entry.getKey();
+            if (key.startsWith(group + " - ")) {
+                String exerciseName = key.substring(group.length() + 3);
+                addMetricView(exerciseName, entry.getValue());
+                hasExercises = true;
+            }
+        }
+        
+        if (!hasExercises) {
+            addInfoRow(metricsContainer, "Aún no hay registros de evolución de cargas suficientes para el grupo: " + group, 0xFFAAAAAA);
+        }
+    }
+
+    private void addMetricView(String exerciseName, double slope) {
         View card = LayoutInflater.from(this).inflate(R.layout.item_metric_card, metricsContainer, false);
         
         TextView tvMuscle = card.findViewById(R.id.tv_muscle_group);
         TextView tvSlope = card.findViewById(R.id.tv_slope_value);
         TextView tvEval = card.findViewById(R.id.tv_evaluation);
         
-        tvMuscle.setText(muscleGroup.toUpperCase());
+        tvMuscle.setText(exerciseName.toUpperCase());
         
         String evaluation;
         int color;
         if (slope > 0.05) {
-            evaluation = "Progresando";
+            evaluation = "Progresión";
             color = 0xFF00BF80; // success_green
         } else if (slope < -0.05) {
-            evaluation = "Retroceso";
+            evaluation = "Regresión";
             color = 0xFFFF3333; // error_red
         } else {
-            evaluation = "Estancado";
+            evaluation = "Estancamiento";
             color = 0xFFFFA726; // orange
         }
         
-        tvSlope.setText(String.format("Pendiente: %+.2f kg/día", slope));
+        tvSlope.setText(String.format("Evolución de Carga: %+.2f kg/día", slope));
         tvEval.setText(evaluation);
         tvEval.setBackgroundTintList(ColorStateList.valueOf(color));
         
