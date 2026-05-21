@@ -3,8 +3,11 @@ package app.controller;
 import app.entity.SleepLog;
 import app.entity.StepLog;
 import app.entity.User;
+import app.entity.Client;
+import app.entity.Trainer;
 import app.entity.WorkoutSession;
 import app.repository.UserRepository;
+import app.repository.TrainerRepository;
 import app.service.HealthService;
 import app.service.WorkoutService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,6 +30,9 @@ public class ClientController {
     private UserRepository userRepo;
 
     @Autowired
+    private TrainerRepository trainerRepo;
+
+    @Autowired
     private NotificationService notificationService;
 
     @Autowired
@@ -37,7 +43,7 @@ public class ClientController {
 
     @GetMapping("/profile")
     public ResponseEntity<User> getProfile(Authentication auth) {
-        Optional<User> userOpt = userRepo.findByEmail(auth.getName());
+        Optional<User> userOpt = userRepo.findByUsername(auth.getName());
         return userOpt.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
     }
 
@@ -48,10 +54,10 @@ public class ClientController {
      * @return
      */
     @PutMapping("/profile")
-    public ResponseEntity<User> updateProfile(Authentication auth, @RequestBody User updateData) {
-        Optional<User> userOpt = userRepo.findByEmail(auth.getName());
-        if (userOpt.isPresent()) {
-            User user = userOpt.get();
+    public ResponseEntity<User> updateProfile(Authentication auth, @RequestBody Client updateData) {
+        Optional<User> userOpt = userRepo.findByUsername(auth.getName());
+        if (userOpt.isPresent() && userOpt.get() instanceof Client) {
+            Client user = (Client) userOpt.get();
             user.setNombre(updateData.getNombre());
             user.setPeso(updateData.getPeso());
             user.setAltura(updateData.getAltura());
@@ -73,7 +79,7 @@ public class ClientController {
      */
     @GetMapping("/workouts")
     public ResponseEntity<List<WorkoutSession>> getWorkouts(Authentication auth) {
-        Optional<User> userOpt = userRepo.findByEmail(auth.getName());
+        Optional<User> userOpt = userRepo.findByUsername(auth.getName());
         if (userOpt.isPresent()) {
             return ResponseEntity.ok(workoutService.getSessionsByUser(userOpt.get().getId()));
         }
@@ -88,9 +94,9 @@ public class ClientController {
      */
     @PostMapping("/workouts")
     public ResponseEntity<WorkoutSession> addWorkout(Authentication auth, @RequestBody WorkoutSession session) {
-        Optional<User> userOpt = userRepo.findByEmail(auth.getName());
-        if (userOpt.isPresent()) {
-            session.setUser(userOpt.get());
+        Optional<User> userOpt = userRepo.findByUsername(auth.getName());
+        if (userOpt.isPresent() && userOpt.get() instanceof Client) {
+            session.setClient((Client) userOpt.get());
             return ResponseEntity.ok(workoutService.saveSession(session));
         }
         return ResponseEntity.status(401).build();
@@ -108,12 +114,12 @@ public class ClientController {
     @PostMapping("/workouts/batch")
     public ResponseEntity<List<WorkoutSession>> addWorkoutBatch(Authentication auth,
             @RequestBody List<WorkoutSession> sessions) {
-        Optional<User> userOpt = userRepo.findByEmail(auth.getName());
-        if (userOpt.isEmpty()) {
+        Optional<User> userOpt = userRepo.findByUsername(auth.getName());
+        if (userOpt.isEmpty() || !(userOpt.get() instanceof Client)) {
             return ResponseEntity.status(401).build();
         }
-        User user = userOpt.get();
-        sessions.forEach(s -> s.setUser(user));
+        Client client = (Client) userOpt.get();
+        sessions.forEach(s -> s.setClient(client));
         return ResponseEntity.ok(workoutService.saveAllSessions(sessions));
     }
 
@@ -129,7 +135,7 @@ public class ClientController {
     @PutMapping("/workouts/{id}")
     public ResponseEntity<?> updateWorkoutExecution(Authentication auth,
             @PathVariable Long id, @RequestBody WorkoutSession update) {
-        Optional<User> userOpt = userRepo.findByEmail(auth.getName());
+        Optional<User> userOpt = userRepo.findByUsername(auth.getName());
         if (userOpt.isEmpty()) {
             return ResponseEntity.status(401).build();
         }
@@ -138,7 +144,7 @@ public class ClientController {
             return ResponseEntity.notFound().build();
         }
         WorkoutSession session = sessionOpt.get();
-        if (!session.getUser().getId().equals(userOpt.get().getId())) {
+        if (!session.getClient().getId().equals(userOpt.get().getId())) {
             return ResponseEntity.status(403).build();
         }
         session.setReps(update.getReps());
@@ -153,7 +159,7 @@ public class ClientController {
      */
     @DeleteMapping("/workouts/{id}")
     public ResponseEntity<?> deleteWorkoutSession(Authentication auth, @PathVariable Long id) {
-        Optional<User> userOpt = userRepo.findByEmail(auth.getName());
+        Optional<User> userOpt = userRepo.findByUsername(auth.getName());
         if (userOpt.isEmpty()) {
             return ResponseEntity.status(401).build();
         }
@@ -162,7 +168,7 @@ public class ClientController {
             return ResponseEntity.notFound().build();
         }
         WorkoutSession session = sessionOpt.get();
-        if (!session.getUser().getId().equals(userOpt.get().getId())) {
+        if (!session.getClient().getId().equals(userOpt.get().getId())) {
             return ResponseEntity.status(403).build();
         }
         workoutService.deleteSession(id);
@@ -177,9 +183,9 @@ public class ClientController {
      */
     @PostMapping("/health/sleep")
     public ResponseEntity<SleepLog> addSleepLog(Authentication auth, @RequestBody SleepLog log) {
-        Optional<User> userOpt = userRepo.findByEmail(auth.getName());
-        if (userOpt.isPresent()) {
-            log.setUser(userOpt.get());
+        Optional<User> userOpt = userRepo.findByUsername(auth.getName());
+        if (userOpt.isPresent() && userOpt.get() instanceof Client) {
+            log.setClient((Client) userOpt.get());
             return ResponseEntity.ok(healthService.saveSleepLog(log));
         }
         return ResponseEntity.status(401).build();
@@ -193,9 +199,9 @@ public class ClientController {
      */
     @PostMapping("/health/steps")
     public ResponseEntity<StepLog> addStepLog(Authentication auth, @RequestBody StepLog log) {
-        Optional<User> userOpt = userRepo.findByEmail(auth.getName());
-        if (userOpt.isPresent()) {
-            log.setUser(userOpt.get());
+        Optional<User> userOpt = userRepo.findByUsername(auth.getName());
+        if (userOpt.isPresent() && userOpt.get() instanceof Client) {
+            log.setClient((Client) userOpt.get());
             return ResponseEntity.ok(healthService.saveStepLog(log));
         }
         return ResponseEntity.status(401).build();
@@ -209,12 +215,12 @@ public class ClientController {
      */
     @PostMapping("/link-trainer/{code}")
     public ResponseEntity<String> linkTrainer(Authentication auth, @PathVariable String code) {
-        Optional<User> userOpt = userRepo.findByEmail(auth.getName());
-        if (userOpt.isPresent()) {
-            User client = userOpt.get();
-            Optional<User> trainerOpt = userRepo.findByTrainerCode(code);
+        Optional<User> userOpt = userRepo.findByUsername(auth.getName());
+        if (userOpt.isPresent() && userOpt.get() instanceof Client) {
+            Client client = (Client) userOpt.get();
+            Optional<Trainer> trainerOpt = trainerRepo.findByTrainerCode(code);
 
-            if (trainerOpt.isPresent() && trainerOpt.get().getTipoUsuario() == app.entity.TipoUsuario.ENTRENADOR) {
+            if (trainerOpt.isPresent()) {
                 client.setTrainer(trainerOpt.get());
                 userRepo.save(client);
                 return ResponseEntity.ok("Entrenador vinculado con éxito");
@@ -230,7 +236,7 @@ public class ClientController {
      */
     @GetMapping("/dashboard")
     public ResponseEntity<DashboardClientDTO> getDashboard(Authentication auth) {
-        Optional<User> userOpt = userRepo.findByEmail(auth.getName());
+        Optional<User> userOpt = userRepo.findByUsername(auth.getName());
         if (userOpt.isPresent()) {
             User user = userOpt.get();
             Long userId = user.getId();
@@ -265,7 +271,7 @@ public class ClientController {
 
     @GetMapping(value = "/notifications/sse", produces = "text/event-stream")
     public SseEmitter subscribeToNotifications(Authentication auth) {
-        Optional<User> userOpt = userRepo.findByEmail(auth.getName());
+        Optional<User> userOpt = userRepo.findByUsername(auth.getName());
         if (userOpt.isPresent()) {
             return notificationService.subscribe(userOpt.get().getId());
         }

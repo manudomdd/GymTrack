@@ -10,6 +10,6 @@ import java.util.Optional;
 
 @Repository
 public interface StepLogRepository extends JpaRepository<StepLog, Long> {
-    List<StepLog> findByUserId(Long userId);
-    Optional<StepLog> findByUserIdAndDate(Long userId, LocalDate date);
+    List<StepLog> findByClientId(Long clientId);
+    Optional<StepLog> findByClientIdAndDate(Long clientId, LocalDate date);
 }

@@ -3,7 +3,7 @@ package app.dto;
 public class ClientSummaryDTO {
     private Long id;
     private String nombre;
-    private String email;
+    private String username;
     private double peso;
     private int altura;
     private int edad;
@@ -12,10 +12,10 @@ public class ClientSummaryDTO {
     public ClientSummaryDTO() {
     }
 
-    public ClientSummaryDTO(Long id, String nombre, String email, double peso, int altura, int edad, String ultimoGrupoMuscular) {
+    public ClientSummaryDTO(Long id, String nombre, String username, double peso, int altura, int edad, String ultimoGrupoMuscular) {
         this.id = id;
         this.nombre = nombre;
-        this.email = email;
+        this.username = username;
         this.peso = peso;
         this.altura = altura;
         this.edad = edad;
@@ -38,12 +38,12 @@ public class ClientSummaryDTO {
         this.nombre = nombre;
     }
 
-    public String getEmail() {
-        return email;
+    public String getUsername() {
+        return username;
     }
 
-    public void setEmail(String email) {
-        this.email = email;
+    public void setUsername(String username) {
+        this.username = username;
     }
 
     public double getPeso() {

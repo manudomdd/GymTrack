@@ -5,6 +5,7 @@ import app.dto.DashboardTrainerDTO;
 import app.entity.User;
 import app.entity.WorkoutSession;
 import app.repository.UserRepository;
+import app.repository.ClientRepository;
 import app.service.HealthService;
 import app.service.NotificationService;
 import app.service.WorkoutService;
@@ -29,6 +30,9 @@ public class TrainerController {
     private UserRepository userRepo;
 
     @Autowired
+    private ClientRepository clientRepo;
+
+    @Autowired
     private NotificationService notificationService;
 
     @Autowired
@@ -42,9 +46,9 @@ public class TrainerController {
      */
     @GetMapping("/clients")
     public ResponseEntity<List<ClientSummaryDTO>> getClients(Authentication auth) {
-        Optional<User> trainerOpt = userRepo.findByEmail(auth.getName());
+        Optional<User> trainerOpt = userRepo.findByUsername(auth.getName());
         if (trainerOpt.isPresent()) {
-            List<User> clients = userRepo.findByTrainerId(trainerOpt.get().getId());
+            List<app.entity.Client> clients = clientRepo.findByTrainerId(trainerOpt.get().getId());
             List<ClientSummaryDTO> dtoList = clients.stream().map(client -> {
                 String ultimoGrupo = "Ninguno";
                 try {
@@ -76,7 +80,7 @@ public class TrainerController {
                 return new ClientSummaryDTO(
                         client.getId(),
                         client.getNombre() != null ? client.getNombre() : "—",
-                        client.getEmail() != null ? client.getEmail() : "—",
+                        client.getUsername() != null ? client.getUsername() : "—",
                         client.getPeso(),
                         client.getAltura(),
                         client.getEdad(),
@@ -93,13 +97,13 @@ public class TrainerController {
      */
     @PostMapping("/assignClient/{clientId}")
     public ResponseEntity<String> assignClient(Authentication auth, @PathVariable Long clientId) {
-        Optional<User> trainerOpt = userRepo.findByEmail(auth.getName());
-        Optional<User> clientOpt = userRepo.findById(clientId);
+        Optional<User> trainerOpt = userRepo.findByUsername(auth.getName());
+        Optional<app.entity.Client> clientOpt = clientRepo.findById(clientId);
 
-        if (trainerOpt.isPresent() && clientOpt.isPresent()) {
-            User client = clientOpt.get();
-            client.setTrainer(trainerOpt.get());
-            userRepo.save(client);
+        if (trainerOpt.isPresent() && trainerOpt.get() instanceof app.entity.Trainer && clientOpt.isPresent()) {
+            app.entity.Client client = clientOpt.get();
+            client.setTrainer((app.entity.Trainer) trainerOpt.get());
+            clientRepo.save(client);
             return ResponseEntity.ok("Cliente asignado exitosamente.");
         }
         return ResponseEntity.badRequest().body("Entrenador o Cliente no encontrados.");
@@ -112,11 +116,11 @@ public class TrainerController {
     @GetMapping("/client/{clientId}/progress")
     public ResponseEntity<Map<String, Double>> getClientProgress(
             Authentication auth, @PathVariable Long clientId) {
-        Optional<User> trainerOpt = userRepo.findByEmail(auth.getName());
-        Optional<User> clientOpt = userRepo.findById(clientId);
+        Optional<User> trainerOpt = userRepo.findByUsername(auth.getName());
+        Optional<app.entity.Client> clientOpt = clientRepo.findById(clientId);
 
         if (trainerOpt.isPresent() && clientOpt.isPresent()) {
-            User client = clientOpt.get();
+            app.entity.Client client = clientOpt.get();
             if (client.getTrainer() != null
                     && client.getTrainer().getId().equals(trainerOpt.get().getId())) {
                 return ResponseEntity.ok(workoutService.calculateProgressMetrics(clientId));
@@ -136,14 +140,14 @@ public class TrainerController {
     @PostMapping("/client/{clientId}/workouts")
     public ResponseEntity<WorkoutSession> assignWorkout(Authentication auth,
             @PathVariable Long clientId, @RequestBody WorkoutSession session) {
-        Optional<User> trainerOpt = userRepo.findByEmail(auth.getName());
-        Optional<User> clientOpt = userRepo.findById(clientId);
+        Optional<User> trainerOpt = userRepo.findByUsername(auth.getName());
+        Optional<app.entity.Client> clientOpt = clientRepo.findById(clientId);
 
         if (trainerOpt.isPresent() && clientOpt.isPresent()) {
-            User client = clientOpt.get();
+            app.entity.Client client = clientOpt.get();
             if (client.getTrainer() != null
                     && client.getTrainer().getId().equals(trainerOpt.get().getId())) {
-                session.setUser(client);
+                session.setClient(client);
                 return ResponseEntity.ok(workoutService.saveSession(session));
             }
         }
@@ -162,11 +166,11 @@ public class TrainerController {
     @GetMapping("/client/{clientId}/health")
     public ResponseEntity<Map<String, Object>> getClientHealth(
             Authentication auth, @PathVariable Long clientId) {
-        Optional<User> trainerOpt = userRepo.findByEmail(auth.getName());
-        Optional<User> clientOpt = userRepo.findById(clientId);
+        Optional<User> trainerOpt = userRepo.findByUsername(auth.getName());
+        Optional<app.entity.Client> clientOpt = clientRepo.findById(clientId);
 
         if (trainerOpt.isPresent() && clientOpt.isPresent()) {
-            User client = clientOpt.get();
+            app.entity.Client client = clientOpt.get();
             if (client.getTrainer() != null
                     && client.getTrainer().getId().equals(trainerOpt.get().getId())) {
                 Map<String, Object> health = new HashMap<>();
@@ -185,11 +189,11 @@ public class TrainerController {
     @GetMapping("/client/{clientId}/workouts")
     public ResponseEntity<List<WorkoutSession>> getClientWorkouts(
             Authentication auth, @PathVariable Long clientId) {
-        Optional<User> trainerOpt = userRepo.findByEmail(auth.getName());
-        Optional<User> clientOpt = userRepo.findById(clientId);
+        Optional<User> trainerOpt = userRepo.findByUsername(auth.getName());
+        Optional<app.entity.Client> clientOpt = clientRepo.findById(clientId);
 
         if (trainerOpt.isPresent() && clientOpt.isPresent()) {
-            User client = clientOpt.get();
+            app.entity.Client client = clientOpt.get();
             if (client.getTrainer() != null
                     && client.getTrainer().getId().equals(trainerOpt.get().getId())) {
                 return ResponseEntity.ok(workoutService.getSessionsByUser(clientId));
@@ -203,10 +207,10 @@ public class TrainerController {
      */
     @GetMapping("/dashboard")
     public ResponseEntity<DashboardTrainerDTO> getDashboard(Authentication auth) {
-        Optional<User> trainerOpt = userRepo.findByEmail(auth.getName());
-        if (trainerOpt.isPresent()) {
-            User trainer = trainerOpt.get();
-            List<User> clients = userRepo.findByTrainerId(trainer.getId());
+        Optional<User> trainerOpt = userRepo.findByUsername(auth.getName());
+        if (trainerOpt.isPresent() && trainerOpt.get() instanceof app.entity.Trainer) {
+            app.entity.Trainer trainer = (app.entity.Trainer) trainerOpt.get();
+            List<app.entity.Client> clients = clientRepo.findByTrainerId(trainer.getId());
             
             int clientesTotales = clients.size();
             int activosHoy = 0;
@@ -215,7 +219,7 @@ public class TrainerController {
             
             LocalDate hoy = LocalDate.now();
             
-            for (User client : clients) {
+            for (app.entity.Client client : clients) {
                 List<WorkoutSession> sessions = workoutService.getSessionsByUser(client.getId());
                 long distinctDates = sessions.stream().filter(s -> s.getDate() != null).map(WorkoutSession::getDate).distinct().count();
                 entrenamientos += distinctDates;
@@ -247,11 +251,11 @@ public class TrainerController {
             @PathVariable Long clientId,
             @RequestParam("date") String dateStr,
             @RequestBody Map<String, String> body) {
-        Optional<User> trainerOpt = userRepo.findByEmail(auth.getName());
-        Optional<User> clientOpt = userRepo.findById(clientId);
+        Optional<User> trainerOpt = userRepo.findByUsername(auth.getName());
+        Optional<app.entity.Client> clientOpt = clientRepo.findById(clientId);
 
         if (trainerOpt.isPresent() && clientOpt.isPresent()) {
-            User client = clientOpt.get();
+            app.entity.Client client = clientOpt.get();
             if (client.getTrainer() != null && client.getTrainer().getId().equals(trainerOpt.get().getId())) {
                 LocalDate date = LocalDate.parse(dateStr);
                 String feedback = body.get("feedback");

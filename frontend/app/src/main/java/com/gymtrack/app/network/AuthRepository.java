@@ -51,15 +51,15 @@ public class AuthRepository {
     }
 
     /**
-     * Realiza el login con email y contraseña.
+     * Permite al usuario iniciar sesión con username y contraseña.
      * Si tiene éxito, guarda el JWT en SharedPreferences.
      * Se ejecuta en un hilo separado; el callback corre en el hilo llamante.
      */
-    public void login(String email, String password, AuthCallback callback) {
+    public void login(String username, String password, AuthCallback callback) {
         new Thread(() -> {
             try {
                 JsonObject body = new JsonObject();
-                body.addProperty("email", email);
+                body.addProperty("username", username);
                 body.addProperty("password", password);
 
                 RequestBody requestBody = RequestBody.create(body.toString(), JSON);
@@ -95,7 +95,7 @@ public class AuthRepository {
 
     /**
      * Registra un nuevo usuario con los datos proporcionados.
-     * userData debe contener: nombre, email, password, peso, altura, neat, tipoUsuario
+     * userData debe contener: nombre, username, password, peso, altura, neat, tipoUsuario
      */
     public void register(Map<String, Object> userData, AuthCallback callback) {
         new Thread(() -> {
@@ -111,7 +111,7 @@ public class AuthRepository {
                     if (response.isSuccessful()) {
                         callback.onSuccess();
                     } else {
-                        callback.onError("Error en el registro. El email puede que ya exista.");
+                        callback.onError("Error en el registro. El username puede que ya exista.");
                     }
                 }
             } catch (IOException e) {

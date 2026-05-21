@@ -32,8 +32,8 @@
                 <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Nombre" android:textSize="12sp" android:textColor="@color/white_54"/>
                 <TextView android:id="@+id/tv_trainer_name" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Manuel López" android:textSize="16sp" android:textColor="@color/white" android:layout_marginBottom="12dp"/>
 
-                <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Email" android:textSize="12sp" android:textColor="@color/white_54"/>
-                <TextView android:id="@+id/tv_trainer_email" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="manuel@gymtrack.com" android:textSize="16sp" android:textColor="@color/white" android:layout_marginBottom="12dp"/>
+                <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Username" android:textSize="12sp" android:textColor="@color/white_54"/>
+                <TextView android:id="@+id/tv_trainer_username" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="manuel@gymtrack.com" android:textSize="16sp" android:textColor="@color/white" android:layout_marginBottom="12dp"/>
 
                 <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="MI CÓDIGO DE ENTRENADOR" android:textSize="12sp" android:textColor="@color/magenta" android:textStyle="bold"/>
                 <TextView android:id="@+id/tv_trainer_code" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="TR-XXXXXX" android:textSize="22sp" android:textColor="@color/white" android:textStyle="bold"/>

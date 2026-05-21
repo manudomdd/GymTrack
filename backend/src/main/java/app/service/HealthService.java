@@ -1,5 +1,6 @@
 package app.service;
 
+import app.entity.Client;
 import app.entity.SleepLog;
 import app.entity.StepLog;
 import app.repository.SleepLogRepository;
@@ -21,7 +22,7 @@ public class HealthService {
     private StepLogRepository stepRepo;
 
     public SleepLog saveSleepLog(SleepLog log) {
-        Optional<SleepLog> existing = sleepRepo.findByUserIdAndDate(log.getUser().getId(), log.getDate());
+        Optional<SleepLog> existing = sleepRepo.findByClientIdAndDate(log.getClient().getId(), log.getDate());
         if (existing.isPresent()) {
             SleepLog e = existing.get();
             e.setHoursSlept(log.getHoursSlept());
@@ -32,7 +33,7 @@ public class HealthService {
     }
 
     public StepLog saveStepLog(StepLog log) {
-        Optional<StepLog> existing = stepRepo.findByUserIdAndDate(log.getUser().getId(), log.getDate());
+        Optional<StepLog> existing = stepRepo.findByClientIdAndDate(log.getClient().getId(), log.getDate());
         if (existing.isPresent()) {
             StepLog e = existing.get();
             e.setSteps(log.getSteps()); // Se sobreescribe con el total del día calculado en el cliente
@@ -42,10 +43,10 @@ public class HealthService {
     }
 
     public List<SleepLog> getSleepLogs(Long userId) {
-        return sleepRepo.findByUserId(userId);
+        return sleepRepo.findByClientId(userId);
     }
 
     public List<StepLog> getStepLogs(Long userId) {
-        return stepRepo.findByUserId(userId);
+        return stepRepo.findByClientId(userId);
     }
 }

@@ -12,7 +12,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="16dp"
-        android:hint="Buscar cliente por nombre o email">
+        android:hint="Buscar cliente por nombre">
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/et_search"
             android:layout_width="match_parent"

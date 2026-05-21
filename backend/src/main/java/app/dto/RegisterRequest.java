@@ -5,7 +5,7 @@ import app.entity.TipoUsuario;
 public class RegisterRequest {
 	
 	private String nombre; 
-	private String email; 
+	private String username; 
 	private String password;
 	private String fechaNacimiento; 
 	private TipoUsuario tipoUsuario; 
@@ -24,11 +24,11 @@ public class RegisterRequest {
 		this.trainerCode = trainerCode;
 	}
 	
-	public RegisterRequest(String nombre, String email, String password, TipoUsuario tipoUsuario, double peso, int altura,
+	public RegisterRequest(String nombre, String username, String password, TipoUsuario tipoUsuario, double peso, int altura,
 			int neat) {
 		super();
 		this.nombre = nombre;
-		this.email = email;
+		this.username = username;
 		this.password = password;
 		this.tipoUsuario = tipoUsuario;
 		this.peso = peso;
@@ -44,12 +44,12 @@ public class RegisterRequest {
 		this.nombre = nombre;
 	}
 
-	public String getEmail() {
-		return email;
+	public String getUsername() {
+		return username;
 	}
 
-	public void setEmail(String email) {
-		this.email = email;
+	public void setUsername(String username) {
+		this.username = username;
 	}
 
 	public String getPassword() {

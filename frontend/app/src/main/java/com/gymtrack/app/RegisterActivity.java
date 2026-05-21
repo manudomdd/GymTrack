@@ -35,7 +35,7 @@ import java.util.Map;
  */
 public class RegisterActivity extends AppCompatActivity {
 
-    private TextInputEditText etNombre, etEmail, etPassword, etPeso, etAltura, etFechaNacimiento;
+    private TextInputEditText etNombre, etUsername, etPassword, etPeso, etAltura, etFechaNacimiento;
     private Slider sliderNeat;
     private TextView tvNeatLabel;
     private Button btnRegister, btnGoLogin;
@@ -58,7 +58,7 @@ public class RegisterActivity extends AppCompatActivity {
         authRepository = new AuthRepository(this);
 
         etNombre = findViewById(R.id.et_nombre);
-        etEmail = findViewById(R.id.et_email);
+        etUsername = findViewById(R.id.et_username);
         etPassword = findViewById(R.id.et_password);
         etPeso = findViewById(R.id.et_peso);
         etAltura = findViewById(R.id.et_altura);
@@ -109,9 +109,9 @@ public class RegisterActivity extends AppCompatActivity {
             datePicker.addOnPositiveButtonClickListener(selection -> {
                 Calendar selectedCal = Calendar.getInstance();
                 selectedCal.setTimeInMillis(selection);
-                String date = String.format("%04d-%02d-%02d", 
-                        selectedCal.get(Calendar.YEAR), 
-                        selectedCal.get(Calendar.MONTH) + 1, 
+                String date = String.format("%04d-%02d-%02d",
+                        selectedCal.get(Calendar.YEAR),
+                        selectedCal.get(Calendar.MONTH) + 1,
                         selectedCal.get(Calendar.DAY_OF_MONTH));
                 etFechaNacimiento.setText(date);
             });
@@ -126,13 +126,13 @@ public class RegisterActivity extends AppCompatActivity {
     /** Gestiona el registro del nuevo usuario */
     private void handleRegister() {
         String nombre = getText(etNombre);
-        String email = getText(etEmail);
+        String username = getText(etUsername);
         String password = getText(etPassword);
         String fechaNacimiento = getText(etFechaNacimiento);
         String pesoStr = getText(etPeso);
         String alturaStr = getText(etAltura);
 
-        if (nombre.isEmpty() || email.isEmpty() || password.isEmpty()
+        if (nombre.isEmpty() || username.isEmpty() || password.isEmpty()
                 || fechaNacimiento.isEmpty() || pesoStr.isEmpty() || alturaStr.isEmpty()) {
             showSnackbar("Por favor, rellena todos los campos", false);
             return;
@@ -158,14 +158,14 @@ public class RegisterActivity extends AppCompatActivity {
 
         Map<String, Object> userData = new HashMap<>();
         userData.put("nombre", nombre);
-        userData.put("email", email);
+        userData.put("username", username);
         userData.put("password", password);
         userData.put("fechaNacimiento", fechaNacimiento);
         userData.put("peso", peso);
         userData.put("altura", altura);
         userData.put("neat", neatValue);
         userData.put("tipoUsuario", tipoUsuario);
-        
+
         if (tipoUsuario.equals("CLIENTE")) {
             String trainerCode = etTrainerCode.getText().toString().trim();
             if (!trainerCode.isEmpty()) {
@@ -188,7 +188,7 @@ public class RegisterActivity extends AppCompatActivity {
             public void onError(String message) {
                 runOnUiThread(() -> {
                     setLoading(false);
-                    showSnackbar("Error: El email ya existe o hay un problema", false);
+                    showSnackbar("Error: El username ya existe o hay un problema", false);
                 });
             }
         });

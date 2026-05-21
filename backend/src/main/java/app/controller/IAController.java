@@ -2,6 +2,7 @@ package app.controller;
 
 import app.entity.User;
 import app.repository.UserRepository;
+import app.repository.ClientRepository;
 import app.service.IAService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -20,6 +21,9 @@ public class IAController {
     private UserRepository userRepo;
 
     @Autowired
+    private ClientRepository clientRepo;
+
+    @Autowired
     private IAService iaService;
 
     /**
@@ -35,11 +39,11 @@ public class IAController {
             @PathVariable Long clientId,
             @RequestBody Map<String, String> request) {
 
-        Optional<User> trainerOpt = userRepo.findByEmail(auth.getName());
-        Optional<User> clientOpt = userRepo.findById(clientId);
+        Optional<User> trainerOpt = userRepo.findByUsername(auth.getName());
+        Optional<app.entity.Client> clientOpt = clientRepo.findById(clientId);
 
         if (trainerOpt.isPresent() && clientOpt.isPresent()) {
-            User client = clientOpt.get();
+            app.entity.Client client = clientOpt.get();
             // Comprobación de que el cliente está vinculado al entrenador autenticado.
             if (client.getTrainer() != null
                     && client.getTrainer().getId().equals(trainerOpt.get().getId())) {
@@ -71,7 +75,7 @@ public class IAController {
             Authentication auth,
             @RequestBody Map<String, String> request) {
 
-        Optional<User> trainerOpt = userRepo.findByEmail(auth.getName());
+        Optional<User> trainerOpt = userRepo.findByUsername(auth.getName());
         if (trainerOpt.isPresent()) {
             String trainerQuery = request.getOrDefault("message", "");
             if (trainerQuery.trim().isEmpty()) {

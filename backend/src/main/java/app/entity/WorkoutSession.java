@@ -12,9 +12,9 @@ public class WorkoutSession {
     private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "user_id", nullable = false)
+    @JoinColumn(name = "client_id", nullable = false)
     @com.fasterxml.jackson.annotation.JsonIgnore
-    private User user;
+    private Client client;
 
     private LocalDate date;
     private String exercise;
@@ -48,12 +48,12 @@ public class WorkoutSession {
         this.id = id;
     }
 
-    public User getUser() {
-        return user;
+    public Client getClient() {
+        return client;
     }
 
-    public void setUser(User user) {
-        this.user = user;
+    public void setClient(Client client) {
+        this.client = client;
     }
 
     public LocalDate getDate() {

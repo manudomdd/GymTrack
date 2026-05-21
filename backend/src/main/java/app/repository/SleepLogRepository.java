@@ -10,6 +10,6 @@ import java.util.Optional;
 
 @Repository
 public interface SleepLogRepository extends JpaRepository<SleepLog, Long> {
-    List<SleepLog> findByUserId(Long userId);
-    Optional<SleepLog> findByUserIdAndDate(Long userId, LocalDate date);
+    List<SleepLog> findByClientId(Long clientId);
+    Optional<SleepLog> findByClientIdAndDate(Long clientId, LocalDate date);
 }

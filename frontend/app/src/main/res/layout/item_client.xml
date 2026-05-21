@@ -21,7 +21,7 @@
             <Space android:layout_width="12dp" android:layout_height="wrap_content"/>
             <LinearLayout android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:orientation="vertical">
                 <TextView android:id="@+id/tv_client_name" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Juan García" android:textSize="16sp" android:textStyle="bold" android:textColor="@color/white"/>
-                <TextView android:id="@+id/tv_client_email" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="juan@gmail.com" android:textSize="12sp" android:textColor="@color/white_54"/>
+                <TextView android:id="@+id/tv_client_username" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="juan_user" android:textSize="12sp" android:textColor="@color/white_54"/>
             </LinearLayout>
         </LinearLayout>
 

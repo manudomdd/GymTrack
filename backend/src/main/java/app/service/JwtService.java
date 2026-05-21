@@ -30,14 +30,14 @@ public class JwtService {
     public String generarToken(Map<String, Object> extraClaims, UserDetails userDetails) {
         return Jwts.builder()
                 .claims(extraClaims)
-                .subject(userDetails.getUsername()) // Usamos el email que definimos en getUsername() de la entidad User
+                .subject(userDetails.getUsername()) // Usamos el username que definimos en getUsername() de la entidad User
                 .issuedAt(new Date(System.currentTimeMillis()))
                 .expiration(new Date(System.currentTimeMillis() + 1000 * 60 * 60 * 24)) // El token durará 24 horas
                 .signWith(getSignInKey())
                 .compact();
     }
 
-    // 3. Método para leer a quién pertenece el token (extrae el email)
+    // 3. Método para leer a quién pertenece el token (extrae el username)
     public String extractUsername(String token) {
         return extractClaim(token, Claims::getSubject);
     }

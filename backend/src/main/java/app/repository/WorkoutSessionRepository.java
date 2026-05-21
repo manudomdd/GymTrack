@@ -9,7 +9,7 @@ import java.util.List;
 
 @Repository
 public interface WorkoutSessionRepository extends JpaRepository<WorkoutSession, Long> {
-    List<WorkoutSession> findByUserId(Long userId);
-    List<WorkoutSession> findByUserIdAndDate(Long userId, LocalDate date);
-    List<WorkoutSession> findByUserIdAndMuscleGroupOrderByDateAsc(Long userId, String muscleGroup);
+    List<WorkoutSession> findByClientId(Long clientId);
+    List<WorkoutSession> findByClientIdAndDate(Long clientId, LocalDate date);
+    List<WorkoutSession> findByClientIdAndMuscleGroupOrderByDateAsc(Long clientId, String muscleGroup);
 }

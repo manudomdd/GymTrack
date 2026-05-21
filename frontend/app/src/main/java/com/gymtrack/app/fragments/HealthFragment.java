@@ -12,7 +12,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
-import android.widget.Spinner;
+import android.widget.AutoCompleteTextView;
 import android.widget.TextView;
 import android.widget.Toast;
 import androidx.annotation.NonNull;
@@ -39,7 +39,7 @@ public class HealthFragment extends Fragment {
 
     private TextView tvSteps;
     private TextInputEditText etHours;
-    private Spinner spinnerQuality;
+    private AutoCompleteTextView spinnerQuality;
     private Button btnSave;
     private SharedPreferences prefs;
 
@@ -72,12 +72,10 @@ public class HealthFragment extends Fragment {
         tvSteps.setText(String.valueOf(prefs.getInt("daily_steps", 0)));
 
         // Configurar Spinner 1-10
-        Integer[] ratings = new Integer[] { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10 };
-        ArrayAdapter<Integer> adapter = new ArrayAdapter<>(requireContext(), android.R.layout.simple_spinner_item,
-                ratings);
-        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        String[] ratings = new String[] { "1", "2", "3", "4", "5", "6", "7", "8", "9", "10" };
+        ArrayAdapter<String> adapter = new ArrayAdapter<>(requireContext(), R.layout.item_dropdown, ratings);
         spinnerQuality.setAdapter(adapter);
-        spinnerQuality.setSelection(4); // Default 5
+        spinnerQuality.setText("5", false); // Default 5
 
         btnSave.setOnClickListener(v -> saveSleepLog());
     }
@@ -88,7 +86,12 @@ public class HealthFragment extends Fragment {
             return;
 
         int hours = (int) Double.parseDouble(hoursStr);
-        int quality = (int) spinnerQuality.getSelectedItem();
+        int quality = 5;
+        try {
+            quality = Integer.parseInt(spinnerQuality.getText().toString());
+        } catch (NumberFormatException e) {
+            quality = 5;
+        }
 
         JsonObject log = new JsonObject();
         log.addProperty("hoursSlept", hours);   // Corregido: era "hours" → no coincidía con SleepLog.hoursSlept

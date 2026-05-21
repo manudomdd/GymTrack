@@ -125,7 +125,7 @@ public class TrainerClientsFragment extends Fragment {
                             Map<String, Object> map = new HashMap<>();
                             map.put("id", obj.get("id").getAsLong());
                             map.put("nombre", obj.get("nombre").getAsString());
-                            map.put("email", obj.get("email").getAsString());
+                            map.put("username", obj.has("username") ? obj.get("username").getAsString() : obj.has("email") ? obj.get("email").getAsString() : "");
                             map.put("peso", obj.get("peso").getAsDouble());
                             map.put("altura", obj.get("altura").getAsInt());
                             map.put("edad", obj.has("edad") && !obj.get("edad").isJsonNull() ? obj.get("edad").getAsInt() : 0);
@@ -150,8 +150,8 @@ public class TrainerClientsFragment extends Fragment {
         List<Map<String, Object>> filtered = new ArrayList<>();
         for (Map<String, Object> client : allClients) {
             String nombre = ((String) client.get("nombre")).toLowerCase();
-            String email = ((String) client.get("email")).toLowerCase();
-            if (nombre.contains(query) || email.contains(query)) {
+            String username = client.containsKey("username") ? ((String) client.get("username")).toLowerCase() : "";
+            if (nombre.contains(query) || username.contains(query)) {
                 filtered.add(client);
             }
         }
@@ -247,7 +247,7 @@ public class TrainerClientsFragment extends Fragment {
             String nombre = (String) c.get("nombre");
 
             h.tvName.setText(nombre);
-            h.tvEmail.setText((String) c.get("email"));
+            h.tvUsername.setText(c.containsKey("username") ? (String) c.get("username") : "");
             h.tvAvatarLetter.setText(nombre.substring(0, 1).toUpperCase());
             h.tvPeso.setText(c.get("peso") + " kg");
             h.tvAltura.setText(c.get("altura") + " cm");
@@ -328,14 +328,14 @@ public class TrainerClientsFragment extends Fragment {
         }
 
         static class VH extends RecyclerView.ViewHolder {
-            TextView tvName, tvEmail, tvAvatarLetter,
+            TextView tvName, tvUsername, tvAvatarLetter,
                     tvLastWorkout, tvPeso, tvAltura, tvEdad;
             Button btnDiary, btnMetrics, btnBiomarkers, btnAiAssistant;
 
             VH(@NonNull View v) {
                 super(v);
                 tvName = v.findViewById(R.id.tv_client_name);
-                tvEmail = v.findViewById(R.id.tv_client_email);
+                tvUsername = v.findViewById(R.id.tv_client_username);
                 tvAvatarLetter = v.findViewById(R.id.tv_avatar_letter);
                 tvLastWorkout = v.findViewById(R.id.tv_last_workout);
                 tvPeso = v.findViewById(R.id.tv_peso);

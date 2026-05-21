@@ -5,6 +5,7 @@ import app.entity.StepLog;
 import app.entity.User;
 import app.entity.WorkoutSession;
 import app.repository.UserRepository;
+import app.repository.ClientRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
@@ -24,6 +25,9 @@ public class IAService {
     private UserRepository userRepository;
 
     @Autowired
+    private ClientRepository clientRepository;
+
+    @Autowired
     private WorkoutService workoutService;
 
     @Autowired
@@ -32,11 +36,11 @@ public class IAService {
     private final RestTemplate restTemplate = new RestTemplate();
 
     public String generateAIResponse(Long clientId, String trainerQuery) {
-        Optional<User> clientOpt = userRepository.findById(clientId);
+        Optional<app.entity.Client> clientOpt = clientRepository.findById(clientId);
         if (!clientOpt.isPresent()) {
             return "Error: Cliente no encontrado.";
         }
-        User client = clientOpt.get();
+        app.entity.Client client = clientOpt.get();
 
         // 1. Recopilar datos básicos
         String infoBasica = String.format("Nombre: %s, Edad: %d años, Peso: %.1f kg, Altura: %d cm, NEAT objetivo: %d kcal.",

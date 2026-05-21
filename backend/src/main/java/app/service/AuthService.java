@@ -5,7 +5,11 @@ import app.dto.LoginResponse;
 import app.dto.RegisterRequest;
 import app.entity.TipoUsuario;
 import app.entity.User;
+import app.entity.Client;
+import app.entity.Trainer;
 import app.repository.UserRepository;
+import app.repository.TrainerRepository;
+import app.repository.ClientRepository;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -17,50 +21,58 @@ import java.util.UUID;
 public class AuthService {
 
     private final UserRepository userRepository;
+    private final TrainerRepository trainerRepository;
     private final PasswordEncoder passwordEncoder;
     private final JwtService jwtService;
     private final AuthenticationManager authenticationManager;
 
-    public AuthService(UserRepository userRepository, PasswordEncoder passwordEncoder,
+    public AuthService(UserRepository userRepository, TrainerRepository trainerRepository, PasswordEncoder passwordEncoder,
                        JwtService jwtService, AuthenticationManager authenticationManager) {
         this.userRepository = userRepository;
+        this.trainerRepository = trainerRepository;
         this.passwordEncoder = passwordEncoder;
         this.jwtService = jwtService;
         this.authenticationManager = authenticationManager;
     }
 
     public void registrar(RegisterRequest request) {
-        if (userRepository.findByEmail(request.getEmail()).isPresent()) {
-            throw new RuntimeException("El email ya está registrado");
+        if (userRepository.findByUsername(request.getUsername()).isPresent()) {
+            throw new RuntimeException("El username ya está registrado");
         }
 
-        User newUser = new User();
-        newUser.setNombre(request.getNombre());
-        newUser.setEmail(request.getEmail());
-        newUser.setPassword(passwordEncoder.encode(request.getPassword()));
-        if (request.getFechaNacimiento() != null && !request.getFechaNacimiento().isEmpty()) {
-            newUser.setFechaNacimiento(java.time.LocalDate.parse(request.getFechaNacimiento()));
-        }
-        newUser.setAltura(request.getAltura());
-        newUser.setPeso(request.getPeso());
-        newUser.setTipoUsuario(request.getTipoUsuario());
+        User newUser;
 
         if (request.getTipoUsuario() == TipoUsuario.ENTRENADOR) {
-            String code = "TR-" + UUID.randomUUID().toString().substring(0, 6).toUpperCase();
-            newUser.setTrainerCode(code);
-        } else if (request.getTipoUsuario() == TipoUsuario.CLIENTE && request.getTrainerCode() != null) {
-            userRepository.findByTrainerCode(request.getTrainerCode()).ifPresent(newUser::setTrainer);
+            Trainer trainer = new Trainer();
+            trainer.setTrainerCode("TR-" + UUID.randomUUID().toString().substring(0, 6).toUpperCase());
+            newUser = trainer;
+        } else {
+            Client client = new Client();
+            client.setAltura(request.getAltura());
+            client.setPeso(request.getPeso());
+            if (request.getFechaNacimiento() != null && !request.getFechaNacimiento().isEmpty()) {
+                client.setFechaNacimiento(java.time.LocalDate.parse(request.getFechaNacimiento()));
+            }
+            if (request.getTrainerCode() != null) {
+                trainerRepository.findByTrainerCode(request.getTrainerCode()).ifPresent(client::setTrainer);
+            }
+            newUser = client;
         }
+
+        newUser.setNombre(request.getNombre());
+        newUser.setUsername(request.getUsername());
+        newUser.setPassword(passwordEncoder.encode(request.getPassword()));
+        newUser.setTipoUsuario(request.getTipoUsuario());
 
         userRepository.save(newUser);
     }
 
     public app.dto.LoginResponse login(LoginRequest request) {
         authenticationManager.authenticate(
-            new UsernamePasswordAuthenticationToken(request.getEmail(), request.getPassword())
+            new UsernamePasswordAuthenticationToken(request.getUsername(), request.getPassword())
         );
 
-        User usuario = userRepository.findByEmail(request.getEmail())
+        User usuario = userRepository.findByUsername(request.getUsername())
                 .orElseThrow(() -> new RuntimeException("Usuario no encontrado"));
 
         String token = jwtService.generarToken(usuario);

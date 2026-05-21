@@ -30,7 +30,7 @@ import okhttp3.Response;
  */
 public class TrainerProfileFragment extends Fragment {
 
-    private TextView tvName, tvEmail, tvCode;
+    private TextView tvName, tvUsername, tvCode;
 
     @Nullable
     @Override
@@ -45,7 +45,7 @@ public class TrainerProfileFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
 
         tvName = view.findViewById(R.id.tv_trainer_name);
-        tvEmail = view.findViewById(R.id.tv_trainer_email);
+        tvUsername = view.findViewById(R.id.tv_trainer_username);
         tvCode = view.findViewById(R.id.tv_trainer_code);
         
         fetchTrainerProfile();
@@ -68,14 +68,14 @@ public class TrainerProfileFragment extends Fragment {
                         JsonObject obj = JsonParser.parseString(response.body().string()).getAsJsonObject();
                         
                         String nombre = obj.has("nombre") ? obj.get("nombre").getAsString() : "Sin nombre";
-                        String email = obj.has("email") ? obj.get("email").getAsString() : "Sin email";
+                        String username = obj.has("username") ? obj.get("username").getAsString() : "Sin username";
                         String code = obj.has("trainerCode") && !obj.get("trainerCode").isJsonNull() 
                                 ? obj.get("trainerCode").getAsString() : "N/A";
                         
                         if (getActivity() == null) return;
                         getActivity().runOnUiThread(() -> {
                             tvName.setText(nombre);
-                            tvEmail.setText(email);
+                            tvUsername.setText(username);
                             tvCode.setText(code);
                         });
                     }

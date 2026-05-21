@@ -104,20 +104,28 @@
 
             <Space android:layout_width="wrap_content" android:layout_height="15dp" />
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Calidad del sueño (1-10)"
-                android:textColor="@color/white_54"
-                android:textSize="12sp" />
-
-            <Spinner
-                android:id="@+id/spinner_sleep_quality"
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/til_sleep_quality"
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
                 android:layout_width="match_parent"
-                android:layout_height="50dp"
-                android:layout_marginTop="5dp"
-                android:background="@drawable/bg_input_field"
-                android:theme="@style/Theme.GymTrack" />
+                android:layout_height="wrap_content"
+                android:hint="Calidad del sueño (1-10)"
+                app:boxBackgroundColor="@color/deep_purple"
+                app:boxStrokeColor="@color/magenta"
+                app:hintTextColor="@color/white_54"
+                app:boxCornerRadiusBottomEnd="15dp"
+                app:boxCornerRadiusBottomStart="15dp"
+                app:boxCornerRadiusTopEnd="15dp"
+                app:boxCornerRadiusTopStart="15dp">
+
+                <AutoCompleteTextView
+                    android:id="@+id/spinner_sleep_quality"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:inputType="none"
+                    android:textColor="@color/white"
+                    android:popupBackground="@drawable/bg_input_field" />
+            </com.google.android.material.textfield.TextInputLayout>
 
             <Space android:layout_width="wrap_content" android:layout_height="25dp" />
 

@@ -33,7 +33,7 @@ public class WorkoutService {
     }
 
     public List<WorkoutSession> getSessionsByUser(Long userId) {
-        return repository.findByUserId(userId);
+        return repository.findByClientId(userId);
     }
 
     /** Busca una sesión por ID para validación de permisos antes de actualizarla. */
@@ -53,7 +53,7 @@ public class WorkoutService {
      *   falso que confundiría con "estancado").
      */
     public Map<String, Double> calculateProgressMetrics(Long userId) {
-        List<WorkoutSession> allSessions = repository.findByUserId(userId);
+        List<WorkoutSession> allSessions = repository.findByClientId(userId);
 
         // Agrupar por "MuscleGroup - Exercise"
         Map<String, List<WorkoutSession>> groupedSessions = allSessions.stream()
@@ -106,6 +106,6 @@ public class WorkoutService {
     }
 
     public List<WorkoutSession> getSessionsByUserAndDate(Long userId, LocalDate date) {
-        return repository.findByUserIdAndDate(userId, date);
+        return repository.findByClientIdAndDate(userId, date);
     }
 }

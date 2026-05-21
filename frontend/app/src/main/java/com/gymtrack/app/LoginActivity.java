@@ -23,7 +23,7 @@ import com.gymtrack.app.network.AuthRepository;
  */
 public class LoginActivity extends AppCompatActivity {
 
-    private TextInputEditText etEmail, etPassword;
+    private TextInputEditText etUsername, etPassword;
     private Button btnLogin, btnGoRegister;
     private ProgressBar progressBar;
     private AuthRepository authRepository;
@@ -35,7 +35,7 @@ public class LoginActivity extends AppCompatActivity {
 
         authRepository = new AuthRepository(this);
 
-        etEmail = findViewById(R.id.et_email);
+        etUsername = findViewById(R.id.et_username);
         etPassword = findViewById(R.id.et_password);
         btnLogin = findViewById(R.id.btn_login);
         btnGoRegister = findViewById(R.id.btn_go_register);
@@ -47,17 +47,17 @@ public class LoginActivity extends AppCompatActivity {
 
     /** Gestiona el intento de login del usuario */
     private void handleLogin() {
-        String email = etEmail.getText() != null ? etEmail.getText().toString().trim() : "";
+        String username = etUsername.getText() != null ? etUsername.getText().toString().trim() : "";
         String password = etPassword.getText() != null ? etPassword.getText().toString() : "";
 
-        if (email.isEmpty() || password.isEmpty()) {
+        if (username.isEmpty() || password.isEmpty()) {
             showSnackbar("Por favor, rellena todos los campos", false);
             return;
         }
 
         setLoading(true);
 
-        authRepository.login(email, password, new AuthRepository.AuthCallback() {
+        authRepository.login(username, password, new AuthRepository.AuthCallback() {
             @Override
             public void onSuccess() {
                 runOnUiThread(() -> {
