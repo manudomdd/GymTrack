@@ -11,12 +11,18 @@ import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.Fragment;
 
+import android.widget.ImageView;
+import android.widget.TextView;
+
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.android.material.navigation.NavigationView;
+import com.google.gson.JsonObject;
 import com.gymtrack.app.fragments.TrainerClientsFragment;
 import com.gymtrack.app.fragments.TrainerDashboardFragment;
 import com.gymtrack.app.fragments.TrainerProfileFragment;
 import com.gymtrack.app.network.AuthRepository;
+import com.gymtrack.app.network.ClientRepository;
+import com.gymtrack.app.utils.AvatarHelper;
 
 /**
  * Activity principal para entrenadores.
@@ -74,6 +80,32 @@ public class TrainerHomeActivity extends AppCompatActivity {
             loadFragment(new TrainerDashboardFragment());
             navView.setCheckedItem(R.id.nav_trainer_dashboard);
         }
+        
+        loadNavHeaderData();
+    }
+    
+    private void loadNavHeaderData() {
+        ClientRepository clientRepository = new ClientRepository(this);
+        clientRepository.getProfile(new ClientRepository.Callback<JsonObject>() {
+            @Override
+            public void onSuccess(JsonObject result) {
+                runOnUiThread(() -> {
+                    android.view.View headerView = navView.getHeaderView(0);
+                    if (headerView != null) {
+                        ImageView ivAvatar = headerView.findViewById(R.id.iv_nav_avatar);
+                        if (ivAvatar != null && result.has("avatar") && !result.get("avatar").isJsonNull()) {
+                            String avatarStr = result.get("avatar").getAsString();
+                            ivAvatar.setImageResource(AvatarHelper.getAvatarResource(avatarStr));
+                        }
+                    }
+                });
+            }
+
+            @Override
+            public void onError(String message) {
+                // Ignore
+            }
+        });
     }
 
     public void loadFragment(Fragment fragment) {

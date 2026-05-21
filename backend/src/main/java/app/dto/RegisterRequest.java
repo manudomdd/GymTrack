@@ -13,6 +13,7 @@ public class RegisterRequest {
 	private int altura; 
 	private int neat;
 	private String trainerCode;
+	private String avatar;
 
 	public RegisterRequest() {}
 
@@ -100,9 +101,11 @@ public class RegisterRequest {
 		this.fechaNacimiento = fechaNacimiento;
 	} 
 	
-	
-	
-	
+	public String getAvatar() {
+		return avatar;
+	}
 
-	
+	public void setAvatar(String avatar) {
+		this.avatar = avatar;
+	}
 }

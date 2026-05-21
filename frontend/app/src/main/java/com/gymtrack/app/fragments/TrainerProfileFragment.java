@@ -5,6 +5,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -16,6 +17,7 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import com.gymtrack.app.R;
 import com.gymtrack.app.network.AuthRepository;
+import com.gymtrack.app.utils.AvatarHelper;
 
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
@@ -31,6 +33,7 @@ import okhttp3.Response;
 public class TrainerProfileFragment extends Fragment {
 
     private TextView tvName, tvUsername, tvCode;
+    private ImageView ivAvatar;
 
     @Nullable
     @Override
@@ -47,6 +50,7 @@ public class TrainerProfileFragment extends Fragment {
         tvName = view.findViewById(R.id.tv_trainer_name);
         tvUsername = view.findViewById(R.id.tv_trainer_username);
         tvCode = view.findViewById(R.id.tv_trainer_code);
+        ivAvatar = view.findViewById(R.id.iv_trainer_avatar); // Necesita id en XML
         
         fetchTrainerProfile();
     }
@@ -71,12 +75,17 @@ public class TrainerProfileFragment extends Fragment {
                         String username = obj.has("username") ? obj.get("username").getAsString() : "Sin username";
                         String code = obj.has("trainerCode") && !obj.get("trainerCode").isJsonNull() 
                                 ? obj.get("trainerCode").getAsString() : "N/A";
+                        String avatar = obj.has("avatar") && !obj.get("avatar").isJsonNull() 
+                                ? obj.get("avatar").getAsString() : null;
                         
                         if (getActivity() == null) return;
                         getActivity().runOnUiThread(() -> {
                             tvName.setText(nombre);
                             tvUsername.setText(username);
                             tvCode.setText(code);
+                            if (ivAvatar != null) {
+                                ivAvatar.setImageResource(AvatarHelper.getAvatarResource(avatar));
+                            }
                         });
                     }
                 }

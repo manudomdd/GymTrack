@@ -9,9 +9,11 @@ import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.RadioGroup;
 import android.widget.TextView;
+import de.hdodenhof.circleimageview.CircleImageView;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -45,6 +47,7 @@ public class RegisterActivity extends AppCompatActivity {
     private AuthRepository authRepository;
 
     private int neatValue = 3;
+    private String selectedAvatar = "avatar_1"; // Default avatar
 
     private static final String[] NEAT_LABELS = {
             "", "Muy Sedentario", "Sedentario", "Moderado", "Activo", "Muy Activo"
@@ -121,6 +124,41 @@ public class RegisterActivity extends AppCompatActivity {
 
         btnRegister.setOnClickListener(v -> handleRegister());
         btnGoLogin.setOnClickListener(v -> finish());
+        
+        setupAvatarSelection();
+    }
+    
+    private void setupAvatarSelection() {
+        CircleImageView iv1 = findViewById(R.id.iv_avatar_1);
+        CircleImageView iv2 = findViewById(R.id.iv_avatar_2);
+        CircleImageView iv3 = findViewById(R.id.iv_avatar_3);
+        
+        int magenta = getResources().getColor(R.color.magenta);
+        int borderSize = (int) (3 * getResources().getDisplayMetrics().density); // 3dp
+
+        View.OnClickListener listener = v -> {
+            // Limpiar bordes
+            iv1.setBorderWidth(0);
+            iv2.setBorderWidth(0);
+            iv3.setBorderWidth(0);
+            
+            // Asignar borde activo al seleccionado
+            CircleImageView selected = (CircleImageView) v;
+            selected.setBorderWidth(borderSize);
+            selected.setBorderColor(magenta);
+            
+            if (v.getId() == R.id.iv_avatar_1) selectedAvatar = "avatar_1";
+            else if (v.getId() == R.id.iv_avatar_2) selectedAvatar = "avatar_2";
+            else if (v.getId() == R.id.iv_avatar_3) selectedAvatar = "avatar_3";
+        };
+        
+        iv1.setOnClickListener(listener);
+        iv2.setOnClickListener(listener);
+        iv3.setOnClickListener(listener);
+        
+        // Estado inicial
+        iv1.setBorderWidth(borderSize);
+        iv1.setBorderColor(magenta);
     }
 
     /** Gestiona el registro del nuevo usuario */
@@ -165,6 +203,7 @@ public class RegisterActivity extends AppCompatActivity {
         userData.put("altura", altura);
         userData.put("neat", neatValue);
         userData.put("tipoUsuario", tipoUsuario);
+        userData.put("avatar", selectedAvatar);
 
         if (tipoUsuario.equals("CLIENTE")) {
             String trainerCode = etTrainerCode.getText().toString().trim();

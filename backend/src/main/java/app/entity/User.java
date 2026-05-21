@@ -38,6 +38,8 @@ public abstract class User implements UserDetails {
     @Enumerated(EnumType.STRING)
     private TipoUsuario tipoUsuario; 
     
+    private String avatar;
+    
     public User() {
         super();
     }
@@ -97,5 +99,13 @@ public abstract class User implements UserDetails {
 
     public void setTipoUsuario(TipoUsuario tipoUsuario) {
         this.tipoUsuario = tipoUsuario;
+    }
+
+    public String getAvatar() {
+        return avatar;
+    }
+
+    public void setAvatar(String avatar) {
+        this.avatar = avatar;
     }
 }

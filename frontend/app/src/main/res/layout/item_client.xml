@@ -15,9 +15,13 @@
 
         <!-- Header: Avatar + Nombre/Email -->
         <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="horizontal" android:gravity="center_vertical">
-            <LinearLayout android:id="@+id/iv_avatar" android:layout_width="48dp" android:layout_height="48dp" android:background="@drawable/bg_avatar_purple" android:gravity="center">
-                <TextView android:id="@+id/tv_avatar_letter" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="J" android:textSize="20sp" android:textStyle="bold" android:textColor="@color/magenta"/>
-            </LinearLayout>
+            <de.hdodenhof.circleimageview.CircleImageView
+                android:id="@+id/iv_client_avatar"
+                android:layout_width="48dp"
+                android:layout_height="48dp"
+                android:src="@drawable/ic_person"
+                app:civ_border_width="2dp"
+                app:civ_border_color="@color/magenta" />
             <Space android:layout_width="12dp" android:layout_height="wrap_content"/>
             <LinearLayout android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:orientation="vertical">
                 <TextView android:id="@+id/tv_client_name" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Juan García" android:textSize="16sp" android:textStyle="bold" android:textColor="@color/white"/>

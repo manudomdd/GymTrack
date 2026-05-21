@@ -17,14 +17,20 @@ import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.Fragment;
 import androidx.annotation.NonNull;
 
+import android.widget.ImageView;
+import android.widget.TextView;
+
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.android.material.navigation.NavigationView;
+import com.google.gson.JsonObject;
 import com.gymtrack.app.fragments.DashboardFragment;
 import com.gymtrack.app.fragments.TrainingLogFragment;
 import com.gymtrack.app.fragments.ClientProfileFragment;
 import com.gymtrack.app.fragments.HealthFragment;
 import com.gymtrack.app.network.AuthRepository;
+import com.gymtrack.app.network.ClientRepository;
 import com.gymtrack.app.services.StepCounterService;
+import com.gymtrack.app.utils.AvatarHelper;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -89,6 +95,32 @@ public class HomeActivity extends AppCompatActivity {
 
         // Solicitar permisos y luego iniciar servicio de pasos
         checkPermissionsAndStartService();
+        
+        loadNavHeaderData();
+    }
+    
+    private void loadNavHeaderData() {
+        ClientRepository clientRepository = new ClientRepository(this);
+        clientRepository.getProfile(new ClientRepository.Callback<JsonObject>() {
+            @Override
+            public void onSuccess(JsonObject result) {
+                runOnUiThread(() -> {
+                    android.view.View headerView = navView.getHeaderView(0);
+                    if (headerView != null) {
+                        ImageView ivAvatar = headerView.findViewById(R.id.iv_nav_avatar);
+                        if (ivAvatar != null && result.has("avatar") && !result.get("avatar").isJsonNull()) {
+                            String avatarStr = result.get("avatar").getAsString();
+                            ivAvatar.setImageResource(AvatarHelper.getAvatarResource(avatarStr));
+                        }
+                    }
+                });
+            }
+
+            @Override
+            public void onError(String message) {
+                // Ignore silent error
+            }
+        });
     }
 
     private void checkPermissionsAndStartService() {

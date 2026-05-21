@@ -84,7 +84,8 @@ public class TrainerController {
                         client.getPeso(),
                         client.getAltura(),
                         client.getEdad(),
-                        ultimoGrupo
+                        ultimoGrupo,
+                        client.getAvatar()
                 );
             }).collect(Collectors.toList());
             return ResponseEntity.ok(dtoList);

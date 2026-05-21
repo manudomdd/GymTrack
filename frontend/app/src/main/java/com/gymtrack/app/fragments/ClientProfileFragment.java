@@ -5,6 +5,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 import androidx.annotation.NonNull;
@@ -14,12 +15,14 @@ import com.google.android.material.textfield.TextInputEditText;
 import com.google.gson.JsonObject;
 import com.gymtrack.app.R;
 import com.gymtrack.app.network.ClientRepository;
+import com.gymtrack.app.utils.AvatarHelper;
 
 public class ClientProfileFragment extends Fragment {
 
     private TextInputEditText etNombre, etEdad, etPeso, etAltura, etTrainerCode;
     private TextView tvTrainerStatus;
     private Button btnUpdate, btnLink;
+    private ImageView ivAvatar;
     private ClientRepository clientRepository;
 
     @Nullable
@@ -45,6 +48,7 @@ public class ClientProfileFragment extends Fragment {
         tvTrainerStatus = view.findViewById(R.id.tv_trainer_status);
         btnUpdate = view.findViewById(R.id.btn_update_profile);
         btnLink = view.findViewById(R.id.btn_link_trainer);
+        ivAvatar = view.findViewById(R.id.iv_client_profile_avatar);
 
         loadProfileData();
 
@@ -63,6 +67,11 @@ public class ClientProfileFragment extends Fragment {
                     etEdad.setText(result.get("edad").getAsString());
                     etPeso.setText(result.get("peso").getAsString());
                     etAltura.setText(result.get("altura").getAsString());
+                    
+                    if (ivAvatar != null && result.has("avatar") && !result.get("avatar").isJsonNull()) {
+                        String avatarStr = result.get("avatar").getAsString();
+                        ivAvatar.setImageResource(AvatarHelper.getAvatarResource(avatarStr));
+                    }
 
                     if (result.has("trainer") && !result.get("trainer").isJsonNull()) {
                         JsonObject trainer = result.getAsJsonObject("trainer");

@@ -15,6 +15,7 @@ import android.widget.LinearLayout;
 import android.widget.ScrollView;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.ImageView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -35,6 +36,7 @@ import com.gymtrack.app.TrainerBiomarkersActivity;
 import com.gymtrack.app.TrainerClientMetricsActivity;
 import com.gymtrack.app.TrainerHomeActivity;
 import com.gymtrack.app.network.AuthRepository;
+import com.gymtrack.app.utils.AvatarHelper;
 
 import java.io.IOException;
 import java.text.SimpleDateFormat;
@@ -130,6 +132,7 @@ public class TrainerClientsFragment extends Fragment {
                             map.put("altura", obj.get("altura").getAsInt());
                             map.put("edad", obj.has("edad") && !obj.get("edad").isJsonNull() ? obj.get("edad").getAsInt() : 0);
                             map.put("ultimoGrupoMuscular", obj.has("ultimoGrupoMuscular") && !obj.get("ultimoGrupoMuscular").isJsonNull() ? obj.get("ultimoGrupoMuscular").getAsString() : "Ninguno");
+                            map.put("avatar", obj.has("avatar") && !obj.get("avatar").isJsonNull() ? obj.get("avatar").getAsString() : null);
                             allClients.add(map);
                         }
 
@@ -245,10 +248,15 @@ public class TrainerClientsFragment extends Fragment {
         public void onBindViewHolder(@NonNull VH h, int position) {
             Map<String, Object> c = data.get(position);
             String nombre = (String) c.get("nombre");
+            String avatarStr = (String) c.get("avatar");
 
             h.tvName.setText(nombre);
             h.tvUsername.setText(c.containsKey("username") ? (String) c.get("username") : "");
-            h.tvAvatarLetter.setText(nombre.substring(0, 1).toUpperCase());
+            
+            if (h.ivAvatar != null) {
+                h.ivAvatar.setImageResource(AvatarHelper.getAvatarResource(avatarStr));
+            }
+            
             h.tvPeso.setText(c.get("peso") + " kg");
             h.tvAltura.setText(c.get("altura") + " cm");
             h.tvEdad.setText(c.get("edad") + " años");
@@ -328,15 +336,16 @@ public class TrainerClientsFragment extends Fragment {
         }
 
         static class VH extends RecyclerView.ViewHolder {
-            TextView tvName, tvUsername, tvAvatarLetter,
+            TextView tvName, tvUsername,
                     tvLastWorkout, tvPeso, tvAltura, tvEdad;
+            ImageView ivAvatar;
             Button btnDiary, btnMetrics, btnBiomarkers, btnAiAssistant;
 
             VH(@NonNull View v) {
                 super(v);
                 tvName = v.findViewById(R.id.tv_client_name);
                 tvUsername = v.findViewById(R.id.tv_client_username);
-                tvAvatarLetter = v.findViewById(R.id.tv_avatar_letter);
+                ivAvatar = v.findViewById(R.id.iv_client_avatar);
                 tvLastWorkout = v.findViewById(R.id.tv_last_workout);
                 tvPeso = v.findViewById(R.id.tv_peso);
                 tvAltura = v.findViewById(R.id.tv_altura);

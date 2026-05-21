@@ -64,6 +64,45 @@
                 android:orientation="vertical"
                 android:padding="25dp">
 
+                <!-- Selector de Avatar -->
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Elige tu avatar"
+                    android:textSize="14sp"
+                    android:textColor="@color/white_54"
+                    android:textStyle="bold"
+                    android:gravity="center" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:gravity="center"
+                    android:layout_marginTop="10dp"
+                    android:layout_marginBottom="25dp">
+
+                    <de.hdodenhof.circleimageview.CircleImageView
+                        android:id="@+id/iv_avatar_1"
+                        android:layout_width="70dp"
+                        android:layout_height="70dp"
+                        android:src="@drawable/avatar_1"
+                        android:layout_marginEnd="15dp" />
+
+                    <de.hdodenhof.circleimageview.CircleImageView
+                        android:id="@+id/iv_avatar_2"
+                        android:layout_width="70dp"
+                        android:layout_height="70dp"
+                        android:src="@drawable/avatar_2"
+                        android:layout_marginEnd="15dp" />
+
+                    <de.hdodenhof.circleimageview.CircleImageView
+                        android:id="@+id/iv_avatar_3"
+                        android:layout_width="70dp"
+                        android:layout_height="70dp"
+                        android:src="@drawable/avatar_3" />
+                </LinearLayout>
+
                 <!-- Nombre -->
                 <com.google.android.material.textfield.TextInputLayout
                     android:id="@+id/til_nombre"

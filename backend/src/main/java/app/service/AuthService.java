@@ -63,6 +63,14 @@ public class AuthService {
         newUser.setUsername(request.getUsername());
         newUser.setPassword(passwordEncoder.encode(request.getPassword()));
         newUser.setTipoUsuario(request.getTipoUsuario());
+        
+        if (request.getAvatar() != null && !request.getAvatar().trim().isEmpty()) {
+            newUser.setAvatar(request.getAvatar());
+        } else {
+            String[] avatars = {"avatar_1", "avatar_2", "avatar_3"};
+            int randomIndex = new java.util.Random().nextInt(avatars.length);
+            newUser.setAvatar(avatars[randomIndex]);
+        }
 
         userRepository.save(newUser);
     }

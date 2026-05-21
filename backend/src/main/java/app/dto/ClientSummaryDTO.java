@@ -8,11 +8,12 @@ public class ClientSummaryDTO {
     private int altura;
     private int edad;
     private String ultimoGrupoMuscular;
+    private String avatar;
 
     public ClientSummaryDTO() {
     }
 
-    public ClientSummaryDTO(Long id, String nombre, String username, double peso, int altura, int edad, String ultimoGrupoMuscular) {
+    public ClientSummaryDTO(Long id, String nombre, String username, double peso, int altura, int edad, String ultimoGrupoMuscular, String avatar) {
         this.id = id;
         this.nombre = nombre;
         this.username = username;
@@ -20,6 +21,7 @@ public class ClientSummaryDTO {
         this.altura = altura;
         this.edad = edad;
         this.ultimoGrupoMuscular = ultimoGrupoMuscular;
+        this.avatar = avatar;
     }
 
     public Long getId() {
@@ -76,5 +78,13 @@ public class ClientSummaryDTO {
 
     public void setUltimoGrupoMuscular(String ultimoGrupoMuscular) {
         this.ultimoGrupoMuscular = ultimoGrupoMuscular;
+    }
+
+    public String getAvatar() {
+        return avatar;
+    }
+
+    public void setAvatar(String avatar) {
+        this.avatar = avatar;
     }
 }
