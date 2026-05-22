@@ -133,7 +133,7 @@ public class StepCounterService extends Service implements SensorEventListener {
                     return;
                 }
 
-                URL url = new URL("http://10.0.2.2:8080/api/client/notifications/sse");
+                URL url = new URL("https://gymtrack-production-5934.up.railway.app/api/client/notifications/sse");
                 conn = (HttpURLConnection) url.openConnection();
                 conn.setRequestMethod("GET");
                 conn.setRequestProperty("Authorization", "Bearer " + token);

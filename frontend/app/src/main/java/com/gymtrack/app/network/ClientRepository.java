@@ -13,7 +13,7 @@ import okhttp3.RequestBody;
 import okhttp3.Response;
 
 public class ClientRepository {
-    private static final String BASE_URL = "http://10.0.2.2:8080/api/client";
+    private static final String BASE_URL = "https://gymtrack-production-5934.up.railway.app/api/client";
     private static final MediaType JSON = MediaType.get("application/json; charset=utf-8");
     private final OkHttpClient client;
     private final Gson gson;

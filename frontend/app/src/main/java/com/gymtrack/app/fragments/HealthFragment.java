@@ -114,7 +114,7 @@ public class HealthFragment extends Fragment {
             try {
                 RequestBody body = RequestBody.create(log.toString(), MediaType.get("application/json; charset=utf-8"));
                 Request request = new Request.Builder()
-                        .url("http://10.0.2.2:8080/api/client/health/sleep")
+                        .url("https://gymtrack-production-5934.up.railway.app/api/client/health/sleep")
                         .addHeader("Authorization", "Bearer " + auth.getToken())
                         .post(body)
                         .build();

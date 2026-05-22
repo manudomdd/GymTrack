@@ -113,7 +113,7 @@ public class AIChatActivity extends AppCompatActivity {
 
                 RequestBody body = RequestBody.create(jsonReq.toString(), MediaType.get("application/json; charset=utf-8"));
                 Request request = new Request.Builder()
-                        .url("http://10.0.2.2:8080/api/trainer/client/" + clientId + "/ai-chat")
+                        .url("https://gymtrack-production-5934.up.railway.app/api/trainer/client/" + clientId + "/ai-chat")
                         .addHeader("Authorization", "Bearer " + authRepository.getToken())
                         .post(body)
                         .build();

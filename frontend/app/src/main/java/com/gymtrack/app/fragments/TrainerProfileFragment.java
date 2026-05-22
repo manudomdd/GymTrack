@@ -62,7 +62,7 @@ public class TrainerProfileFragment extends Fragment {
         new Thread(() -> {
             try {
                 Request request = new Request.Builder()
-                        .url("http://10.0.2.2:8080/api/client/profile") // Same profile endpoint
+                        .url("https://gymtrack-production-5934.up.railway.app/api/client/profile") // Same profile endpoint
                         .addHeader("Authorization", "Bearer " + auth.getToken())
                         .get()
                         .build();

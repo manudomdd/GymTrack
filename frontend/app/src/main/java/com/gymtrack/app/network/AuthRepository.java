@@ -21,12 +21,12 @@ import okhttp3.Response;
 /**
  * Repositorio de autenticación que maneja las llamadas HTTP al backend.
  * Equivale al AuthService de Flutter.
- * Endpoint base: http://10.0.2.2:8080/api/auth
+ * Endpoint base: https://gymtrack-production-5934.up.railway.app/api/auth
  * (10.0.2.2 es la IP que el emulador Android usa para acceder al host)
  */
 public class AuthRepository {
 
-    private static final String BASE_URL = "http://10.0.2.2:8080/api/auth";
+    private static final String BASE_URL = "https://gymtrack-production-5934.up.railway.app/api/auth";
     private static final String PREFS_NAME = "gymtrack_prefs";
     private static final String KEY_TOKEN = "token";
     private static final MediaType JSON = MediaType.get("application/json; charset=utf-8");
@@ -144,7 +144,7 @@ public class AuthRepository {
         new Thread(() -> {
             try {
                 Request request = new Request.Builder()
-                        .url("http://10.0.2.2:8080/api/trainer/client/" + clientId + "/progress")
+                        .url("https://gymtrack-production-5934.up.railway.app/api/trainer/client/" + clientId + "/progress")
                         .addHeader("Authorization", "Bearer " + getToken())
                         .get()
                         .build();
@@ -178,7 +178,7 @@ public class AuthRepository {
         new Thread(() -> {
             try {
                 Request request = new Request.Builder()
-                        .url("http://10.0.2.2:8080/api/trainer/client/" + clientId + "/health")
+                        .url("https://gymtrack-production-5934.up.railway.app/api/trainer/client/" + clientId + "/health")
                         .addHeader("Authorization", "Bearer " + getToken())
                         .get()
                         .build();
@@ -206,7 +206,7 @@ public class AuthRepository {
         new Thread(() -> {
             try {
                 Request request = new Request.Builder()
-                        .url("http://10.0.2.2:8080/api/trainer/dashboard")
+                        .url("https://gymtrack-production-5934.up.railway.app/api/trainer/dashboard")
                         .addHeader("Authorization", "Bearer " + getToken())
                         .get()
                         .build();

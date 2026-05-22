@@ -395,7 +395,7 @@ public class TrainingLogFragment extends Fragment {
                         seriesArray.toString(),
                         MediaType.get("application/json; charset=utf-8"));
                 Request request = new Request.Builder()
-                        .url("http://10.0.2.2:8080/api/client/workouts/batch")
+                        .url("https://gymtrack-production-5934.up.railway.app/api/client/workouts/batch")
                         .addHeader("Authorization", "Bearer " + token)
                         .post(body).build();
 
@@ -442,7 +442,7 @@ public class TrainingLogFragment extends Fragment {
         new Thread(() -> {
             try {
                 Request request = new Request.Builder()
-                        .url("http://10.0.2.2:8080/api/client/workouts/" + sessionId)
+                        .url("https://gymtrack-production-5934.up.railway.app/api/client/workouts/" + sessionId)
                         .addHeader("Authorization", "Bearer " + token)
                         .delete().build();
 
@@ -486,7 +486,7 @@ public class TrainingLogFragment extends Fragment {
                         MediaType.get("application/json; charset=utf-8"));
 
                 Request request = new Request.Builder()
-                        .url("http://10.0.2.2:8080/api/trainer/client/" + clientId + "/feedback?date=" + dateStr)
+                        .url("https://gymtrack-production-5934.up.railway.app/api/trainer/client/" + clientId + "/feedback?date=" + dateStr)
                         .addHeader("Authorization", "Bearer " + token)
                         .put(body).build();
 
@@ -525,8 +525,8 @@ public class TrainingLogFragment extends Fragment {
                         ? getArguments().getLong("CLIENT_ID", -1)
                         : -1;
                 String url = clientId != -1
-                        ? "http://10.0.2.2:8080/api/trainer/client/" + clientId + "/workouts"
-                        : "http://10.0.2.2:8080/api/client/workouts";
+                        ? "https://gymtrack-production-5934.up.railway.app/api/trainer/client/" + clientId + "/workouts"
+                        : "https://gymtrack-production-5934.up.railway.app/api/client/workouts";
 
                 Request request = new Request.Builder()
                         .url(url)
