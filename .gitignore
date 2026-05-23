@@ -36,4 +36,5 @@ frontend/local.properties
 /javadoc/
 /docs/javadoc/
 /javadoc_output/
+/backend/doc/
 
