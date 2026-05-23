@@ -31,3 +31,8 @@ frontend/local.properties
 
 # Logs
 *.log
+
+# Doc
+*.html
+*.js
+*.css
