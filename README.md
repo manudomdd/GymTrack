@@ -66,8 +66,3 @@ Para garantizar la estabilidad y limpieza del proyecto, seguimos una estricta po
 - **`main`:** Rama base de desarrollo continuo. Contiene las últimas características funcionales. Preparada para *debugging* local rápido.
 - **`production`:** Entorno de producción altamente securizado. Enlazado automáticamente para el Despliegue Continuo (CD). 
 - **`test`:** Entorno de pruebas e integración (QA) para la validación de nuevas *features* antes de ser unificadas con la rama principal.
-
----
-<div align="center">
-  <i>Desarrollado con pasión para revolucionar el software deportivo.</i>
-</div>
