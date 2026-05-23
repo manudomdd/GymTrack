@@ -55,7 +55,7 @@ He contenedorizado el backend y su base de datos para que levantar el servicio s
 
 1. Abre la carpeta `frontend/` utilizando **Android Studio**.
 2. Sincroniza el proyecto con Gradle.
-3. Configura las variables de red del cliente apuntando a tu `localhost` (o a la IP de tu máquina si usas un dispositivo físico).Actualmente esta configurado para apuntar a loscalhost
+3. Configura las variables de red del cliente apuntando a tu `localhost` (o a la IP de tu máquina si usas un dispositivo físico). Actualmente esta configurado para apuntar a localhost.
 5. Ejecuta la aplicación.
 
 ## 🌳 Estructura de Ramas del Repositorio
