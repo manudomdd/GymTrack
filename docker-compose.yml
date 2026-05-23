@@ -1,0 +1,35 @@
+# ESTE ARCHIVO ES PARA SIMULACIÓN LOCAL DEL ENTORNO DE PRODUCCIÓN. RAILWAY DESPLEGARÁ DIRECTAMENTE DESDE EL DOCKERFILE.
+services:
+  db:
+    image: mysql:8.0
+    container_name: gymtrack_prod_db_sim
+    environment:
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD:-root_password}
+      MYSQL_DATABASE: ${MYSQL_DATABASE:-gymtrack_v2}
+      MYSQL_USER: ${MYSQL_USER:-manu}
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD:-manu}
+    ports:
+      - "3306:3306"
+    volumes:
+      - prod_db_data:/var/lib/mysql
+    restart: unless-stopped
+
+  api_backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: gymtrack_prod_backend_sim
+    environment:
+      - MYSQL_HOST=db
+      - MYSQL_PORT=3306
+      - MYSQL_DATABASE=${MYSQL_DATABASE:-gymtrack_v2}
+      - MYSQL_USER=${MYSQL_USER:-manu}
+      - MYSQL_PASSWORD=${MYSQL_PASSWORD:-manu}
+    ports:
+      - "8080:8080"
+    depends_on:
+      - db
+    restart: unless-stopped
+
+volumes:
+  prod_db_data:
