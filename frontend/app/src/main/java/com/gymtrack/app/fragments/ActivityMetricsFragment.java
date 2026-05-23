@@ -31,6 +31,14 @@ import java.util.Locale;
  */
 public class ActivityMetricsFragment extends Fragment {
 
+    /**
+     * Registra y persiste un nuevo registro en el sistema.
+     *
+     * @param inflater Objeto para inflar diseños XML en la interfaz.
+     * @param container Contenedor padre donde se inserta la vista.
+     * @param savedInstanceState Estado de instancia guardado previamente.
+     * @return El resultado o estado devuelto tras procesar la petición.
+     */
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater,
@@ -39,6 +47,12 @@ public class ActivityMetricsFragment extends Fragment {
         return inflater.inflate(R.layout.fragment_activity_metrics, container, false);
     }
 
+    /**
+     * Registra y persiste un nuevo registro en el sistema.
+     *
+     * @param view Vista raíz devuelta tras inflar el fragmento.
+     * @param savedInstanceState Estado de instancia guardado previamente.
+     */
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);

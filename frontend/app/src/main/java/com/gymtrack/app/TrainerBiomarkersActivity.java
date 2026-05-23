@@ -32,22 +32,35 @@ import java.util.Locale;
  */
 public class TrainerBiomarkersActivity extends AppCompatActivity {
 
+    // Repositorio para operaciones de persistencia de la entidad Auth.
     private AuthRepository authRepository;
+    // Atributo de tipo long para almacenar clientId.
     private long clientId;
 
     private TextView tvMonthYear, tvSteps, tvSleepHours, tvSleepQuality, tvEmptyMessage;
     private Button btnPrevMonth, btnNextMonth, btnBack;
+    // Atributo de tipo GridLayout para almacenar gridDays.
     private GridLayout gridDays;
     private LinearLayout layoutData, layoutEmpty;
 
+    // Atributo de tipo Calendar para almacenar currentCalendar.
     private Calendar currentCalendar;
+    // Atributo de tipo Calendar para almacenar selectedDate.
     private Calendar selectedDate;
 
+    // Atributo de tipo JsonArray para almacenar sleepLogs.
     private JsonArray sleepLogs = new JsonArray();
+    // Atributo de tipo JsonArray para almacenar stepLogs.
     private JsonArray stepLogs = new JsonArray();
 
+    // Atributo de tipo SimpleDateFormat para almacenar dateFormat.
     private final SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
 
+    /**
+     * Registra y persiste un nuevo registro en el sistema.
+     *
+     * @param savedInstanceState Estado de instancia guardado previamente.
+     */
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -100,6 +113,10 @@ public class TrainerBiomarkersActivity extends AppCompatActivity {
         updateUIForSelectedDate();
     }
 
+    /**
+     * Realiza una consulta para obtener los datos solicitados.
+     *
+     */
     private void fetchHealthData() {
         authRepository.getClientHealth(clientId, new AuthRepository.HealthCallback() {
             @Override
@@ -124,6 +141,10 @@ public class TrainerBiomarkersActivity extends AppCompatActivity {
         });
     }
 
+    /**
+     * Procesa la operación correspondiente para refreshCalendar.
+     *
+     */
     private void refreshCalendar() {
         String[] meses = {"Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio",
                 "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre"};
@@ -185,6 +206,10 @@ public class TrainerBiomarkersActivity extends AppCompatActivity {
         }
     }
 
+    /**
+     * Actualiza los datos del registro en la base de datos.
+     *
+     */
     private void updateUIForSelectedDate() {
         String targetDate = dateFormat.format(selectedDate.getTime());
         

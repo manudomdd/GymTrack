@@ -17,8 +17,14 @@ import org.springframework.transaction.annotation.Transactional;
 @Configuration
 public class ApplicationConfig {
 
+    // Repositorio para operaciones de persistencia de la entidad User.
     private final UserRepository userRepository;
 
+    /**
+     * Constructor de la clase ApplicationConfig con inyección de dependencias.
+     *
+     * @param userRepository Parámetro de entrada para la operación.
+     */
     public ApplicationConfig(UserRepository userRepository) {
         this.userRepository = userRepository;
     }

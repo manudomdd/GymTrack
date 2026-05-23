@@ -38,17 +38,30 @@ import okhttp3.Response;
  */
 public class AIGeneralChatActivity extends AppCompatActivity {
 
+    // Listado interactivo (RecyclerView) para presentar chat.
     private RecyclerView rvChat;
+    // Campo de entrada de texto (EditText) para ingresar el/la message.
     private EditText etMessage;
+    // Botón interactivo (Button) para send.
     private Button btnSend;
+    // Atributo de tipo ProgressBar para almacenar pbLoading.
     private ProgressBar pbLoading;
 
+    // Atributo de tipo ChatAdapter para almacenar adapter.
     private ChatAdapter adapter;
+    // Atributo de tipo List<ChatMessage> para almacenar messages.
     private final List<ChatMessage> messages = new ArrayList<>();
 
+    // Repositorio para operaciones de persistencia de la entidad Auth.
     private AuthRepository authRepository;
+    // Atributo de tipo OkHttpClient para almacenar httpClient.
     private OkHttpClient httpClient;
 
+    /**
+     * Registra y persiste un nuevo registro en el sistema.
+     *
+     * @param savedInstanceState Estado de instancia guardado previamente.
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -87,6 +100,11 @@ public class AIGeneralChatActivity extends AppCompatActivity {
         adapter.notifyDataSetChanged();
     }
 
+    /**
+     * Procesa la operación correspondiente para sendMessage.
+     *
+     * @param msgText Parámetro de entrada para la operación.
+     */
     private void sendMessage(String msgText) {
         // 1. Añadir mensaje localmente
         messages.add(new ChatMessage("trainer", msgText));

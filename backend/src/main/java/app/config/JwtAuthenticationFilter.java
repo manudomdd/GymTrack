@@ -28,11 +28,20 @@ import java.io.IOException;
 @Component
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
+    // Atributo de tipo Logger para almacenar log.
     private static final Logger log = LoggerFactory.getLogger(JwtAuthenticationFilter.class);
 
+    // Servicio para la gestión de la lógica de negocio de Jwt.
     private final JwtService jwtService;
+    // Servicio para la gestión de la lógica de negocio de Userdetails.
     private final UserDetailsService userDetailsService;
 
+    /**
+     * Constructor de la clase JwtAuthenticationFilter con inyección de dependencias.
+     *
+     * @param jwtService Parámetro de entrada para la operación.
+     * @param userDetailsService Parámetro de entrada para la operación.
+     */
     public JwtAuthenticationFilter(JwtService jwtService, UserDetailsService userDetailsService) {
         this.jwtService = jwtService;
         this.userDetailsService = userDetailsService;

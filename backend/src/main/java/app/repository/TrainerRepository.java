@@ -15,5 +15,11 @@ import app.entity.Trainer;
 @Repository
 public interface TrainerRepository extends JpaRepository<Trainer, Long> {
 	
+	/**
+	 * Realiza una consulta para obtener los datos solicitados.
+	 *
+	 * @param trainerCode Parámetro de entrada para la operación.
+	 * @return El resultado o estado devuelto tras procesar la petición.
+	 */
 	Optional<Trainer> findByTrainerCode(String trainerCode);
 }

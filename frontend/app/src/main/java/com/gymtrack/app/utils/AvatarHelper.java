@@ -10,6 +10,12 @@ import com.gymtrack.app.R;
  * @since 23/05/2026
  */
 public class AvatarHelper {
+    /**
+     * Recupera el valor actual de avatarresource.
+     *
+     * @param avatarName Parámetro de entrada para la operación.
+     * @return El resultado o estado devuelto tras procesar la petición.
+     */
     public static int getAvatarResource(String avatarName) {
         if (avatarName == null) return R.drawable.ic_person; // Default fallback if needed
         switch (avatarName) {

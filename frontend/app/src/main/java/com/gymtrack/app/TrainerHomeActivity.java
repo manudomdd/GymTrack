@@ -33,10 +33,18 @@ import com.gymtrack.app.utils.AvatarHelper;
  */
 public class TrainerHomeActivity extends AppCompatActivity {
 
+    // Atributo de tipo DrawerLayout para almacenar drawerLayout.
     private DrawerLayout drawerLayout;
+    // Atributo de tipo NavigationView para almacenar navView.
     private NavigationView navView;
+    // Repositorio para operaciones de persistencia de la entidad Auth.
     private AuthRepository authRepository;
 
+    /**
+     * Registra y persiste un nuevo registro en el sistema.
+     *
+     * @param savedInstanceState Estado de instancia guardado previamente.
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -82,6 +90,10 @@ public class TrainerHomeActivity extends AppCompatActivity {
         loadNavHeaderData();
     }
     
+    /**
+     * Procesa la operación correspondiente para loadNavHeaderData.
+     *
+     */
     private void loadNavHeaderData() {
         ClientRepository clientRepository = new ClientRepository(this);
         clientRepository.getProfile(new ClientRepository.Callback<JsonObject>() {
@@ -106,6 +118,11 @@ public class TrainerHomeActivity extends AppCompatActivity {
         });
     }
 
+    /**
+     * Procesa la operación correspondiente para loadFragment.
+     *
+     * @param fragment Parámetro de entrada para la operación.
+     */
     public void loadFragment(Fragment fragment) {
         getSupportFragmentManager()
                 .beginTransaction()
@@ -113,6 +130,10 @@ public class TrainerHomeActivity extends AppCompatActivity {
                 .commit();
     }
 
+    /**
+     * Procesa la operación correspondiente para showLogoutDialog.
+     *
+     */
     private void showLogoutDialog() {
         new MaterialAlertDialogBuilder(this, R.style.Theme_GymTrack_Dialog)
                 .setTitle("Cerrar Sesión")
@@ -127,6 +148,10 @@ public class TrainerHomeActivity extends AppCompatActivity {
                 .show();
     }
 
+    /**
+     * Procesa la operación correspondiente para onBackPressed.
+     *
+     */
     @Override
     public void onBackPressed() {
         if (drawerLayout.isDrawerOpen(GravityCompat.START)) {

@@ -54,16 +54,30 @@ import okhttp3.Response;
  */
 public class TrainingLogFragment extends Fragment {
 
+    // Atributo de tipo Calendar para almacenar selectedDate.
     private Calendar selectedDate = Calendar.getInstance();
+    // Vista de texto (TextView) para mostrar el/la monthyear.
     private TextView tvMonthYear;
+    // Atributo de tipo LinearLayout para almacenar calendarContainer.
     private LinearLayout calendarContainer;
+    // Listado interactivo (RecyclerView) para presentar workouts.
     private RecyclerView rvWorkouts;
+    // Atributo de tipo LinearLayout para almacenar layoutEmpty.
     private LinearLayout layoutEmpty;
+    // Atributo de tipo WorkoutAdapter para almacenar adapter.
     private WorkoutAdapter adapter;
 
     // Lista completa de series recibidas del backend (modelo plano)
     private final List<Map<String, Object>> workoutSessions = new ArrayList<>();
 
+    /**
+     * Registra y persiste un nuevo registro en el sistema.
+     *
+     * @param inflater Objeto para inflar diseños XML en la interfaz.
+     * @param container Contenedor padre donde se inserta la vista.
+     * @param savedInstanceState Estado de instancia guardado previamente.
+     * @return El resultado o estado devuelto tras procesar la petición.
+     */
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater,
@@ -72,6 +86,12 @@ public class TrainingLogFragment extends Fragment {
         return inflater.inflate(R.layout.fragment_training_log, container, false);
     }
 
+    /**
+     * Registra y persiste un nuevo registro en el sistema.
+     *
+     * @param view Vista raíz devuelta tras inflar el fragmento.
+     * @param savedInstanceState Estado de instancia guardado previamente.
+     */
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
@@ -186,6 +206,13 @@ public class TrainingLogFragment extends Fragment {
         refreshWorkoutList();
     }
 
+    /**
+     * Procesa la operación correspondiente para isSameDay.
+     *
+     * @param cal Parámetro de entrada para la operación.
+     * @param day Parámetro de entrada para la operación.
+     * @return El resultado o estado devuelto tras procesar la petición.
+     */
     private boolean isSameDay(Calendar cal, int day) {
         return cal.get(Calendar.DAY_OF_MONTH) == day;
     }
@@ -586,6 +613,14 @@ public class TrainingLogFragment extends Fragment {
         return el.getAsString();
     }
 
+    /**
+     * Realiza una consulta para obtener los datos solicitados.
+     *
+     * @param obj Parámetro de entrada para la operación.
+     * @param key Parámetro de entrada para la operación.
+     * @param fallback Parámetro de entrada para la operación.
+     * @return El resultado o estado devuelto tras procesar la petición.
+     */
     private int safeGetInt(JsonObject obj, String key, int fallback) {
         try {
             if (!obj.has(key) || obj.get(key).isJsonNull())
@@ -596,6 +631,14 @@ public class TrainingLogFragment extends Fragment {
         }
     }
 
+    /**
+     * Realiza una consulta para obtener los datos solicitados.
+     *
+     * @param obj Parámetro de entrada para la operación.
+     * @param key Parámetro de entrada para la operación.
+     * @param fallback Parámetro de entrada para la operación.
+     * @return El resultado o estado devuelto tras procesar la petición.
+     */
     private double safeGetDouble(JsonObject obj, String key, double fallback) {
         try {
             if (!obj.has(key) || obj.get(key).isJsonNull())
@@ -606,6 +649,14 @@ public class TrainingLogFragment extends Fragment {
         }
     }
 
+    /**
+     * Realiza una consulta para obtener los datos solicitados.
+     *
+     * @param obj Parámetro de entrada para la operación.
+     * @param key Parámetro de entrada para la operación.
+     * @param fallback Parámetro de entrada para la operación.
+     * @return El resultado o estado devuelto tras procesar la petición.
+     */
     private long safeGetLong(JsonObject obj, String key, long fallback) {
         try {
             if (!obj.has(key) || obj.get(key).isJsonNull())
@@ -616,6 +667,12 @@ public class TrainingLogFragment extends Fragment {
         }
     }
 
+    /**
+     * Procesa la operación correspondiente para parseOrZero.
+     *
+     * @param et Parámetro de entrada para la operación.
+     * @return El resultado o estado devuelto tras procesar la petición.
+     */
     private int parseOrZero(TextInputEditText et) {
         try {
             return et.getText() != null ? Integer.parseInt(et.getText().toString()) : 0;
@@ -624,6 +681,12 @@ public class TrainingLogFragment extends Fragment {
         }
     }
 
+    /**
+     * Procesa la operación correspondiente para parseDoubleOrZero.
+     *
+     * @param et Parámetro de entrada para la operación.
+     * @return El resultado o estado devuelto tras procesar la petición.
+     */
     private double parseDoubleOrZero(TextInputEditText et) {
         try {
             return et.getText() != null ? Double.parseDouble(et.getText().toString()) : 0.0;

@@ -28,20 +28,32 @@ import java.util.stream.Collectors;
 @Service
 public class IAService {
 
+    // Repositorio para operaciones de persistencia de la entidad User.
     @Autowired
     private UserRepository userRepository;
 
+    // Repositorio para operaciones de persistencia de la entidad Client.
     @Autowired
     private ClientRepository clientRepository;
 
+    // Servicio para la gestión de la lógica de negocio de Workout.
     @Autowired
     private WorkoutService workoutService;
 
+    // Servicio para la gestión de la lógica de negocio de Health.
     @Autowired
     private HealthService healthService;
 
+    // Atributo de tipo RestTemplate para almacenar restTemplate.
     private final RestTemplate restTemplate = new RestTemplate();
 
+    /**
+     * Procesa la operación correspondiente para generateAIResponse.
+     *
+     * @param clientId Identificador único del usuario o cliente asociado.
+     * @param trainerQuery Parámetro de entrada para la operación.
+     * @return El resultado o estado devuelto tras procesar la petición.
+     */
     public String generateAIResponse(Long clientId, String trainerQuery) {
         Optional<app.entity.Client> clientOpt = clientRepository.findById(clientId);
         if (!clientOpt.isPresent()) {
@@ -185,6 +197,12 @@ public class IAService {
         }
     }
 
+    /**
+     * Procesa la operación correspondiente para generateGeneralAIResponse.
+     *
+     * @param trainerQuery Parámetro de entrada para la operación.
+     * @return El resultado o estado devuelto tras procesar la petición.
+     */
     public String generateGeneralAIResponse(String trainerQuery) {
         String systemPrompt = "Eres un asistente experto en ciencias del deporte y la salud, diseñado para ayudar a entrenadores personales con sus dudas de entrenamiento, nutrición, fatiga o cualquier otra consulta técnica.";
 

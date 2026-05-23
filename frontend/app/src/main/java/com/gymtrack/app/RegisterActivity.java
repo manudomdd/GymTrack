@@ -38,21 +38,35 @@ import java.util.Map;
 public class RegisterActivity extends AppCompatActivity {
 
     private TextInputEditText etNombre, etUsername, etPassword, etPeso, etAltura, etFechaNacimiento;
+    // Atributo de tipo Slider para almacenar sliderNeat.
     private Slider sliderNeat;
+    // Vista de texto (TextView) para mostrar el/la neatlabel.
     private TextView tvNeatLabel;
     private Button btnRegister, btnGoLogin;
+    // Atributo de tipo ProgressBar para almacenar progressBar.
     private ProgressBar progressBar;
+    // Atributo de tipo View para almacenar tilTrainerCode.
     private View tilTrainerCode;
+    // Campo de entrada de texto (EditText) para ingresar el/la trainercode.
     private TextInputEditText etTrainerCode;
+    // Repositorio para operaciones de persistencia de la entidad Auth.
     private AuthRepository authRepository;
 
+    // Vista de texto (TextView) para mostrar el/la neatvalue.
     private int neatValue = 3;
+    // Atributo de tipo String para almacenar selectedAvatar.
     private String selectedAvatar = "avatar_1"; // Default avatar
 
+    // Atributo de tipo String[] para almacenar NEAT_LABELS.
     private static final String[] NEAT_LABELS = {
             "", "Muy Sedentario", "Sedentario", "Moderado", "Activo", "Muy Activo"
     };
 
+    /**
+     * Registra y persiste un nuevo registro en el sistema.
+     *
+     * @param savedInstanceState Estado de instancia guardado previamente.
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -128,6 +142,10 @@ public class RegisterActivity extends AppCompatActivity {
         setupAvatarSelection();
     }
     
+    /**
+     * Establece el valor de upavatarselection.
+     *
+     */
     private void setupAvatarSelection() {
         CircleImageView iv1 = findViewById(R.id.iv_avatar_1);
         CircleImageView iv2 = findViewById(R.id.iv_avatar_2);
@@ -233,15 +251,32 @@ public class RegisterActivity extends AppCompatActivity {
         });
     }
 
+    /**
+     * Recupera el valor actual de text.
+     *
+     * @param et Parámetro de entrada para la operación.
+     * @return El resultado o estado devuelto tras procesar la petición.
+     */
     private String getText(TextInputEditText et) {
         return et.getText() != null ? et.getText().toString().trim() : "";
     }
 
+    /**
+     * Establece el valor de loading.
+     *
+     * @param loading Parámetro de entrada para la operación.
+     */
     private void setLoading(boolean loading) {
         btnRegister.setVisibility(loading ? View.GONE : View.VISIBLE);
         progressBar.setVisibility(loading ? View.VISIBLE : View.GONE);
     }
 
+    /**
+     * Procesa la operación correspondiente para showSnackbar.
+     *
+     * @param message Parámetro de entrada para la operación.
+     * @param success Parámetro de entrada para la operación.
+     */
     private void showSnackbar(String message, boolean success) {
         View rootView = findViewById(android.R.id.content);
         Snackbar snackbar = Snackbar.make(rootView, message, Snackbar.LENGTH_LONG);

@@ -20,12 +20,22 @@ import okhttp3.Response;
  * @since 23/05/2026
  */
 public class ClientRepository {
+    // Atributo de tipo String para almacenar BASE_URL.
     private static final String BASE_URL = "http://10.0.2.2:8080/api/client";
+    // Atributo de tipo MediaType para almacenar JSON.
     private static final MediaType JSON = MediaType.get("application/json; charset=utf-8");
+    // Cliente asociado a este registro.
     private final OkHttpClient client;
+    // Atributo de tipo Gson para almacenar gson.
     private final Gson gson;
+    // Repositorio para operaciones de persistencia de la entidad Auth.
     private final AuthRepository authRepository;
 
+    /**
+     * Constructor de la clase ClientRepository con inyección de dependencias.
+     *
+     * @param context Parámetro de entrada para la operación.
+     */
     public ClientRepository(Context context) {
         this.client = new OkHttpClient.Builder()
                 .connectTimeout(5, TimeUnit.SECONDS)
@@ -40,6 +50,11 @@ public class ClientRepository {
         void onError(String message);
     }
 
+    /**
+     * Recupera el valor actual de profile.
+     *
+     * @param callback Parámetro de entrada para la operación.
+     */
     public void getProfile(Callback<JsonObject> callback) {
         new Thread(() -> {
             try {
@@ -62,6 +77,12 @@ public class ClientRepository {
         }).start();
     }
 
+    /**
+     * Actualiza los datos del registro en la base de datos.
+     *
+     * @param data Parámetro de entrada para la operación.
+     * @param callback Parámetro de entrada para la operación.
+     */
     public void updateProfile(JsonObject data, Callback<Void> callback) {
         new Thread(() -> {
             try {
@@ -84,6 +105,12 @@ public class ClientRepository {
         }).start();
     }
 
+    /**
+     * Procesa la operación correspondiente para linkTrainer.
+     *
+     * @param code Código único de vinculación del entrenador.
+     * @param callback Parámetro de entrada para la operación.
+     */
     public void linkTrainer(String code, Callback<String> callback) {
         new Thread(() -> {
             try {
@@ -112,6 +139,11 @@ public class ClientRepository {
         void onError(String message);
     }
 
+    /**
+     * Recupera el valor actual de clientdashboard.
+     *
+     * @param callback Parámetro de entrada para la operación.
+     */
     public void getClientDashboard(ClientDashboardCallback callback) {
         new Thread(() -> {
             try {

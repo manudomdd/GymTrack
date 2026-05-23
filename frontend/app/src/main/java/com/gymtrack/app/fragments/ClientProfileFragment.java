@@ -27,11 +27,22 @@ import com.gymtrack.app.utils.AvatarHelper;
 public class ClientProfileFragment extends Fragment {
 
     private TextInputEditText etNombre, etEdad, etPeso, etAltura, etTrainerCode;
+    // Vista de texto (TextView) para mostrar el/la trainerstatus.
     private TextView tvTrainerStatus;
     private Button btnUpdate, btnLink;
+    // Vista de imagen (ImageView) para visualizar el/la avatar.
     private ImageView ivAvatar;
+    // Repositorio para operaciones de persistencia de la entidad Client.
     private ClientRepository clientRepository;
 
+    /**
+     * Registra y persiste un nuevo registro en el sistema.
+     *
+     * @param inflater Objeto para inflar diseños XML en la interfaz.
+     * @param container Contenedor padre donde se inserta la vista.
+     * @param savedInstanceState Estado de instancia guardado previamente.
+     * @return El resultado o estado devuelto tras procesar la petición.
+     */
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
@@ -39,6 +50,12 @@ public class ClientProfileFragment extends Fragment {
         return inflater.inflate(R.layout.fragment_client_profile, container, false);
     }
 
+    /**
+     * Registra y persiste un nuevo registro en el sistema.
+     *
+     * @param view Vista raíz devuelta tras inflar el fragmento.
+     * @param savedInstanceState Estado de instancia guardado previamente.
+     */
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
@@ -63,6 +80,10 @@ public class ClientProfileFragment extends Fragment {
         btnLink.setOnClickListener(v -> handleLinkTrainer());
     }
 
+    /**
+     * Procesa la operación correspondiente para loadProfileData.
+     *
+     */
     private void loadProfileData() {
         clientRepository.getProfile(new ClientRepository.Callback<JsonObject>() {
             @Override
@@ -100,6 +121,10 @@ public class ClientProfileFragment extends Fragment {
         });
     }
 
+    /**
+     * Actualiza los datos del registro en la base de datos.
+     *
+     */
     private void handleUpdateProfile() {
         String nombre = etNombre.getText().toString().trim();
         String pesoStr = etPeso.getText().toString().trim();
@@ -133,6 +158,10 @@ public class ClientProfileFragment extends Fragment {
         });
     }
 
+    /**
+     * Procesa la operación correspondiente para handleLinkTrainer.
+     *
+     */
     private void handleLinkTrainer() {
         String code = etTrainerCode.getText().toString().trim().toUpperCase();
         if (code.isEmpty())

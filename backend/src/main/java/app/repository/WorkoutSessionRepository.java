@@ -16,7 +16,27 @@ import java.util.List;
  */
 @Repository
 public interface WorkoutSessionRepository extends JpaRepository<WorkoutSession, Long> {
+    /**
+     * Realiza una consulta para obtener los datos solicitados.
+     *
+     * @param clientId Identificador único del usuario o cliente asociado.
+     * @return El resultado o estado devuelto tras procesar la petición.
+     */
     List<WorkoutSession> findByClientId(Long clientId);
+    /**
+     * Realiza una consulta para obtener los datos solicitados.
+     *
+     * @param clientId Identificador único del usuario o cliente asociado.
+     * @param date Parámetro de entrada para la operación.
+     * @return El resultado o estado devuelto tras procesar la petición.
+     */
     List<WorkoutSession> findByClientIdAndDate(Long clientId, LocalDate date);
+    /**
+     * Realiza una consulta para obtener los datos solicitados.
+     *
+     * @param clientId Identificador único del usuario o cliente asociado.
+     * @param muscleGroup Parámetro de entrada para la operación.
+     * @return El resultado o estado devuelto tras procesar la petición.
+     */
     List<WorkoutSession> findByClientIdAndMuscleGroupOrderByDateAsc(Long clientId, String muscleGroup);
 }

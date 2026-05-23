@@ -44,12 +44,18 @@ import okhttp3.Response;
  */
 public class HealthFragment extends Fragment {
 
+    // Vista de texto (TextView) para mostrar el/la steps.
     private TextView tvSteps;
+    // Campo de entrada de texto (EditText) para ingresar el/la hours.
     private TextInputEditText etHours;
+    // Vista de texto (TextView) para mostrar el/la spinnerquality.
     private AutoCompleteTextView spinnerQuality;
+    // Botón interactivo (Button) para save.
     private Button btnSave;
+    // Atributo de tipo SharedPreferences para almacenar prefs.
     private SharedPreferences prefs;
 
+    // Vista de imagen (ImageView) para visualizar el/la stepsreceer.
     private final BroadcastReceiver stepsReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
@@ -59,6 +65,14 @@ public class HealthFragment extends Fragment {
         }
     };
 
+    /**
+     * Registra y persiste un nuevo registro en el sistema.
+     *
+     * @param inflater Objeto para inflar diseños XML en la interfaz.
+     * @param container Contenedor padre donde se inserta la vista.
+     * @param savedInstanceState Estado de instancia guardado previamente.
+     * @return El resultado o estado devuelto tras procesar la petición.
+     */
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
@@ -66,6 +80,12 @@ public class HealthFragment extends Fragment {
         return inflater.inflate(R.layout.fragment_health, container, false);
     }
 
+    /**
+     * Registra y persiste un nuevo registro en el sistema.
+     *
+     * @param view Vista raíz devuelta tras inflar el fragmento.
+     * @param savedInstanceState Estado de instancia guardado previamente.
+     */
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
@@ -87,6 +107,10 @@ public class HealthFragment extends Fragment {
         btnSave.setOnClickListener(v -> saveSleepLog());
     }
 
+    /**
+     * Registra y persiste un nuevo registro en el sistema.
+     *
+     */
     private void saveSleepLog() {
         String hoursStr = etHours.getText().toString();
         if (hoursStr.isEmpty())
@@ -111,6 +135,11 @@ public class HealthFragment extends Fragment {
         saveSleepToBackend(log);
     }
 
+    /**
+     * Registra y persiste un nuevo registro en el sistema.
+     *
+     * @param log Registro de salud o biomarcador.
+     */
     private void saveSleepToBackend(JsonObject log) {
         AuthRepository auth = new AuthRepository(requireContext());
         OkHttpClient client = new OkHttpClient.Builder()
@@ -147,6 +176,10 @@ public class HealthFragment extends Fragment {
         }).start();
     }
 
+    /**
+     * Inicia el ciclo de vida visible activando receptores de eventos o servicios requeridos.
+     *
+     */
     @Override
     public void onStart() {
         super.onStart();
@@ -158,6 +191,10 @@ public class HealthFragment extends Fragment {
         }
     }
 
+    /**
+     * Detiene los servicios en segundo plano y desregistra receptores para optimizar la batería.
+     *
+     */
     @Override
     public void onStop() {
         super.onStop();

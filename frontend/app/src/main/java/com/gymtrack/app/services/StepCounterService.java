@@ -33,13 +33,23 @@ import java.net.URL;
  * @since 23/05/2026
  */
 public class StepCounterService extends Service implements SensorEventListener {
+    // Gestor de persistencia de JPA (EntityManager) para transacciones.
     private SensorManager sensorManager;
+    // Atributo de tipo Sensor para almacenar stepSensor.
     private Sensor stepSensor;
+    // Atributo de tipo int para almacenar currentSteps.
     private int currentSteps = 0;
+    // Atributo de tipo int para almacenar initialSteps.
     private int initialSteps = -1;
+    // Atributo de tipo String para almacenar CHANNEL_ID.
     private static final String CHANNEL_ID = "StepCounterChannel";
+    // Atributo de tipo String para almacenar ACTION_STEPS_UPDATED.
     public static final String ACTION_STEPS_UPDATED = "com.gymtrack.app.STEPS_UPDATED";
 
+    /**
+     * Registra y persiste un nuevo registro en el sistema.
+     *
+     */
     @Override
     public void onCreate() {
         super.onCreate();
@@ -53,6 +63,14 @@ public class StepCounterService extends Service implements SensorEventListener {
         startNotificationListener();
     }
 
+    /**
+     * Procesa la operación correspondiente para onStartCommand.
+     *
+     * @param intent Parámetro de entrada para la operación.
+     * @param flags Parámetro de entrada para la operación.
+     * @param startId Parámetro de entrada para la operación.
+     * @return El resultado o estado devuelto tras procesar la petición.
+     */
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
         updateNotification();
@@ -62,6 +80,11 @@ public class StepCounterService extends Service implements SensorEventListener {
         return START_STICKY;
     }
 
+    /**
+     * Procesa la operación correspondiente para onSensorChanged.
+     *
+     * @param event Parámetro de entrada para la operación.
+     */
     @Override
     public void onSensorChanged(SensorEvent event) {
         if (event.sensor.getType() == Sensor.TYPE_STEP_COUNTER) {
@@ -84,6 +107,10 @@ public class StepCounterService extends Service implements SensorEventListener {
         }
     }
 
+    /**
+     * Actualiza los datos del registro en la base de datos.
+     *
+     */
     private void updateNotification() {
         Notification notification = new NotificationCompat.Builder(this, CHANNEL_ID)
                 .setContentTitle("GymTrack")
@@ -100,13 +127,29 @@ public class StepCounterService extends Service implements SensorEventListener {
         }
     }
 
+    /**
+     * Procesa la operación correspondiente para onAccuracyChanged.
+     *
+     * @param sensor Parámetro de entrada para la operación.
+     * @param accuracy Parámetro de entrada para la operación.
+     */
     @Override
     public void onAccuracyChanged(Sensor sensor, int accuracy) {}
 
+    /**
+     * Procesa la operación correspondiente para onBind.
+     *
+     * @param intent Parámetro de entrada para la operación.
+     * @return El resultado o estado devuelto tras procesar la petición.
+     */
     @Nullable
     @Override
     public IBinder onBind(Intent intent) { return null; }
 
+    /**
+     * Libera la memoria y limpia referencias persistentes al destruir la vista o actividad.
+     *
+     */
     @Override
     public void onDestroy() {
         super.onDestroy();
@@ -115,6 +158,10 @@ public class StepCounterService extends Service implements SensorEventListener {
         }
     }
 
+    /**
+     * Registra y persiste un nuevo registro en el sistema.
+     *
+     */
     private void createNotificationChannel() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             NotificationChannel channel = new NotificationChannel(
@@ -127,6 +174,10 @@ public class StepCounterService extends Service implements SensorEventListener {
         }
     }
 
+    /**
+     * Procesa la operación correspondiente para startNotificationListener.
+     *
+     */
     private void startNotificationListener() {
         new Thread(() -> {
             BufferedReader reader = null;
@@ -176,6 +227,12 @@ public class StepCounterService extends Service implements SensorEventListener {
         }).start();
     }
 
+    /**
+     * Procesa la operación correspondiente para showSystemNotification.
+     *
+     * @param title Parámetro de entrada para la operación.
+     * @param message Parámetro de entrada para la operación.
+     */
     private void showSystemNotification(String title, String message) {
         NotificationManager manager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
         String channelId = "gymtrack_coach_notifications";

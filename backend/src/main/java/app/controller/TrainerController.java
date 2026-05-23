@@ -33,18 +33,23 @@ import java.util.stream.Collectors;
 @RequestMapping("/api/trainer")
 public class TrainerController {
 
+    // Repositorio para operaciones de persistencia de la entidad User.
     @Autowired
     private UserRepository userRepo;
 
+    // Repositorio para operaciones de persistencia de la entidad Client.
     @Autowired
     private ClientRepository clientRepo;
 
+    // Servicio para la gestión de la lógica de negocio de Notification.
     @Autowired
     private NotificationService notificationService;
 
+    // Servicio para la gestión de la lógica de negocio de Workout.
     @Autowired
     private WorkoutService workoutService;
 
+    // Servicio para la gestión de la lógica de negocio de Health.
     @Autowired
     private HealthService healthService;
 

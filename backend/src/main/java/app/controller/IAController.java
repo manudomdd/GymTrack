@@ -24,12 +24,15 @@ import java.util.Optional;
 @RequestMapping("/api/trainer")
 public class IAController {
 
+    // Repositorio para operaciones de persistencia de la entidad User.
     @Autowired
     private UserRepository userRepo;
 
+    // Repositorio para operaciones de persistencia de la entidad Client.
     @Autowired
     private ClientRepository clientRepo;
 
+    // Servicio para la gestión de la lógica de negocio de Ia.
     @Autowired
     private IAService iaService;
 

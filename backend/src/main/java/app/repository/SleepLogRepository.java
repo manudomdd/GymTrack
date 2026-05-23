@@ -17,6 +17,19 @@ import java.util.Optional;
  */
 @Repository
 public interface SleepLogRepository extends JpaRepository<SleepLog, Long> {
+    /**
+     * Realiza una consulta para obtener los datos solicitados.
+     *
+     * @param clientId Identificador único del usuario o cliente asociado.
+     * @return El resultado o estado devuelto tras procesar la petición.
+     */
     List<SleepLog> findByClientId(Long clientId);
+    /**
+     * Realiza una consulta para obtener los datos solicitados.
+     *
+     * @param clientId Identificador único del usuario o cliente asociado.
+     * @param date Parámetro de entrada para la operación.
+     * @return El resultado o estado devuelto tras procesar la petición.
+     */
     Optional<SleepLog> findByClientIdAndDate(Long clientId, LocalDate date);
 }

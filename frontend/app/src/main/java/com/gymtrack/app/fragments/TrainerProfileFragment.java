@@ -33,8 +33,17 @@ import okhttp3.Response;
 public class TrainerProfileFragment extends Fragment {
 
     private TextView tvName, tvUsername, tvCode;
+    // Vista de imagen (ImageView) para visualizar el/la avatar.
     private ImageView ivAvatar;
 
+    /**
+     * Registra y persiste un nuevo registro en el sistema.
+     *
+     * @param inflater Objeto para inflar diseños XML en la interfaz.
+     * @param container Contenedor padre donde se inserta la vista.
+     * @param savedInstanceState Estado de instancia guardado previamente.
+     * @return El resultado o estado devuelto tras procesar la petición.
+     */
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater,
@@ -43,6 +52,12 @@ public class TrainerProfileFragment extends Fragment {
         return inflater.inflate(R.layout.fragment_trainer_profile, container, false);
     }
 
+    /**
+     * Registra y persiste un nuevo registro en el sistema.
+     *
+     * @param view Vista raíz devuelta tras inflar el fragmento.
+     * @param savedInstanceState Estado de instancia guardado previamente.
+     */
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
@@ -55,6 +70,10 @@ public class TrainerProfileFragment extends Fragment {
         fetchTrainerProfile();
     }
 
+    /**
+     * Realiza una consulta para obtener los datos solicitados.
+     *
+     */
     private void fetchTrainerProfile() {
         AuthRepository auth = new AuthRepository(requireContext());
         OkHttpClient client = new OkHttpClient();

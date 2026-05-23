@@ -31,11 +31,19 @@ import java.util.Set;
  */
 public class TrainerClientMetricsActivity extends AppCompatActivity {
 
+    // Campo de entrada de texto (EditText) para ingresar el/la mricscontainer.
     private LinearLayout metricsContainer;
+    // Atributo de tipo LinearLayout para almacenar healthContainer.
     private LinearLayout healthContainer;
+    // Repositorio para operaciones de persistencia de la entidad Auth.
     private AuthRepository authRepository;
     private Map<String, Double> allMetrics;
 
+    /**
+     * Registra y persiste un nuevo registro en el sistema.
+     *
+     * @param savedInstanceState Estado de instancia guardado previamente.
+     */
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -83,6 +91,10 @@ public class TrainerClientMetricsActivity extends AppCompatActivity {
         });
     }
 
+    /**
+     * Procesa la operación correspondiente para showMuscleGroups.
+     *
+     */
     private void showMuscleGroups() {
         metricsContainer.removeAllViews();
         addSectionHeader(metricsContainer, "Selecciona un Grupo Muscular");
@@ -118,6 +130,11 @@ public class TrainerClientMetricsActivity extends AppCompatActivity {
         }
     }
 
+    /**
+     * Procesa la operación correspondiente para showExercisesForGroup.
+     *
+     * @param group Parámetro de entrada para la operación.
+     */
     private void showExercisesForGroup(String group) {
         metricsContainer.removeAllViews();
         
@@ -154,6 +171,12 @@ public class TrainerClientMetricsActivity extends AppCompatActivity {
         }
     }
 
+    /**
+     * Registra y persiste un nuevo registro en el sistema.
+     *
+     * @param exerciseName Parámetro de entrada para la operación.
+     * @param slope Parámetro de entrada para la operación.
+     */
     private void addMetricView(String exerciseName, double slope) {
         View card = LayoutInflater.from(this).inflate(R.layout.item_metric_card, metricsContainer, false);
         
@@ -195,6 +218,13 @@ public class TrainerClientMetricsActivity extends AppCompatActivity {
         parent.addView(tv);
     }
 
+    /**
+     * Registra y persiste un nuevo registro en el sistema.
+     *
+     * @param parent Parámetro de entrada para la operación.
+     * @param text Parámetro de entrada para la operación.
+     * @param color Parámetro de entrada para la operación.
+     */
     private void addInfoRow(LinearLayout parent, String text, int color) {
         TextView tv = new TextView(this);
         tv.setText(text);

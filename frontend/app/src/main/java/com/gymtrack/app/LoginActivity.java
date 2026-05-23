@@ -24,9 +24,16 @@ public class LoginActivity extends AppCompatActivity {
 
     private TextInputEditText etUsername, etPassword;
     private Button btnLogin, btnGoRegister;
+    // Atributo de tipo ProgressBar para almacenar progressBar.
     private ProgressBar progressBar;
+    // Repositorio para operaciones de persistencia de la entidad Auth.
     private AuthRepository authRepository;
 
+    /**
+     * Registra y persiste un nuevo registro en el sistema.
+     *
+     * @param savedInstanceState Estado de instancia guardado previamente.
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -85,11 +92,22 @@ public class LoginActivity extends AppCompatActivity {
         });
     }
 
+    /**
+     * Establece el valor de loading.
+     *
+     * @param loading Parámetro de entrada para la operación.
+     */
     private void setLoading(boolean loading) {
         btnLogin.setVisibility(loading ? View.GONE : View.VISIBLE);
         progressBar.setVisibility(loading ? View.VISIBLE : View.GONE);
     }
 
+    /**
+     * Procesa la operación correspondiente para showSnackbar.
+     *
+     * @param message Parámetro de entrada para la operación.
+     * @param success Parámetro de entrada para la operación.
+     */
     private void showSnackbar(String message, boolean success) {
         View rootView = findViewById(android.R.id.content);
         Snackbar snackbar = Snackbar.make(rootView, message, Snackbar.LENGTH_LONG);

@@ -61,15 +61,34 @@ public class JwtService {
         return extractExpiration(token).before(new Date());
     }
 
+    /**
+     * Procesa la operación correspondiente para extractExpiration.
+     *
+     * @param token Parámetro de entrada para la operación.
+     * @return El resultado o estado devuelto tras procesar la petición.
+     */
     private Date extractExpiration(String token) {
         return extractClaim(token, Claims::getExpiration);
     }
 
+    /**
+     * Procesa la operación correspondiente para extractClaim.
+     *
+     * @param token Parámetro de entrada para la operación.
+     * @param claimsResolver Parámetro de entrada para la operación.
+     * @return El resultado o estado devuelto tras procesar la petición.
+     */
     public <T> T extractClaim(String token, Function<Claims, T> claimsResolver) {
         final Claims claims = extractAllClaims(token);
         return claimsResolver.apply(claims);
     }
 
+    /**
+     * Procesa la operación correspondiente para extractAllClaims.
+     *
+     * @param token Parámetro de entrada para la operación.
+     * @return El resultado o estado devuelto tras procesar la petición.
+     */
     private Claims extractAllClaims(String token) {
         return Jwts.parser()
                 .verifyWith(getSignInKey())

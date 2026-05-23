@@ -33,21 +33,32 @@ import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
 @RequestMapping("/api/client")
 public class ClientController {
 
+    // Repositorio para operaciones de persistencia de la entidad User.
     @Autowired
     private UserRepository userRepo;
 
+    // Repositorio para operaciones de persistencia de la entidad Trainer.
     @Autowired
     private TrainerRepository trainerRepo;
 
+    // Servicio para la gestión de la lógica de negocio de Notification.
     @Autowired
     private NotificationService notificationService;
 
+    // Servicio para la gestión de la lógica de negocio de Workout.
     @Autowired
     private WorkoutService workoutService;
 
+    // Servicio para la gestión de la lógica de negocio de Health.
     @Autowired
     private HealthService healthService;
 
+    /**
+     * Recupera el valor actual de profile.
+     *
+     * @param auth Objeto de autenticación con la sesión activa del usuario.
+     * @return Respuesta HTTP con el cuerpo de datos y código de estado correspondiente.
+     */
     @GetMapping("/profile")
     public ResponseEntity<User> getProfile(Authentication auth) {
         Optional<User> userOpt = userRepo.findByUsername(auth.getName());
@@ -276,6 +287,12 @@ public class ClientController {
         return ResponseEntity.status(401).build();
     }
 
+    /**
+     * Procesa la operación correspondiente para subscribeToNotifications.
+     *
+     * @param auth Objeto de autenticación con la sesión activa del usuario.
+     * @return Canal de flujo de eventos persistentes (Server-Sent Events).
+     */
     @GetMapping(value = "/notifications/sse", produces = "text/event-stream")
     public SseEmitter subscribeToNotifications(Authentication auth) {
         Optional<User> userOpt = userRepo.findByUsername(auth.getName());

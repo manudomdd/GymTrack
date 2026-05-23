@@ -15,5 +15,11 @@ import app.entity.Client;
 @Repository
 public interface ClientRepository extends JpaRepository<Client, Long> {
 	
+	/**
+	 * Realiza una consulta para obtener los datos solicitados.
+	 *
+	 * @param trainerId Parámetro de entrada para la operación.
+	 * @return El resultado o estado devuelto tras procesar la petición.
+	 */
 	List<Client> findByTrainerId(Long trainerId);
 }

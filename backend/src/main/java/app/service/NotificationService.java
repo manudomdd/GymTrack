@@ -18,6 +18,12 @@ public class NotificationService {
 
     private final Map<Long, SseEmitter> emitters = new ConcurrentHashMap<>();
 
+    /**
+     * Procesa la operación correspondiente para subscribe.
+     *
+     * @param userId Identificador único del usuario o cliente asociado.
+     * @return Canal de flujo de eventos persistentes (Server-Sent Events).
+     */
     public SseEmitter subscribe(Long userId) {
         SseEmitter emitter = new SseEmitter(24 * 60 * 60 * 1000L);
 
@@ -38,6 +44,12 @@ public class NotificationService {
         return emitter;
     }
 
+    /**
+     * Procesa la operación correspondiente para sendNotification.
+     *
+     * @param userId Identificador único del usuario o cliente asociado.
+     * @param message Parámetro de entrada para la operación.
+     */
     public void sendNotification(Long userId, String message) {
         SseEmitter emitter = emitters.get(userId);
         if (emitter != null) {

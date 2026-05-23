@@ -27,15 +27,27 @@ import okhttp3.Response;
  */
 public class AuthRepository {
 
+    // Atributo de tipo String para almacenar BASE_URL.
     private static final String BASE_URL = "http://10.0.2.2:8080/api/auth";
+    // Atributo de tipo String para almacenar PREFS_NAME.
     private static final String PREFS_NAME = "gymtrack_prefs";
+    // Atributo de tipo String para almacenar KEY_TOKEN.
     private static final String KEY_TOKEN = "token";
+    // Atributo de tipo MediaType para almacenar JSON.
     private static final MediaType JSON = MediaType.get("application/json; charset=utf-8");
 
+    // Cliente asociado a este registro.
     private final OkHttpClient client;
+    // Atributo de tipo Gson para almacenar gson.
     private final Gson gson;
+    // Atributo de tipo SharedPreferences para almacenar prefs.
     private final SharedPreferences prefs;
 
+    /**
+     * Constructor de la clase AuthRepository con inyección de dependencias.
+     *
+     * @param context Parámetro de entrada para la operación.
+     */
     public AuthRepository(Context context) {
         this.client = new OkHttpClient.Builder()
                 .connectTimeout(5, TimeUnit.SECONDS)
@@ -141,6 +153,12 @@ public class AuthRepository {
         void onError(String message);
     }
 
+    /**
+     * Recupera el valor actual de clientprogress.
+     *
+     * @param clientId Identificador único del usuario o cliente asociado.
+     * @param callback Parámetro de entrada para la operación.
+     */
     public void getClientProgress(long clientId, ProgressCallback callback) {
         new Thread(() -> {
             try {
@@ -203,6 +221,11 @@ public class AuthRepository {
         void onError(String message);
     }
 
+    /**
+     * Recupera el valor actual de trainerdashboard.
+     *
+     * @param callback Parámetro de entrada para la operación.
+     */
     public void getTrainerDashboard(TrainerDashboardCallback callback) {
         new Thread(() -> {
             try {

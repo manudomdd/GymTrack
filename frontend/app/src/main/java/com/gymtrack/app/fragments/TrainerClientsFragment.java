@@ -64,11 +64,22 @@ import okhttp3.Response;
  */
 public class TrainerClientsFragment extends Fragment {
 
+    // Atributo de tipo ClientAdapter para almacenar adapter.
     private ClientAdapter adapter;
+    // Atributo de tipo LinearLayout para almacenar layoutEmpty.
     private LinearLayout layoutEmpty;
+    // Listado interactivo (RecyclerView) para presentar clients.
     private RecyclerView rvClients;
     private final List<Map<String, Object>> allClients = new ArrayList<>();
 
+    /**
+     * Registra y persiste un nuevo registro en el sistema.
+     *
+     * @param inflater Objeto para inflar diseños XML en la interfaz.
+     * @param container Contenedor padre donde se inserta la vista.
+     * @param savedInstanceState Estado de instancia guardado previamente.
+     * @return El resultado o estado devuelto tras procesar la petición.
+     */
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater,
@@ -77,6 +88,12 @@ public class TrainerClientsFragment extends Fragment {
         return inflater.inflate(R.layout.fragment_trainer_clients, container, false);
     }
 
+    /**
+     * Registra y persiste un nuevo registro en el sistema.
+     *
+     * @param view Vista raíz devuelta tras inflar el fragmento.
+     * @param savedInstanceState Estado de instancia guardado previamente.
+     */
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
@@ -103,6 +120,10 @@ public class TrainerClientsFragment extends Fragment {
         updateVisibility(allClients);
     }
 
+    /**
+     * Realiza una consulta para obtener los datos solicitados.
+     *
+     */
     private void fetchClients() {
         AuthRepository auth = new AuthRepository(requireContext());
         OkHttpClient client = new OkHttpClient();
@@ -147,6 +168,11 @@ public class TrainerClientsFragment extends Fragment {
         }).start();
     }
 
+    /**
+     * Procesa la operación correspondiente para filterClients.
+     *
+     * @param query Parámetro de entrada para la operación.
+     */
     private void filterClients(String query) {
         List<Map<String, Object>> filtered = new ArrayList<>();
         for (Map<String, Object> client : allClients) {
@@ -160,12 +186,22 @@ public class TrainerClientsFragment extends Fragment {
         updateVisibility(filtered);
     }
 
+    /**
+     * Actualiza los datos del registro en la base de datos.
+     *
+     * @param list Parámetro de entrada para la operación.
+     */
     private void updateVisibility(List<Map<String, Object>> list) {
         boolean empty = list.isEmpty();
         rvClients.setVisibility(empty ? View.GONE : View.VISIBLE);
         layoutEmpty.setVisibility(empty ? View.VISIBLE : View.GONE);
     }
 
+    /**
+     * Procesa la operación correspondiente para openClientDiary.
+     *
+     * @param client Parámetro de entrada para la operación.
+     */
     private void openClientDiary(Map<String, Object> client) {
         Object idObj = client.get("id");
         long clientId = idObj instanceof Number ? ((Number) idObj).longValue() : -1;
@@ -182,6 +218,11 @@ public class TrainerClientsFragment extends Fragment {
         }
     }
 
+    /**
+     * Procesa la operación correspondiente para openBiomarkers.
+     *
+     * @param client Parámetro de entrada para la operación.
+     */
     private void openBiomarkers(Map<String, Object> client) {
         Object idObj = client.get("id");
         long clientId = idObj instanceof Number ? ((Number) idObj).longValue() : -1;
@@ -194,6 +235,11 @@ public class TrainerClientsFragment extends Fragment {
         startActivity(intent);
     }
 
+    /**
+     * Procesa la operación correspondiente para openAiAssistant.
+     *
+     * @param client Parámetro de entrada para la operación.
+     */
     private void openAiAssistant(Map<String, Object> client) {
         Object idObj = client.get("id");
         long clientId = idObj instanceof Number ? ((Number) idObj).longValue() : -1;

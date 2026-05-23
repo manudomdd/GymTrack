@@ -27,12 +27,26 @@ import java.util.UUID;
 @Service
 public class AuthService {
 
+    // Repositorio para operaciones de persistencia de la entidad User.
     private final UserRepository userRepository;
+    // Repositorio para operaciones de persistencia de la entidad Trainer.
     private final TrainerRepository trainerRepository;
+    // Atributo de tipo PasswordEncoder para almacenar passwordEncoder.
     private final PasswordEncoder passwordEncoder;
+    // Servicio para la gestión de la lógica de negocio de Jwt.
     private final JwtService jwtService;
+    // Gestor de persistencia de JPA (EntityManager) para transacciones.
     private final AuthenticationManager authenticationManager;
 
+    /**
+     * Constructor de la clase AuthService con inyección de dependencias.
+     *
+     * @param userRepository Parámetro de entrada para la operación.
+     * @param trainerRepository Parámetro de entrada para la operación.
+     * @param passwordEncoder Parámetro de entrada para la operación.
+     * @param jwtService Parámetro de entrada para la operación.
+     * @param authenticationManager Parámetro de entrada para la operación.
+     */
     public AuthService(UserRepository userRepository, TrainerRepository trainerRepository, PasswordEncoder passwordEncoder,
                        JwtService jwtService, AuthenticationManager authenticationManager) {
         this.userRepository = userRepository;
@@ -42,6 +56,11 @@ public class AuthService {
         this.authenticationManager = authenticationManager;
     }
 
+    /**
+     * Procesa la operación correspondiente para registrar.
+     *
+     * @param request Estructura de datos con la solicitud del cliente.
+     */
     public void registrar(RegisterRequest request) {
         if (userRepository.findByUsername(request.getUsername()).isPresent()) {
             throw new RuntimeException("El username ya está registrado");

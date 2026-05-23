@@ -22,12 +22,20 @@ import java.util.Optional;
 @Service
 public class HealthService {
 
+    // Repositorio para operaciones de persistencia de la entidad Sleep.
     @Autowired
     private SleepLogRepository sleepRepo;
 
+    // Repositorio para operaciones de persistencia de la entidad Step.
     @Autowired
     private StepLogRepository stepRepo;
 
+    /**
+     * Registra y persiste un nuevo registro en el sistema.
+     *
+     * @param log Registro de salud o biomarcador.
+     * @return El resultado o estado devuelto tras procesar la petición.
+     */
     public SleepLog saveSleepLog(SleepLog log) {
         Optional<SleepLog> existing = sleepRepo.findByClientIdAndDate(log.getClient().getId(), log.getDate());
         if (existing.isPresent()) {
@@ -39,6 +47,12 @@ public class HealthService {
         return sleepRepo.save(log);
     }
 
+    /**
+     * Registra y persiste un nuevo registro en el sistema.
+     *
+     * @param log Registro de salud o biomarcador.
+     * @return El resultado o estado devuelto tras procesar la petición.
+     */
     public StepLog saveStepLog(StepLog log) {
         Optional<StepLog> existing = stepRepo.findByClientIdAndDate(log.getClient().getId(), log.getDate());
         if (existing.isPresent()) {
@@ -49,10 +63,22 @@ public class HealthService {
         return stepRepo.save(log);
     }
 
+    /**
+     * Recupera el valor actual de sleeplogs.
+     *
+     * @param userId Identificador único del usuario o cliente asociado.
+     * @return El resultado o estado devuelto tras procesar la petición.
+     */
     public List<SleepLog> getSleepLogs(Long userId) {
         return sleepRepo.findByClientId(userId);
     }
 
+    /**
+     * Recupera el valor actual de steplogs.
+     *
+     * @param userId Identificador único del usuario o cliente asociado.
+     * @return El resultado o estado devuelto tras procesar la petición.
+     */
     public List<StepLog> getStepLogs(Long userId) {
         return stepRepo.findByClientId(userId);
     }

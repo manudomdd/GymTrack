@@ -21,8 +21,14 @@ import java.util.Map;
 @RequestMapping("/api/auth")
 public class AuthController {
 
+    // Servicio para la gestión de la lógica de negocio de Auth.
     private final AuthService authService;
 
+    /**
+     * Constructor de la clase AuthController con inyección de dependencias.
+     *
+     * @param authService Parámetro de entrada para la operación.
+     */
     public AuthController(AuthService authService) {
         this.authService = authService;
     }

@@ -13,6 +13,10 @@ import org.springframework.boot.test.context.SpringBootTest;
 @SpringBootTest
 class BackendApplicationTests {
 
+	/**
+	 * Procesa la operación correspondiente para contextLoads.
+	 *
+	 */
 	@Test
 	void contextLoads() {
 	}

@@ -13,6 +13,11 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 @SpringBootApplication
 public class BackendApplication {
 
+	/**
+	 * Procesa la operación correspondiente para main.
+	 *
+	 * @param args Parámetro de entrada para la operación.
+	 */
 	public static void main(String[] args) {
 		SpringApplication.run(BackendApplication.class, args);
 	}

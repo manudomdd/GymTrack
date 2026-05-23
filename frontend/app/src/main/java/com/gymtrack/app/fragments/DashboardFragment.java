@@ -25,12 +25,25 @@ import com.gymtrack.app.network.dto.DashboardClientDTO;
  */
 public class DashboardFragment extends Fragment {
 
+    // Vista de texto (TextView) para mostrar el/la entrenamientos.
     private TextView tvEntrenamientos;
+    // Vista de texto (TextView) para mostrar el/la pasos.
     private TextView tvPasos;
+    // Vista de texto (TextView) para mostrar el/la calorias.
     private TextView tvCalorias;
+    // Vista de texto (TextView) para mostrar el/la sueno.
     private TextView tvSueno;
+    // Repositorio para operaciones de persistencia de la entidad Client.
     private ClientRepository clientRepository;
 
+    /**
+     * Registra y persiste un nuevo registro en el sistema.
+     *
+     * @param inflater Objeto para inflar diseños XML en la interfaz.
+     * @param container Contenedor padre donde se inserta la vista.
+     * @param savedInstanceState Estado de instancia guardado previamente.
+     * @return El resultado o estado devuelto tras procesar la petición.
+     */
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater,
@@ -39,6 +52,12 @@ public class DashboardFragment extends Fragment {
         return inflater.inflate(R.layout.fragment_dashboard, container, false);
     }
 
+    /**
+     * Registra y persiste un nuevo registro en el sistema.
+     *
+     * @param view Vista raíz devuelta tras inflar el fragmento.
+     * @param savedInstanceState Estado de instancia guardado previamente.
+     */
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
@@ -52,6 +71,10 @@ public class DashboardFragment extends Fragment {
         fetchDashboardData();
     }
     
+    /**
+     * Realiza una consulta para obtener los datos solicitados.
+     *
+     */
     private void fetchDashboardData() {
         clientRepository.getClientDashboard(new ClientRepository.ClientDashboardCallback() {
             @Override

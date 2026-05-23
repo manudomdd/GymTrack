@@ -43,10 +43,18 @@ import java.util.List;
  */
 public class HomeActivity extends AppCompatActivity {
 
+    // Atributo de tipo DrawerLayout para almacenar drawerLayout.
     private DrawerLayout drawerLayout;
+    // Atributo de tipo NavigationView para almacenar navView.
     private NavigationView navView;
+    // Repositorio para operaciones de persistencia de la entidad Auth.
     private AuthRepository authRepository;
 
+    /**
+     * Registra y persiste un nuevo registro en el sistema.
+     *
+     * @param savedInstanceState Estado de instancia guardado previamente.
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -97,6 +105,10 @@ public class HomeActivity extends AppCompatActivity {
         loadNavHeaderData();
     }
     
+    /**
+     * Procesa la operación correspondiente para loadNavHeaderData.
+     *
+     */
     private void loadNavHeaderData() {
         ClientRepository clientRepository = new ClientRepository(this);
         clientRepository.getProfile(new ClientRepository.Callback<JsonObject>() {
@@ -121,6 +133,10 @@ public class HomeActivity extends AppCompatActivity {
         });
     }
 
+    /**
+     * Procesa la operación correspondiente para checkPermissionsAndStartService.
+     *
+     */
     private void checkPermissionsAndStartService() {
         String[] permissions;
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
@@ -149,6 +165,10 @@ public class HomeActivity extends AppCompatActivity {
         }
     }
 
+    /**
+     * Procesa la operación correspondiente para startStepService.
+     *
+     */
     private void startStepService() {
         Intent serviceIntent = new Intent(this, StepCounterService.class);
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
@@ -158,6 +178,13 @@ public class HomeActivity extends AppCompatActivity {
         }
     }
 
+    /**
+     * Procesa la operación correspondiente para onRequestPermissionsResult.
+     *
+     * @param requestCode Parámetro de entrada para la operación.
+     * @param permissions Parámetro de entrada para la operación.
+     * @param grantResults Parámetro de entrada para la operación.
+     */
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
@@ -191,6 +218,10 @@ public class HomeActivity extends AppCompatActivity {
                 .show();
     }
 
+    /**
+     * Procesa la operación correspondiente para onBackPressed.
+     *
+     */
     @Override
     public void onBackPressed() {
         if (drawerLayout.isDrawerOpen(GravityCompat.START)) {

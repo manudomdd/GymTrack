@@ -22,8 +22,14 @@ import org.springframework.security.web.SecurityFilterChain;
 @EnableWebSecurity
 public class SecurityConfig {
 
+    // Proveedor de utilidades y servicios para la gestión de tokens JWT.
     private final JwtAuthenticationFilter jwtAuthFilter;
 
+    /**
+     * Constructor de la clase SecurityConfig con inyección de dependencias.
+     *
+     * @param jwtAuthFilter Parámetro de entrada para la operación.
+     */
     public SecurityConfig(JwtAuthenticationFilter jwtAuthFilter) {
         this.jwtAuthFilter = jwtAuthFilter;
     }
@@ -42,6 +48,11 @@ public class SecurityConfig {
         return http.build();
     }
 
+    /**
+     * Procesa la operación correspondiente para passwordEncoder.
+     *
+     * @return El resultado o estado devuelto tras procesar la petición.
+     */
     @Bean
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();

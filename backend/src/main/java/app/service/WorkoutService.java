@@ -24,9 +24,16 @@ import java.util.stream.Collectors;
 @Service
 public class WorkoutService {
 
+    // Repositorio para operaciones de persistencia de la entidad Repository.
     @Autowired
     private WorkoutSessionRepository repository;
 
+    /**
+     * Registra y persiste un nuevo registro en el sistema.
+     *
+     * @param session Sesión de entrenamiento a procesar.
+     * @return El resultado o estado devuelto tras procesar la petición.
+     */
     public WorkoutSession saveSession(WorkoutSession session) {
         return repository.save(session);
     }
@@ -39,6 +46,12 @@ public class WorkoutService {
         return repository.saveAll(sessions);
     }
 
+    /**
+     * Recupera el valor actual de sessionsbyuser.
+     *
+     * @param userId Identificador único del usuario o cliente asociado.
+     * @return El resultado o estado devuelto tras procesar la petición.
+     */
     public List<WorkoutSession> getSessionsByUser(Long userId) {
         return repository.findByClientId(userId);
     }
@@ -108,10 +121,22 @@ public class WorkoutService {
         return metrics;
     }
 
+    /**
+     * Elimina de forma permanente un registro del sistema.
+     *
+     * @param id Parámetro de entrada para la operación.
+     */
     public void deleteSession(Long id) {
         repository.deleteById(id);
     }
 
+    /**
+     * Recupera el valor actual de sessionsbyuseranddate.
+     *
+     * @param userId Identificador único del usuario o cliente asociado.
+     * @param date Parámetro de entrada para la operación.
+     * @return El resultado o estado devuelto tras procesar la petición.
+     */
     public List<WorkoutSession> getSessionsByUserAndDate(Long userId, LocalDate date) {
         return repository.findByClientIdAndDate(userId, date);
     }
