@@ -1,6 +1,8 @@
 package app.config;
 
 import app.service.JwtService;
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.PersistenceContext;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -25,6 +27,10 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
     private final JwtService jwtService;
     private final UserDetailsService userDetailsService;
+
+    // Inyectamos el EntityManager para poder gestionar el contexto de persistencia manualmente
+    @PersistenceContext
+    private EntityManager entityManager;
 
     public JwtAuthenticationFilter(JwtService jwtService, UserDetailsService userDetailsService) {
         this.jwtService = jwtService;
@@ -52,7 +58,10 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             userEmail = jwtService.extractUsername(jwt);
 
             if (userEmail != null && SecurityContextHolder.getContext().getAuthentication() == null) {
+                
+                // Cargamos el usuario de la BBDD
                 UserDetails userDetails = this.userDetailsService.loadUserByUsername(userEmail);
+                
                 if (jwtService.isTokenValid(jwt, userDetails)) {
                     UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(
                             userDetails,
@@ -61,15 +70,23 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
                     );
                     authToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
                     SecurityContextHolder.getContext().setAuthentication(authToken);
+                    
                     log.debug("JWT válido para usuario: {} | Ruta: {} {}",
                             userEmail, request.getMethod(), request.getRequestURI());
+
+                    // --- SOLUCIÓN A LA FUGA DE CONEXIONES ---
+                    // Limpiamos el contexto de persistencia. Esto desprende (detach) las entidades
+                    // y fuerza a Hibernate (OpenSessionInView) a devolver la conexión JDBC 
+                    // al HikariPool DE INMEDIATO antes de pasar al SseEmitter.
+                    if (entityManager != null) {
+                        entityManager.clear();
+                    }
+                    
                 } else {
                     log.warn("JWT inválido o expirado para usuario: {}", userEmail);
                 }
             }
         } catch (Exception ex) {
-            // Registramos el error para facilitar el debugging sin romper la cadena de filtros.
-            // Spring Security devolverá 403 si el SecurityContext queda vacío.
             log.error("Error procesando JWT en ruta {} {}: {}",
                     request.getMethod(), request.getRequestURI(), ex.getMessage());
         }
