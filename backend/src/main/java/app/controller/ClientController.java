@@ -271,10 +271,16 @@ public class ClientController {
 
     @GetMapping(value = "/notifications/sse", produces = "text/event-stream")
     public SseEmitter subscribeToNotifications(Authentication auth) {
-        Optional<User> userOpt = userRepo.findByUsername(auth.getName());
-        if (userOpt.isPresent()) {
-            return notificationService.subscribe(userOpt.get().getId());
+        Long userId = fetchUserIdIsolated(auth.getName());
+        if (userId == null) {
+            return null;
         }
-        return null;
+        return notificationService.subscribe(userId);
+    }
+
+    private Long fetchUserIdIsolated(String username) {
+        return userRepo.findByUsername(username)
+                .map(User::getId)
+                .orElse(null);
     }
 }
