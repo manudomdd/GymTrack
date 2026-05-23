@@ -44,7 +44,7 @@ La arquitectura de esta rama está lista para ser desplegada en Railway (u otras
 
 ### 🛠️ Simulación Local del Entorno de Producción
 
-Aunque plataformas como Railway ignoran el archivo `docker-compose.yml` que se encuentra en la raíz (ya que despliegan desde el Dockerfile), hemos conservado este orquestador para **fines de documentación y simulación de incidencias en local**.
+Aunque plataformas como Railway ignoran el archivo `docker-compose.yml` que se encuentra en la raíz (ya que despliegan desde el Dockerfile), he conservado este orquestador para **fines de documentación y simulación de incidencias en local**.
 
 Si necesitas levantar una réplica exacta del servidor de producción en tu ordenador:
 
