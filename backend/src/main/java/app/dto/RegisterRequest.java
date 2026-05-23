@@ -2,6 +2,13 @@ package app.dto;
 
 import app.entity.TipoUsuario;
 
+/**
+ * DTO que encapsula los datos para el registro de nuevos usuarios.
+ *
+ * @author Manuel Dominguez
+ * @version 1.0
+ * @since 23/05/2026
+ */
 public class RegisterRequest {
 	
 	private String nombre; 

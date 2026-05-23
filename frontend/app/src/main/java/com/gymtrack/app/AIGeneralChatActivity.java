@@ -29,6 +29,13 @@ import okhttp3.Request;
 import okhttp3.RequestBody;
 import okhttp3.Response;
 
+/**
+ * Actividad Android que proporciona una interfaz de chat general con la Inteligencia Artificial.
+ *
+ * @author Manuel Dominguez
+ * @version 1.0
+ * @since 23/05/2026
+ */
 public class AIGeneralChatActivity extends AppCompatActivity {
 
     private RecyclerView rvChat;

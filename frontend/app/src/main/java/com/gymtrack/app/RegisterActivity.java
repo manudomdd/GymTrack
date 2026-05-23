@@ -29,11 +29,11 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- * Pantalla de Registro de GymTrack.
- * Equivale a RegisterScreen.dart de Flutter.
+ * Actividad Android que gestiona la interfaz de registro de nuevos usuarios.
  *
- * Campos: nombre, email, password, peso, altura, NEAT (slider 1-5).
- * En caso de éxito vuelve al Login.
+ * @author Manuel Dominguez
+ * @version 1.0
+ * @since 23/05/2026
  */
 public class RegisterActivity extends AppCompatActivity {
 

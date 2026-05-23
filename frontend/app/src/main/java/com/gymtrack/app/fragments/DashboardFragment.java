@@ -17,11 +17,11 @@ import com.gymtrack.app.network.ClientRepository;
 import com.gymtrack.app.network.dto.DashboardClientDTO;
 
 /**
- * Fragment del Dashboard principal del usuario cliente.
- * Equivale al _buildDashboard() de HomeScreen.dart.
+ * Fragmento Android del dashboard principal que resume la actividad diaria del cliente.
  *
- * Muestra 4 tarjetas de estadísticas y botones de acceso rápido
- * para navegar a Registro de Entrenamiento y Métricas.
+ * @author Manuel Dominguez
+ * @version 1.0
+ * @since 23/05/2026
  */
 public class DashboardFragment extends Fragment {
 

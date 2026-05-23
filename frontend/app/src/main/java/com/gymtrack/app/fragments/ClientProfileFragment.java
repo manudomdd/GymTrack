@@ -17,6 +17,13 @@ import com.gymtrack.app.R;
 import com.gymtrack.app.network.ClientRepository;
 import com.gymtrack.app.utils.AvatarHelper;
 
+/**
+ * Fragmento Android que gestiona el perfil del cliente y la vinculación con el entrenador.
+ *
+ * @author Manuel Dominguez
+ * @version 1.0
+ * @since 23/05/2026
+ */
 public class ClientProfileFragment extends Fragment {
 
     private TextInputEditText etNombre, etEdad, etPeso, etAltura, etTrainerCode;

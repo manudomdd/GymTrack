@@ -56,13 +56,11 @@ import okhttp3.RequestBody;
 import okhttp3.Response;
 
 /**
- * Fragment para la lista de clientes del entrenador.
+ * Fragmento Android para mostrar y buscar la lista de clientes vinculados al entrenador.
  *
- * Incluye:
- * - Buscador en tiempo real por nombre o email
- * - RecyclerView con tarjeta por cliente
- * - Diálogo de detalles del cliente
- * - Diálogo para asignar rutina con fecha exacta y series granulares por serie
+ * @author Manuel Dominguez
+ * @version 1.0
+ * @since 23/05/2026
  */
 public class TrainerClientsFragment extends Fragment {
 

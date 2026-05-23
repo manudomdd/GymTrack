@@ -17,8 +17,11 @@ import com.gymtrack.app.network.AuthRepository;
 import com.gymtrack.app.network.dto.DashboardTrainerDTO;
 
 /**
- * Fragment del Dashboard principal del entrenador.
- * Equivale al _buildDashboard() de TrainerHomeScreen.dart.
+ * Fragmento Android del dashboard principal del entrenador.
+ *
+ * @author Manuel Dominguez
+ * @version 1.0
+ * @since 23/05/2026
  */
 public class TrainerDashboardFragment extends Fragment {
 

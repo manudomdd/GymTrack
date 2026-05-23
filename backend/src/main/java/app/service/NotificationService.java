@@ -6,6 +6,13 @@ import java.io.IOException;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
+/**
+ * Servicio para la gestión de notificaciones en tiempo real a través de Server-Sent Events (SSE).
+ *
+ * @author Manuel Dominguez
+ * @version 1.0
+ * @since 23/05/2026
+ */
 @Service
 public class NotificationService {
 

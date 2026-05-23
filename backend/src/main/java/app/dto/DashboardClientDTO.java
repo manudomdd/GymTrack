@@ -1,5 +1,12 @@
 package app.dto;
 
+/**
+ * Objeto de transferencia de datos para el dashboard del cliente.
+ *
+ * @author Manuel Dominguez
+ * @version 1.0
+ * @since 23/05/2026
+ */
 public class DashboardClientDTO {
     private int entrenamientos;
     private int pasosHoy;

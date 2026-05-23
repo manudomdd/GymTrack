@@ -25,13 +25,11 @@ import com.gymtrack.app.network.ClientRepository;
 import com.gymtrack.app.utils.AvatarHelper;
 
 /**
- * Activity principal para entrenadores.
- * Equivale a TrainerHomeScreen.dart de Flutter.
+ * Actividad principal para el rol de entrenador, conteniendo la navegación y paneles de control.
  *
- * Contiene un DrawerLayout con tres secciones:
- * - Dashboard (índice 0): estadísticas y accesos rápidos del entrenador
- * - Clientes (índice 1): lista de clientes con búsqueda
- * - Mi Perfil (índice 2): información personal del entrenador
+ * @author Manuel Dominguez
+ * @version 1.0
+ * @since 23/05/2026
  */
 public class TrainerHomeActivity extends AppCompatActivity {
 

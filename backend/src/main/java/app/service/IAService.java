@@ -18,6 +18,13 @@ import java.time.LocalDate;
 import java.util.*;
 import java.util.stream.Collectors;
 
+/**
+ * Servicio de integración con la IA para recomendaciones personalizadas de entrenamiento y bienestar.
+ *
+ * @author Manuel Dominguez
+ * @version 1.0
+ * @since 23/05/2026
+ */
 @Service
 public class IAService {
 

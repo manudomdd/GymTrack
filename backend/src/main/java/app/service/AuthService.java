@@ -17,6 +17,13 @@ import org.springframework.stereotype.Service;
 
 import java.util.UUID;
 
+/**
+ * Servicio para la gestión del flujo de autenticación y registro de usuarios.
+ *
+ * @author Manuel Dominguez
+ * @version 1.0
+ * @since 23/05/2026
+ */
 @Service
 public class AuthService {
 

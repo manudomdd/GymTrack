@@ -22,6 +22,13 @@ import app.dto.DashboardClientDTO;
 import app.service.NotificationService;
 import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
 
+/**
+ * Controlador REST para gestionar las operaciones y datos personales de los clientes.
+ *
+ * @author Manuel Dominguez
+ * @version 1.0
+ * @since 23/05/2026
+ */
 @RestController
 @RequestMapping("/api/client")
 public class ClientController {

@@ -9,6 +9,13 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import java.util.List;
 
+/**
+ * Entidad que representa a un usuario con el rol de Entrenador en la aplicación.
+ *
+ * @author Manuel Dominguez
+ * @version 1.0
+ * @since 23/05/2026
+ */
 @Entity
 @Table(name = "trainers")
 @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})

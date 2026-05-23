@@ -14,6 +14,13 @@ import java.time.Period;
 import java.util.List;
 import jakarta.persistence.Transient;
 
+/**
+ * Entidad que representa a un usuario con el rol de Cliente en la aplicación.
+ *
+ * @author Manuel Dominguez
+ * @version 1.0
+ * @since 23/05/2026
+ */
 @Entity
 @Table(name = "clients")
 @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})

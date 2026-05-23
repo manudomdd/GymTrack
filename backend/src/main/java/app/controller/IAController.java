@@ -13,6 +13,13 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
 
+/**
+ * Controlador REST para la comunicación con los servicios de inteligencia artificial.
+ *
+ * @author Manuel Dominguez
+ * @version 1.0
+ * @since 23/05/2026
+ */
 @RestController
 @RequestMapping("/api/trainer")
 public class IAController {

@@ -2,6 +2,13 @@ package com.gymtrack.app.utils;
 
 import com.gymtrack.app.R;
 
+/**
+ * Clase de utilidad para gestionar la selección y carga de avatares circulares en la app.
+ *
+ * @author Manuel Dominguez
+ * @version 1.0
+ * @since 23/05/2026
+ */
 public class AvatarHelper {
     public static int getAvatarResource(String avatarName) {
         if (avatarName == null) return R.drawable.ic_person; // Default fallback if needed

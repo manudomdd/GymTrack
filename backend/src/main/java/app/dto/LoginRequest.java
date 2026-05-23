@@ -1,5 +1,12 @@
 package app.dto;
 
+/**
+ * DTO que contiene las credenciales de inicio de sesión del usuario.
+ *
+ * @author Manuel Dominguez
+ * @version 1.0
+ * @since 23/05/2026
+ */
 public class LoginRequest {
 
 	private String username;

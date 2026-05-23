@@ -10,6 +10,13 @@ import org.springframework.web.bind.annotation.*;
 import jakarta.validation.Valid;
 import java.util.Map;
 
+/**
+ * Controlador REST que expone los endpoints para inicio de sesión y registro de usuarios.
+ *
+ * @author Manuel Dominguez
+ * @version 1.0
+ * @since 23/05/2026
+ */
 @RestController
 @RequestMapping("/api/auth")
 public class AuthController {

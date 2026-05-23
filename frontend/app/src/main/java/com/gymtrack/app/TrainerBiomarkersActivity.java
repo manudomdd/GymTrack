@@ -23,6 +23,13 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Locale;
 
+/**
+ * Actividad Android para visualizar los biomarcadores de salud del cliente desde el rol de entrenador.
+ *
+ * @author Manuel Dominguez
+ * @version 1.0
+ * @since 23/05/2026
+ */
 public class TrainerBiomarkersActivity extends AppCompatActivity {
 
     private AuthRepository authRepository;

@@ -1,5 +1,12 @@
 package com.gymtrack.app.network.dto;
 
+/**
+ * Objeto DTO en el frontend que mapea la respuesta del dashboard del entrenador.
+ *
+ * @author Manuel Dominguez
+ * @version 1.0
+ * @since 23/05/2026
+ */
 public class DashboardTrainerDTO {
     private int clientesTotales;
     private int activosHoy;

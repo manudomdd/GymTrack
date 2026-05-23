@@ -24,11 +24,11 @@ import okhttp3.Request;
 import okhttp3.Response;
 
 /**
- * Fragment del perfil del entrenador.
- * Equivale al _buildTrainerProfile() de TrainerHomeScreen.dart.
+ * Fragmento Android que gestiona la vista de perfil del entrenador y su código de vinculación.
  *
- * Muestra información personal estática y estadísticas del entrenador.
- * TODO: Cargar datos reales del backend.
+ * @author Manuel Dominguez
+ * @version 1.0
+ * @since 23/05/2026
  */
 public class TrainerProfileFragment extends Fragment {
 

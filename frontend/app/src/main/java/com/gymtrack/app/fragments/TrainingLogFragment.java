@@ -46,20 +46,11 @@ import okhttp3.RequestBody;
 import okhttp3.Response;
 
 /**
- * Fragment para el registro de entrenamientos.
+ * Fragmento Android para visualizar el diario de entrenamiento y registrar nuevas series.
  *
- * Flujo de registro (cliente):
- * 1. Pulsar "+ Añadir Entrenamiento".
- * 2. Introducir nombre del ejercicio y grupo muscular (cabecera común a todas
- * las series).
- * 3. Pulsar "+ Añadir Serie" para añadir filas individuales (Peso, Reps, RIR,
- * Comentario).
- * 4. Al guardar, se empaquetan todas las series en un JsonArray y se envían a
- * POST /api/client/workouts/batch.
- *
- * Vista del entrenador: modo solo lectura (btnAdd oculto).
- * Lee de GET /api/trainer/client/{clientId}/workouts y muestra cada serie como
- * card.
+ * @author Manuel Dominguez
+ * @version 1.0
+ * @since 23/05/2026
  */
 public class TrainingLogFragment extends Fragment {
 

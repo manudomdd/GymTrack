@@ -12,6 +12,13 @@ import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
+/**
+ * Servicio para gestionar los registros de salud (sueño y pasos) de los usuarios.
+ *
+ * @author Manuel Dominguez
+ * @version 1.0
+ * @since 23/05/2026
+ */
 @Service
 public class HealthService {
 

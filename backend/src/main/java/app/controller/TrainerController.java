@@ -22,6 +22,13 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
+/**
+ * Controlador REST para gestionar las acciones y consultas de los entrenadores.
+ *
+ * @author Manuel Dominguez
+ * @version 1.0
+ * @since 23/05/2026
+ */
 @RestController
 @RequestMapping("/api/trainer")
 public class TrainerController {

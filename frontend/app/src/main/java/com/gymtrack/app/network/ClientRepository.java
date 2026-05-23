@@ -12,6 +12,13 @@ import okhttp3.Request;
 import okhttp3.RequestBody;
 import okhttp3.Response;
 
+/**
+ * Repositorio en el frontend para gestionar las peticiones de red relativas a los clientes.
+ *
+ * @author Manuel Dominguez
+ * @version 1.0
+ * @since 23/05/2026
+ */
 public class ClientRepository {
     private static final String BASE_URL = "http://10.0.2.2:8080/api/client";
     private static final MediaType JSON = MediaType.get("application/json; charset=utf-8");

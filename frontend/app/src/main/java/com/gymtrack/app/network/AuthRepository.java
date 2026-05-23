@@ -19,10 +19,11 @@ import okhttp3.RequestBody;
 import okhttp3.Response;
 
 /**
- * Repositorio de autenticación que maneja las llamadas HTTP al backend.
- * Equivale al AuthService de Flutter.
- * Endpoint base: http://10.0.2.2:8080/api/auth
- * (10.0.2.2 es la IP que el emulador Android usa para acceder al host)
+ * Repositorio para gestionar las llamadas HTTP del flujo de autenticación del usuario.
+ *
+ * @author Manuel Dominguez
+ * @version 1.0
+ * @since 23/05/2026
  */
 public class AuthRepository {
 
@@ -225,4 +226,3 @@ public class AuthRepository {
         }).start();
     }
 }
-

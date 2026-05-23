@@ -29,6 +29,13 @@ import okhttp3.Request;
 import okhttp3.RequestBody;
 import okhttp3.Response;
 
+/**
+ * Actividad Android de chat interactivo con la IA enfocada en el análisis detallado del cliente.
+ *
+ * @author Manuel Dominguez
+ * @version 1.0
+ * @since 23/05/2026
+ */
 public class AIChatActivity extends AppCompatActivity {
 
     private long clientId;

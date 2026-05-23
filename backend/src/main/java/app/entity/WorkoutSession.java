@@ -3,6 +3,13 @@ package app.entity;
 import jakarta.persistence.*;
 import java.time.LocalDate;
 
+/**
+ * Entidad que representa una serie de ejercicio dentro de una sesión de entrenamiento.
+ *
+ * @author Manuel Dominguez
+ * @version 1.0
+ * @since 23/05/2026
+ */
 @Entity
 @Table(name = "workout_sessions")
 public class WorkoutSession {

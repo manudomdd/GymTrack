@@ -23,11 +23,11 @@ import java.util.Map;
 import java.util.Set;
 
 /**
- * Pantalla de métricas de un cliente específico, accesible desde el perfil del entrenador.
+ * Actividad Android para mostrar y analizar las métricas de progreso de un cliente.
  *
- * Muestra:
- * 1. Progreso de carga por grupo muscular (regresión lineal: pendiente + evaluación)
- * 2. Registros de salud del cliente (pasos diarios + sueño)
+ * @author Manuel Dominguez
+ * @version 1.0
+ * @since 23/05/2026
  */
 public class TrainerClientMetricsActivity extends AppCompatActivity {
 

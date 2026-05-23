@@ -23,11 +23,11 @@ import java.util.Date;
 import java.util.Locale;
 
 /**
- * Fragment de Métricas de Actividad.
- * Equivale a ActivityMetricsScreen de home_screen.dart.
+ * Fragmento Android para visualizar y registrar las métricas de salud detalladas del cliente.
  *
- * Muestra 5 métricas con barras de progreso:
- * Pasos, Sueño, Calorías, Frecuencia Cardíaca, Agua.
+ * @author Manuel Dominguez
+ * @version 1.0
+ * @since 23/05/2026
  */
 public class ActivityMetricsFragment extends Fragment {
 

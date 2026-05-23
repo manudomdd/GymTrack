@@ -18,6 +18,13 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import java.util.List;
 
+/**
+ * Clase abstracta base que representa un usuario del sistema para Spring Security.
+ *
+ * @author Manuel Dominguez
+ * @version 1.0
+ * @since 23/05/2026
+ */
 @Entity
 @Table (name = "users")
 @Inheritance(strategy = InheritanceType.JOINED)
