@@ -4,10 +4,10 @@ services:
     image: mysql:8.0
     container_name: gymtrack_prod_db_sim
     environment:
-      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD:-root_password}
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD:-pon_aqui_tu_root_password}
       MYSQL_DATABASE: ${MYSQL_DATABASE:-gymtrack_v2}
-      MYSQL_USER: ${MYSQL_USER:-manu}
-      MYSQL_PASSWORD: ${MYSQL_PASSWORD:-manu}
+      MYSQL_USER: ${MYSQL_USER:-pon_aqui_tu_usuario}
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD:-pon_aqui_tu_password}
     ports:
       - "3306:3306"
     volumes:
@@ -23,8 +23,8 @@ services:
       - MYSQL_HOST=db
       - MYSQL_PORT=3306
       - MYSQL_DATABASE=${MYSQL_DATABASE:-gymtrack_v2}
-      - MYSQL_USER=${MYSQL_USER:-manu}
-      - MYSQL_PASSWORD=${MYSQL_PASSWORD:-manu}
+      - MYSQL_USER=${MYSQL_USER:-pon_aqui_tu_usuario}
+      - MYSQL_PASSWORD=${MYSQL_PASSWORD:-pon_aqui_tu_password}
     ports:
       - "8080:8080"
     depends_on:

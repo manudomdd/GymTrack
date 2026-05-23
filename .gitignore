@@ -32,5 +32,6 @@ frontend/local.properties
 # Logs
 *.log
 
-# Variables de entorno
+# --- Variables de Entorno Locales ---
 *.env
+.env
