@@ -33,8 +33,9 @@ frontend/local.properties
 *.log
 
 # Excluir carpetas de documentacion generada (Javadoc/KDoc)
-/javadoc/
-/docs/javadoc/
-/javadoc_output/
-/backend/doc/
+doc/
+javadoc/
+docs/javadoc/
+javadoc_output/
+backend/doc/
 

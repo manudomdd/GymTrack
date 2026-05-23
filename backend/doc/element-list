@@ -1,8 +1,0 @@
-app
-app.config
-app.controller
-app.dto
-app.entity
-app.repository
-app.service
-com.example.backend
