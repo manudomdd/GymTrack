@@ -30,11 +30,11 @@ Este repositorio está estructurado en formato **Monorepo**, dividiendo claramen
 La rama `main` está configurada específicamente para facilitar el **desarrollo local rápido, la depuración y la corrección de errores**. 
 
 > ⚠️ **Nota de Arquitectura sobre las Credenciales:** 
-> Para agilizar el levantamiento del proyecto por parte del equipo de desarrollo, en la rama `main` **las credenciales de la base de datos se encuentran *hardcodeadas***. Esto es intencional y exclusivo de este entorno de trabajo local. La rama `production` (orientada a despliegues en PaaS como Railway) utiliza un blindaje estricto mediante variables de entorno (`.env`) sin valores por defecto comprometidos.
+> Para agilizar el levantamiento del proyecto por parte de la persona encargada de la corrección de este trabajo, en la rama `main` **las credenciales de la base de datos se encuentran *hardcodeadas***. Esto es intencional y exclusivo de este entorno de trabajo local. La rama `production` (orientada a despliegues en PaaS como Railway) utiliza un blindaje estricto mediante variables de entorno (`.env`) sin valores por defecto comprometidos.
 
 ### 🛠️ Pasos para la Ejecución del Backend (vía Docker)
 
-Hemos contenedorizado el backend y su base de datos para que levantar el servicio sea cuestión de un solo comando. No necesitas instalar bases de datos locales.
+He contenedorizado el backend y su base de datos para que levantar el servicio sea cuestión de un solo comando. No necesitas instalar bases de datos locales.
 
 1. **Sitúate en la raíz del proyecto:**
    ```bash
