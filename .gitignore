@@ -25,7 +25,6 @@ frontend/app/build/
 frontend/local.properties
 
 # Ejecutables finales
-*.apk
 *.aab
 *.exe
 
