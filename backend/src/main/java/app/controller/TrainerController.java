@@ -212,22 +212,31 @@ public class TrainerController {
         if (trainerOpt.isPresent() && trainerOpt.get() instanceof app.entity.Trainer) {
             app.entity.Trainer trainer = (app.entity.Trainer) trainerOpt.get();
             List<app.entity.Client> clients = clientRepo.findByTrainerId(trainer.getId());
-            
+
             int clientesTotales = clients.size();
             int activosHoy = 0;
             int entrenamientos = 0;
             int estaSemana = 0;
-            
+
             LocalDate hoy = LocalDate.now();
-            
+
+            // Carga TODAS las sesiones de TODOS los clientes en una sola query SQL (elimina N+1)
+            List<Long> clientIds = clients.stream().map(app.entity.Client::getId).collect(Collectors.toList());
+            List<WorkoutSession> todasLasSesiones = workoutService.getSessionsByClientIds(clientIds);
+
+            // Agrupa en memoria por clientId para evitar más consultas
+            Map<Long, List<WorkoutSession>> sessionsPorCliente = todasLasSesiones.stream()
+                    .collect(Collectors.groupingBy(s -> s.getClient().getId()));
+
             for (app.entity.Client client : clients) {
-                List<WorkoutSession> sessions = workoutService.getSessionsByUser(client.getId());
+                List<WorkoutSession> sessions = sessionsPorCliente.getOrDefault(client.getId(), List.of());
+
                 long distinctDates = sessions.stream().filter(s -> s.getDate() != null).map(WorkoutSession::getDate).distinct().count();
                 entrenamientos += distinctDates;
-                
+
                 boolean isActivoHoy = sessions.stream().anyMatch(s -> s.getDate() != null && s.getDate().equals(hoy));
                 if (isActivoHoy) activosHoy++;
-                
+
                 long workoutsThisWeek = sessions.stream()
                     .filter(s -> s.getDate() != null)
                     .map(WorkoutSession::getDate)
@@ -236,7 +245,7 @@ public class TrainerController {
                     .count();
                 estaSemana += workoutsThisWeek;
             }
-            
+
             DashboardTrainerDTO dto = new DashboardTrainerDTO(clientesTotales, activosHoy, entrenamientos, estaSemana);
             return ResponseEntity.ok(dto);
         }
