@@ -3,7 +3,6 @@
     <string name="app_name">GymTrack</string>
     <string name="login_title_gym">GYM</string>
     <string name="login_title_track">TRACK</string>
-    <string name="status_badge">ESTADO: EN DESARROLLO</string>
     <string name="welcome">¡Bienvenido a GymTrack!</string>
     <string name="hint_email">example@email.com</string>
     <string name="hint_password">••••••••</string>
