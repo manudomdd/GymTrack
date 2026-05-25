@@ -24,6 +24,10 @@ frontend/build/
 frontend/app/build/
 frontend/local.properties
 
+# --- Variables de Entorno Locales ---
+*.env
+.env
+
 # Ejecutables finales
 *.aab
 *.exe

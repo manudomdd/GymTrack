@@ -270,17 +270,20 @@ public class ClientController {
                 .filter(s -> s.getDate() != null && s.getDate().equals(hoy))
                 .mapToInt(StepLog::getSteps)
                 .sum();
-            
-            // Calorias (mocked as pasos * 0.04)
-            int calorias = (int) (pasosHoy * 0.04);
-            
+
+            // Calorías basadas en fórmula fisiológica MET:
+            // Distancia (km) = pasos × 0.0008 (longitud media de zancada ~0.8m)
+            // Calorías ≈ distancia(km) × peso(kg) × 1.036 (MET caminata moderada)
+            double pesoKg = (user instanceof Client) ? ((Client) user).getPeso() : 70.0;
+            int calorias = (int) (pasosHoy * 0.0008 * pesoKg * 1.036);
+
             // Horas de sueño hoy
             List<SleepLog> sleeps = healthService.getSleepLogs(userId);
             double horasSueno = sleeps.stream()
                 .filter(s -> s.getDate() != null && s.getDate().equals(hoy))
                 .mapToDouble(SleepLog::getHoursSlept)
                 .sum();
-                
+
             DashboardClientDTO dto = new DashboardClientDTO((int) entrenamientos, pasosHoy, calorias, horasSueno);
             return ResponseEntity.ok(dto);
         }

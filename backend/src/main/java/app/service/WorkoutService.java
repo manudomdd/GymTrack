@@ -56,6 +56,18 @@ public class WorkoutService {
         return repository.findByClientId(userId);
     }
 
+    /**
+     * Carga todas las sesiones de una lista de clientes en una sola consulta SQL.
+     * Elimina el problema N+1 del dashboard del entrenador.
+     *
+     * @param clientIds Lista de IDs de los clientes a consultar.
+     * @return Lista de todas las sesiones de los clientes dados.
+     */
+    public List<WorkoutSession> getSessionsByClientIds(List<Long> clientIds) {
+        if (clientIds == null || clientIds.isEmpty()) return List.of();
+        return repository.findByClientIdIn(clientIds);
+    }
+
     /** Busca una sesión por ID para validación de permisos antes de actualizarla. */
     public Optional<WorkoutSession> findById(Long id) {
         return repository.findById(id);

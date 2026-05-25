@@ -39,4 +39,12 @@ public interface WorkoutSessionRepository extends JpaRepository<WorkoutSession, 
      * @return El resultado o estado devuelto tras procesar la petición.
      */
     List<WorkoutSession> findByClientIdAndMuscleGroupOrderByDateAsc(Long clientId, String muscleGroup);
+    /**
+     * Carga las sesiones de una lista de clientes en una sola consulta SQL.
+     * Evita el problema N+1 en el dashboard del entrenador.
+     *
+     * @param clientIds Lista de IDs de los clientes a consultar.
+     * @return Lista de todas las sesiones de los clientes dados.
+     */
+    List<WorkoutSession> findByClientIdIn(List<Long> clientIds);
 }
