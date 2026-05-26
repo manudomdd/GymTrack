@@ -53,6 +53,10 @@
             android:name=".AIGeneralChatActivity"
             android:windowSoftInputMode="adjustResize" />
 
+        <activity
+            android:name=".AdminDashboardActivity"
+            android:windowSoftInputMode="adjustPan" />
+
         <service
             android:name=".services.StepCounterService"
             android:exported="false"

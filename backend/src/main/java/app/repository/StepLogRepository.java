@@ -12,4 +12,5 @@ import java.util.Optional;
 public interface StepLogRepository extends JpaRepository<StepLog, Long> {
     List<StepLog> findByClientId(Long clientId);
     Optional<StepLog> findByClientIdAndDate(Long clientId, LocalDate date);
+    void deleteAllByClientId(Long clientId);
 }

@@ -12,4 +12,5 @@ import java.util.Optional;
 public interface SleepLogRepository extends JpaRepository<SleepLog, Long> {
     List<SleepLog> findByClientId(Long clientId);
     Optional<SleepLog> findByClientIdAndDate(Long clientId, LocalDate date);
+    void deleteAllByClientId(Long clientId);
 }

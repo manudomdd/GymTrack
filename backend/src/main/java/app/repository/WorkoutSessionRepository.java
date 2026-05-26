@@ -14,4 +14,5 @@ public interface WorkoutSessionRepository extends JpaRepository<WorkoutSession, 
     List<WorkoutSession> findByClientIdAndMuscleGroupOrderByDateAsc(Long clientId, String muscleGroup);
     // Query batch: carga todas las sesiones de una lista de clientes en una sola consulta SQL (evita el problema N+1)
     List<WorkoutSession> findByClientIdIn(List<Long> clientIds);
+    void deleteAllByClientId(Long clientId);
 }
