@@ -14,8 +14,22 @@ import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+/**
+ * Servicio encargado de gestionar la lógica de negocio relacionada con los entrenamientos.
+ * <p>
+ * Proporciona métodos para registrar de forma masiva (batch) nuevas series, recuperar 
+ * historiales optimizando las consultas SQL (evitando N+1), y ejecutar algoritmos
+ * analíticos, como el cálculo de la regresión lineal para visualizar el progreso del 
+ * cliente en base a la carga levantada a lo largo del tiempo.
+ * </p>
+ *
+ * @author Manuel Dominguez
+ * @version 1.0
+ * @since 26/05/2025
+ */
 @Service
 public class WorkoutService {
+
 
     @Autowired
     private WorkoutSessionRepository repository;

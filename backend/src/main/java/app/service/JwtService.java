@@ -14,8 +14,22 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.function.Function;
 
+/**
+ * Servicio encargado de la generación, extracción y validación de tokens JWT.
+ * <p>
+ * Emplea la librería JJWT para construir y firmar digitalmente los tokens utilizando
+ * una clave secreta (HMAC-SHA). Este servicio es la pieza central para mantener
+ * el estado de autenticación de forma "stateless" en la API REST, garantizando
+ * la identidad del usuario en cada petición HTTP subsiguiente al login.
+ * </p>
+ *
+ * @author Manuel Dominguez
+ * @version 1.0
+ * @since 26/05/2025
+ */
 @Service
 public class JwtService {
+
 
     /** Clave secreta JWT leída desde application.properties (application.security.jwt.secret-key). */
     @Value("${application.security.jwt.secret-key}")

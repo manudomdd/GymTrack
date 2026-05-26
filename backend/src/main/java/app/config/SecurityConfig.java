@@ -12,10 +12,26 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 
+/**
+ * Configuración central de seguridad de la aplicación.
+ * <p>
+ * Habilita la seguridad a nivel web y de métodos (REST). Define la política de
+ * gestión de sesiones como sin estado (STATELESS) debido al uso de tokens JWT,
+ * y establece las reglas de autorización para los endpoints (ej. rutas públicas 
+ * bajo {@code /api/auth/**}).
+ * Además, inserta el filtro personalizado {@link JwtAuthenticationFilter} en 
+ * la cadena de filtros de Spring Security.
+ * </p>
+ *
+ * @author Manuel Dominguez
+ * @version 1.0
+ * @since 26/05/2025
+ */
 @Configuration
 @EnableWebSecurity
 @EnableMethodSecurity
 public class SecurityConfig {
+
 
     private final JwtAuthenticationFilter jwtAuthFilter;
 

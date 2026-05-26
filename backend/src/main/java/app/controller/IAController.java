@@ -13,6 +13,19 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
 
+/**
+ * Controlador REST que provee la integración con el motor de Inteligencia Artificial.
+ * <p>
+ * Expone endpoints exclusivos para los entrenadores que permiten generar respuestas
+ * automatizadas. Proporciona tanto un chat general para consultas genéricas de fitness,
+ * como un chat contextualizado que tiene en cuenta las métricas y el progreso
+ * específico de un cliente vinculado para ofrecer recomendaciones personalizadas.
+ * </p>
+ *
+ * @author Manuel Dominguez
+ * @version 1.0
+ * @since 26/05/2025
+ */
 @RestController
 @RequestMapping("/api/trainer")
 public class IAController {

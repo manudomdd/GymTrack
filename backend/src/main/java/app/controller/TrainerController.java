@@ -22,6 +22,19 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
+/**
+ * Controlador REST que expone los endpoints específicos para los usuarios con rol ENTRENADOR.
+ * <p>
+ * Facilita las operaciones de gestión sobre la cartera de clientes del entrenador.
+ * Proporciona acceso a las métricas de progreso (regresión lineal), registros de salud
+ * diarios (pasos, sueño) y el historial completo de entrenamientos de cada cliente. 
+ * Además, permite emitir feedback estructurado y en tiempo real (vía SSE) sobre las sesiones.
+ * </p>
+ *
+ * @author Manuel Dominguez
+ * @version 1.0
+ * @since 26/05/2025
+ */
 @RestController
 @RequestMapping("/api/trainer")
 public class TrainerController {

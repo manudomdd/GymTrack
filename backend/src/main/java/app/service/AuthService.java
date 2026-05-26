@@ -17,8 +17,21 @@ import org.springframework.stereotype.Service;
 
 import java.util.UUID;
 
+/**
+ * Servicio encargado de gestionar la lógica de negocio para la autenticación y el registro.
+ * <p>
+ * Se encarga de validar los datos del nuevo usuario, generar contraseñas encriptadas 
+ * usando BCrypt, asignar avatares por defecto y verificar las credenciales 
+ * durante el proceso de login, interactuando con {@link JwtService} para la emisión de tokens.
+ * </p>
+ *
+ * @author Manuel Dominguez
+ * @version 1.0
+ * @since 26/05/2025
+ */
 @Service
 public class AuthService {
+
 
     private final UserRepository userRepository;
     private final TrainerRepository trainerRepository;

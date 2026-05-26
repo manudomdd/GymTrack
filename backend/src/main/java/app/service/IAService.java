@@ -18,8 +18,23 @@ import java.time.LocalDate;
 import java.util.*;
 import java.util.stream.Collectors;
 
+/**
+ * Servicio que integra y gestiona las llamadas a la API de Groq (Llama 3).
+ * <p>
+ * Se encarga de recopilar y estructurar todos los datos biomecánicos y de
+ * rendimiento del cliente (últimos entrenamientos, calidad del sueño, pasos)
+ * para generar un prompt de sistema (System Prompt) contextualizado. Esto permite 
+ * a la Inteligencia Artificial ofrecer un análisis altamente personalizado y 
+ * emitir recomendaciones objetivas para asistir al entrenador.
+ * </p>
+ *
+ * @author Manuel Dominguez
+ * @version 1.0
+ * @since 26/05/2025
+ */
 @Service
 public class IAService {
+
 
     @Autowired
     private UserRepository userRepository;

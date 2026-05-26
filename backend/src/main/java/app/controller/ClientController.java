@@ -22,6 +22,19 @@ import app.dto.DashboardClientDTO;
 import app.service.NotificationService;
 import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
 
+/**
+ * Controlador REST que expone los endpoints específicos para los usuarios con rol CLIENTE.
+ * <p>
+ * Gestiona de forma integral la experiencia del cliente en la plataforma, abarcando
+ * la actualización de su perfil biométrico, el registro de métricas de salud diarias 
+ * (pasos y sueño), la vinculación con un entrenador personal, y la gestión (CRUD) de 
+ * su diario de entrenamientos.
+ * </p>
+ *
+ * @author Manuel Dominguez
+ * @version 1.0
+ * @since 26/05/2025
+ */
 @RestController
 @RequestMapping("/api/client")
 public class ClientController {

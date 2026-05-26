@@ -7,8 +7,21 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.transaction.annotation.Transactional;
 
+/**
+ * Configuración central de beans para la aplicación Spring Boot.
+ * <p>
+ * Define componentes fundamentales como el {@link UserDetailsService}, el cual
+ * es utilizado por Spring Security para recuperar los datos del usuario desde 
+ * la base de datos durante el proceso de autenticación.
+ * </p>
+ *
+ * @author Manuel Dominguez
+ * @version 1.0
+ * @since 26/05/2025
+ */
 @Configuration
 public class ApplicationConfig {
+
 
     private final UserRepository userRepository;
 

@@ -6,8 +6,22 @@ import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
+/**
+ * Servicio encargado de gestionar las notificaciones en tiempo real mediante Server-Sent Events (SSE).
+ * <p>
+ * Mantiene un registro en memoria de las conexiones activas (emitters) de los clientes, 
+ * permitiendo enviar alertas unidireccionales (ej. un nuevo feedback del entrenador)
+ * de forma inmediata sin necesidad de que el cliente realice polling constante.
+ * Implementa control estricto del ciclo de vida para evitar "memory leaks".
+ * </p>
+ *
+ * @author Manuel Dominguez
+ * @version 1.0
+ * @since 26/05/2025
+ */
 @Service
 public class NotificationService {
+
 
     private final Map<Long, SseEmitter> emitters = new ConcurrentHashMap<>();
 

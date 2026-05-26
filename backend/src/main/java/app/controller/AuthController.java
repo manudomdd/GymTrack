@@ -10,6 +10,18 @@ import org.springframework.web.bind.annotation.*;
 import jakarta.validation.Valid;
 import java.util.Map;
 
+/**
+ * Controlador REST que gestiona los endpoints de autenticación y registro de usuarios.
+ * <p>
+ * Expone los endpoints públicos (no requieren token JWT previo) para permitir a los
+ * nuevos usuarios registrarse en la plataforma y a los usuarios existentes iniciar 
+ * sesión de forma segura, obteniendo el token necesario para el resto de peticiones.
+ * </p>
+ *
+ * @author Manuel Dominguez
+ * @version 1.0
+ * @since 26/05/2025
+ */
 @RestController
 @RequestMapping("/api/auth")
 public class AuthController {

@@ -12,8 +12,21 @@ import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
+/**
+ * Servicio encargado de gestionar los registros diarios de salud y bienestar.
+ * <p>
+ * Proporciona métodos transaccionales para guardar, actualizar y consultar
+ * las métricas de sueño (horas dormidas, calidad) y actividad física (pasos) 
+ * de los clientes, asegurando que solo exista un registro por fecha y usuario.
+ * </p>
+ *
+ * @author Manuel Dominguez
+ * @version 1.0
+ * @since 26/05/2025
+ */
 @Service
 public class HealthService {
+
 
     @Autowired
     private SleepLogRepository sleepRepo;
