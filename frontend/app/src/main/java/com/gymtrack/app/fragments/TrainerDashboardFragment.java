@@ -17,10 +17,20 @@ import com.gymtrack.app.network.AuthRepository;
 import com.gymtrack.app.network.dto.DashboardTrainerDTO;
 
 /**
- * Fragment del Dashboard principal del entrenador.
- * Equivale al _buildDashboard() de TrainerHomeScreen.dart.
+ * Fragmento que representa el panel principal (Dashboard) del usuario con rol ENTRENADOR.
+ * <p>
+ * Proporciona un resumen gerencial sobre la cartera de clientes. Permite al entrenador 
+ * monitorizar métricas de alto nivel como el total de clientes asignados, 
+ * los clientes que han estado activos hoy (han entrenado) y el volumen 
+ * total de sesiones de entrenamiento registradas durante la semana actual.
+ * </p>
+ *
+ * @author Manuel Dominguez
+ * @version 1.0
+ * @since 26/05/2025
  */
 public class TrainerDashboardFragment extends Fragment {
+
 
     private TextView tvClientesTotales;
     private TextView tvActivosHoy;

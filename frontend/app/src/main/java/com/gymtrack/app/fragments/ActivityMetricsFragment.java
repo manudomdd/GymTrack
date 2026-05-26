@@ -23,13 +23,20 @@ import java.util.Date;
 import java.util.Locale;
 
 /**
- * Fragment de Métricas de Actividad.
- * Equivale a ActivityMetricsScreen de home_screen.dart.
+ * Fragmento que muestra las métricas de actividad diaria de un cliente.
+ * <p>
+ * Proporciona una vista rápida de métricas clave como los pasos diarios, 
+ * horas de sueño, calorías estimadas, frecuencia cardíaca y consumo de agua.
+ * Incluye funcionalidad para añadir métricas de forma manual mediante un diálogo 
+ * de captura de datos.
+ * </p>
  *
- * Muestra 5 métricas con barras de progreso:
- * Pasos, Sueño, Calorías, Frecuencia Cardíaca, Agua.
+ * @author Manuel Dominguez
+ * @version 1.0
+ * @since 26/05/2025
  */
 public class ActivityMetricsFragment extends Fragment {
+
 
     @Nullable
     @Override

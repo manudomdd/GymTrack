@@ -14,14 +14,20 @@ import com.google.android.material.textfield.TextInputEditText;
 import com.gymtrack.app.network.AuthRepository;
 
 /**
- * Pantalla de Login de GymTrack.
- * Equivale a LoginScreen.dart de Flutter.
+ * Actividad responsable de la pantalla de autenticación de GymTrack.
+ * <p>
+ * Permite a los usuarios acceder al sistema utilizando sus credenciales.
+ * Esta actividad interactúa con el backend para validar la sesión y obtener el token JWT. 
+ * Dependiendo del rol asignado al usuario (Cliente, Entrenador o Administrador), 
+ * se encarga de redirigirlo a su correspondiente panel de control de forma dinámica.
+ * </p>
  *
- * Permite al usuario iniciar sesión con email y contraseña.
- * En caso de éxito navega a HomeActivity.
- * Ofrece navegación a RegisterActivity para crear cuenta nueva.
+ * @author Manuel Dominguez
+ * @version 1.0
+ * @since 26/05/2025
  */
 public class LoginActivity extends AppCompatActivity {
+
 
     private TextInputEditText etUsername, etPassword;
     private Button btnLogin, btnGoRegister;

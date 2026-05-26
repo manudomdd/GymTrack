@@ -46,22 +46,24 @@ import okhttp3.RequestBody;
 import okhttp3.Response;
 
 /**
- * Fragment para el registro de entrenamientos.
+ * Fragmento principal para el registro interactivo del diario de entrenamientos.
+ * <p>
+ * Su comportamiento es dinámico según el rol del usuario:
+ * - <b>Modo Cliente</b>: Permite seleccionar un día en el calendario, añadir ejercicios 
+ * (filtrados por grupo muscular) y registrar múltiples series especificando peso, 
+ * repeticiones, RIR (Repeticiones en Reserva) y comentarios. Utiliza un envío 
+ * por lotes (Batch POST) para optimizar las peticiones de red.
+ * - <b>Modo Entrenador</b>: Actúa como visor (Read-Only) para consultar el trabajo 
+ * realizado por un cliente en una fecha específica y permite añadir comentarios de feedback
+ * directamente sobre el entrenamiento.
+ * </p>
  *
- * Flujo de registro (cliente):
- * 1. Pulsar "+ Añadir Entrenamiento".
- * 2. Introducir nombre del ejercicio y grupo muscular (cabecera común a todas
- * las series).
- * 3. Pulsar "+ Añadir Serie" para añadir filas individuales (Peso, Reps, RIR,
- * Comentario).
- * 4. Al guardar, se empaquetan todas las series en un JsonArray y se envían a
- * POST /api/client/workouts/batch.
- *
- * Vista del entrenador: modo solo lectura (btnAdd oculto).
- * Lee de GET /api/trainer/client/{clientId}/workouts y muestra cada serie como
- * card.
+ * @author Manuel Dominguez
+ * @version 1.0
+ * @since 26/05/2025
  */
 public class TrainingLogFragment extends Fragment {
+
 
     private Calendar selectedDate = Calendar.getInstance();
     private TextView tvMonthYear;

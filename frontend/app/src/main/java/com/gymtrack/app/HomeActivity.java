@@ -35,15 +35,21 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Activity principal para usuarios clientes.
- * Equivale a HomeScreen.dart de Flutter.
+ * Actividad principal destinada a los usuarios con rol de CLIENTE.
+ * <p>
+ * Esta actividad gestiona la navegación lateral estructurada y sirve como contenedor
+ * de fragmentos de la aplicación. Integra secciones clave como el panel de resumen, 
+ * el gestor de entrenamientos, la edición de perfil y las analíticas de salud.
+ * Además, al inicializarse, comprueba permisos e instancía el servicio en segundo
+ * plano responsable del podómetro (conteo de pasos).
+ * </p>
  *
- * Contiene un DrawerLayout con tres secciones:
- * - Dashboard (índice 0): estadísticas y accesos rápidos
- * - Registro de Entrenamiento (índice 1): calendario y lista de entrenamientos
- * - Métricas de Actividad (índice 2): pasos, sueño, calorías, etc.
+ * @author Manuel Dominguez
+ * @version 1.0
+ * @since 26/05/2025
  */
 public class HomeActivity extends AppCompatActivity {
+
 
     private DrawerLayout drawerLayout;
     private NavigationView navView;

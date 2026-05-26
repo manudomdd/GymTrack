@@ -35,7 +35,22 @@ import okhttp3.Request;
 import okhttp3.RequestBody;
 import okhttp3.Response;
 
+/**
+ * Fragmento encargado del registro y monitorización de la salud general del cliente.
+ * <p>
+ * Captura y envía al backend los datos biométricos diarios del usuario,
+ * prestando especial atención a la calidad y cantidad de sueño (horas dormidas y 
+ * puntuación de calidad 1-10). Además, lee de manera automática y en tiempo real
+ * la cantidad de pasos diarios usando un {@link android.content.BroadcastReceiver}
+ * vinculado al servicio del podómetro del dispositivo.
+ * </p>
+ *
+ * @author Manuel Dominguez
+ * @version 1.0
+ * @since 26/05/2025
+ */
 public class HealthFragment extends Fragment {
+
 
     private TextView tvSteps;
     private TextInputEditText etHours;

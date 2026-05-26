@@ -29,7 +29,21 @@ import okhttp3.Request;
 import okhttp3.RequestBody;
 import okhttp3.Response;
 
+/**
+ * Actividad que implementa la interfaz de chat con el asistente de Inteligencia Artificial (Modo General).
+ * <p>
+ * Permite a los entrenadores realizar consultas técnicas sobre nutrición, biomecánica, 
+ * periodización, etc. Envía los mensajes al backend, el cual se encarga de 
+ * interactuar con el modelo LLM (Groq API) utilizando un system prompt enfocado en 
+ * ciencias del deporte, garantizando respuestas expertas y precisas.
+ * </p>
+ *
+ * @author Manuel Dominguez
+ * @version 1.0
+ * @since 26/05/2025
+ */
 public class AIGeneralChatActivity extends AppCompatActivity {
+
 
     private RecyclerView rvChat;
     private EditText etMessage;

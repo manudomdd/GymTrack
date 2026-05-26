@@ -17,7 +17,22 @@ import com.gymtrack.app.R;
 import com.gymtrack.app.network.ClientRepository;
 import com.gymtrack.app.utils.AvatarHelper;
 
+/**
+ * Fragmento que gestiona el perfil personal del usuario cliente.
+ * <p>
+ * Permite al usuario visualizar y actualizar sus datos biométricos básicos 
+ * (peso, altura) los cuales son cruciales para los cálculos del sistema. 
+ * Asimismo, expone la funcionalidad vital de "Vincular Entrenador", permitiendo 
+ * introducir un Trainer Code (Código de Entrenador) para enlazar su cuenta con 
+ * un profesional, estableciendo así el flujo de supervisión en la plataforma.
+ * </p>
+ *
+ * @author Manuel Dominguez
+ * @version 1.0
+ * @since 26/05/2025
+ */
 public class ClientProfileFragment extends Fragment {
+
 
     private TextInputEditText etNombre, etEdad, etPeso, etAltura, etTrainerCode;
     private TextView tvTrainerStatus;

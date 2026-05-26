@@ -17,13 +17,20 @@ import com.gymtrack.app.network.ClientRepository;
 import com.gymtrack.app.network.dto.DashboardClientDTO;
 
 /**
- * Fragment del Dashboard principal del usuario cliente.
- * Equivale al _buildDashboard() de HomeScreen.dart.
+ * Fragmento que representa el panel principal (Dashboard) del usuario con rol CLIENTE.
+ * <p>
+ * Muestra las estadísticas resumidas del día actual mediante cuatro métricas
+ * principales (entrenamientos completados, pasos dados, calorías estimadas 
+ * quemadas y horas de sueño de la noche anterior) para proporcionar una visión 
+ * rápida del rendimiento y adherencia del cliente.
+ * </p>
  *
- * Muestra 4 tarjetas de estadísticas y botones de acceso rápido
- * para navegar a Registro de Entrenamiento y Métricas.
+ * @author Manuel Dominguez
+ * @version 1.0
+ * @since 26/05/2025
  */
 public class DashboardFragment extends Fragment {
+
 
     private TextView tvEntrenamientos;
     private TextView tvPasos;

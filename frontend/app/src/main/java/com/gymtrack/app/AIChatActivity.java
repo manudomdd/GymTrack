@@ -29,7 +29,22 @@ import okhttp3.Request;
 import okhttp3.RequestBody;
 import okhttp3.Response;
 
+/**
+ * Actividad que implementa la interfaz de chat con el asistente de Inteligencia Artificial (Modo Contextual).
+ * <p>
+ * A diferencia del chat general, esta actividad está vinculada al ID de un cliente 
+ * específico. El backend inyecta los datos reales de este cliente (biometría, sueño, 
+ * pasos y últimas 40 series de entrenamiento) en el System Prompt del LLM. 
+ * Esto permite a la IA proporcionar análisis predictivos y recomendaciones altamente 
+ * personalizadas basadas en datos reales.
+ * </p>
+ *
+ * @author Manuel Dominguez
+ * @version 1.0
+ * @since 26/05/2025
+ */
 public class AIChatActivity extends AppCompatActivity {
+
 
     private long clientId;
     private String clientName;

@@ -23,13 +23,20 @@ import java.util.Map;
 import java.util.Set;
 
 /**
- * Pantalla de métricas de un cliente específico, accesible desde el perfil del entrenador.
+ * Actividad que presenta el análisis de progreso de entrenamiento de un cliente específico.
+ * <p>
+ * Consulta al backend el resultado del cálculo de regresión lineal sobre el historial
+ * de cargas levantadas. Muestra una interfaz categorizada por grupos musculares y 
+ * evalúa matemáticamente si el cliente se encuentra en fase de progresión, 
+ * regresión o estancamiento para cada ejercicio.
+ * </p>
  *
- * Muestra:
- * 1. Progreso de carga por grupo muscular (regresión lineal: pendiente + evaluación)
- * 2. Registros de salud del cliente (pasos diarios + sueño)
+ * @author Manuel Dominguez
+ * @version 1.0
+ * @since 26/05/2025
  */
 public class TrainerClientMetricsActivity extends AppCompatActivity {
+
 
     private LinearLayout metricsContainer;
     private LinearLayout healthContainer;

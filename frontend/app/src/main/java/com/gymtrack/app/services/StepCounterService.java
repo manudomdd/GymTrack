@@ -25,7 +25,24 @@ import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
 
+/**
+ * Servicio en segundo plano (Foreground Service) dedicado a la monitorización 
+ * de salud y comunicaciones en tiempo real.
+ * <p>
+ * Cumple dos funciones críticas:
+ * 1. <b>Podómetro en tiempo real</b>: Utiliza el sensor hardware {@link android.hardware.Sensor#TYPE_STEP_COUNTER} 
+ *    para rastrear los pasos diarios, mostrando una notificación persistente al usuario.
+ * 2. <b>Cliente SSE (Server-Sent Events)</b>: Mantiene una conexión unidireccional 
+ *    abierta con el backend de forma resiliente (con auto-reconexión) para recibir 
+ *    notificaciones push sobre el feedback dejado por los entrenadores.
+ * </p>
+ *
+ * @author Manuel Dominguez
+ * @version 1.0
+ * @since 26/05/2025
+ */
 public class StepCounterService extends Service implements SensorEventListener {
+
     private SensorManager sensorManager;
     private Sensor stepSensor;
     private int currentSteps = 0;

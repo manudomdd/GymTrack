@@ -24,13 +24,20 @@ import okhttp3.Request;
 import okhttp3.Response;
 
 /**
- * Fragment del perfil del entrenador.
- * Equivale al _buildTrainerProfile() de TrainerHomeScreen.dart.
+ * Fragmento que muestra el perfil profesional del entrenador.
+ * <p>
+ * Muestra la información personal del usuario (nombre, nombre de usuario y avatar) 
+ * obtenida del servidor. Adicionalmente, expone el Código de Entrenador 
+ * (Trainer Code) asignado, un dato vital que los clientes necesitan introducir 
+ * durante el registro en la aplicación para vincular sus cuentas automáticamente.
+ * </p>
  *
- * Muestra información personal estática y estadísticas del entrenador.
- * TODO: Cargar datos reales del backend.
+ * @author Manuel Dominguez
+ * @version 1.0
+ * @since 26/05/2025
  */
 public class TrainerProfileFragment extends Fragment {
+
 
     private TextView tvName, tvUsername, tvCode;
     private ImageView ivAvatar;

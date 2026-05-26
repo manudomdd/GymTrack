@@ -12,7 +12,21 @@ import okhttp3.Request;
 import okhttp3.RequestBody;
 import okhttp3.Response;
 
+/**
+ * Repositorio encargado de las operaciones de red exclusivas del dominio del Cliente.
+ * <p>
+ * Interactúa con el backend protegido para realizar operaciones CRUD sobre el 
+ * perfil biométrico del usuario, la vinculación mediante código a la cartera 
+ * de un entrenador y la obtención de las métricas resumidas que nutren el Dashboard.
+ * Inyecta de forma transparente el JWT provisto por {@link AuthRepository} en todas sus peticiones.
+ * </p>
+ *
+ * @author Manuel Dominguez
+ * @version 1.0
+ * @since 26/05/2025
+ */
 public class ClientRepository {
+
     private static final String BASE_URL = "https://gymtrack-production-5934.up.railway.app/api/client";
     private static final MediaType JSON = MediaType.get("application/json; charset=utf-8");
     private final OkHttpClient client;

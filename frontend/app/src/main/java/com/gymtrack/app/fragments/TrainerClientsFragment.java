@@ -56,15 +56,21 @@ import okhttp3.RequestBody;
 import okhttp3.Response;
 
 /**
- * Fragment para la lista de clientes del entrenador.
+ * Fragmento que muestra la lista de clientes vinculados a un entrenador.
+ * <p>
+ * Incluye un buscador en tiempo real (por nombre o usuario) y renderiza 
+ * de forma dinámica las tarjetas de los clientes. Cada tarjeta proporciona 
+ * accesos directos clave: el diario de entrenamientos, el análisis de 
+ * métricas de progreso (regresión lineal), el registro de salud (biomarcadores) y 
+ * el chat interactivo asistido por IA contextualizada para ese cliente.
+ * </p>
  *
- * Incluye:
- * - Buscador en tiempo real por nombre o email
- * - RecyclerView con tarjeta por cliente
- * - Diálogo de detalles del cliente
- * - Diálogo para asignar rutina con fecha exacta y series granulares por serie
+ * @author Manuel Dominguez
+ * @version 1.0
+ * @since 26/05/2025
  */
 public class TrainerClientsFragment extends Fragment {
+
 
     private ClientAdapter adapter;
     private LinearLayout layoutEmpty;

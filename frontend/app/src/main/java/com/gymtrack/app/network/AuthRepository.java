@@ -19,12 +19,21 @@ import okhttp3.RequestBody;
 import okhttp3.Response;
 
 /**
- * Repositorio de autenticación que maneja las llamadas HTTP al backend.
- * Equivale al AuthService de Flutter.
- * Endpoint base: https://gymtrack-production-5934.up.railway.app/api/auth
- * (10.0.2.2 es la IP que el emulador Android usa para acceder al host)
+ * Repositorio central de autenticación y red.
+ * <p>
+ * Gestiona el flujo crítico de sesión (Login, Registro y Manejo de JWT) utilizando 
+ * {@link android.content.SharedPreferences} para la persistencia local del token y el rol de usuario.
+ * Además, actúa de forma temporal como proveedor de llamadas HTTP generalistas para 
+ * los módulos de entrenador y progreso, ejecutando las peticiones de red asíncronamente 
+ * mediante OkHttp3 para no bloquear el hilo principal (UI Thread).
+ * </p>
+ *
+ * @author Manuel Dominguez
+ * @version 1.0
+ * @since 26/05/2025
  */
 public class AuthRepository {
+
 
     private static final String BASE_URL = "https://gymtrack-production-5934.up.railway.app/api/auth";
     private static final String PREFS_NAME = "gymtrack_prefs";

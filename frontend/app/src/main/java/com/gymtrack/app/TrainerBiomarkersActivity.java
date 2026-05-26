@@ -23,7 +23,21 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Locale;
 
+/**
+ * Actividad que permite al entrenador visualizar los registros de salud diarios (biomarcadores) de un cliente.
+ * <p>
+ * Implementa una vista de calendario interactiva que permite navegar por meses y días. 
+ * Al seleccionar una fecha concreta, la actividad consulta y muestra las métricas 
+ * de sueño (horas y calidad) y actividad física (pasos) registradas por el cliente 
+ * en ese día específico.
+ * </p>
+ *
+ * @author Manuel Dominguez
+ * @version 1.0
+ * @since 26/05/2025
+ */
 public class TrainerBiomarkersActivity extends AppCompatActivity {
+
 
     private AuthRepository authRepository;
     private long clientId;
