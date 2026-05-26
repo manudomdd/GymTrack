@@ -32,4 +32,6 @@ public interface StepLogRepository extends JpaRepository<StepLog, Long> {
      * @return El resultado o estado devuelto tras procesar la petición.
      */
     Optional<StepLog> findByClientIdAndDate(Long clientId, LocalDate date);
+    
+    void deleteAllByClientId(Long clientId);
 }

@@ -32,4 +32,6 @@ public interface SleepLogRepository extends JpaRepository<SleepLog, Long> {
      * @return El resultado o estado devuelto tras procesar la petición.
      */
     Optional<SleepLog> findByClientIdAndDate(Long clientId, LocalDate date);
+    
+    void deleteAllByClientId(Long clientId);
 }

@@ -11,6 +11,8 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 
+import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
+
 /**
  * Configuración de seguridad de Spring Security, filtros y políticas de acceso.
  *
@@ -20,6 +22,7 @@ import org.springframework.security.web.SecurityFilterChain;
  */
 @Configuration
 @EnableWebSecurity
+@EnableMethodSecurity
 public class SecurityConfig {
 
     // Proveedor de utilidades y servicios para la gestión de tokens JWT.

@@ -47,4 +47,6 @@ public interface WorkoutSessionRepository extends JpaRepository<WorkoutSession, 
      * @return Lista de todas las sesiones de los clientes dados.
      */
     List<WorkoutSession> findByClientIdIn(List<Long> clientIds);
+    
+    void deleteAllByClientId(Long clientId);
 }

@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.google.android.material.card.MaterialCardView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginBottom="12dp"
+    app:cardBackgroundColor="@color/input_field_bg"
+    app:cardCornerRadius="16dp"
+    app:cardElevation="4dp"
+    app:strokeColor="@color/magenta"
+    app:strokeWidth="1dp">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="16dp">
+
+        <TextView
+            android:id="@+id/tv_admin_user_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Nombre Apellido"
+            android:textColor="@color/white"
+            android:textSize="18sp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/tv_admin_user_email"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/tv_admin_user_name"
+            android:layout_marginTop="4dp"
+            android:text="correo@ejemplo.com"
+            android:textColor="#888888"
+            android:textSize="14sp" />
+
+        <TextView
+            android:id="@+id/tv_admin_user_type"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/tv_admin_user_email"
+            android:layout_marginTop="8dp"
+            android:background="@drawable/bg_rounded_admin"
+            android:paddingHorizontal="12dp"
+            android:paddingVertical="4dp"
+            android:text="ENTRENADOR"
+            android:textColor="@color/white"
+            android:textSize="12sp"
+            android:textStyle="bold" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btn_admin_delete_user"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:layout_centerVertical="true"
+            android:backgroundTint="#FF4444"
+            android:text="Eliminar"
+            android:textColor="@color/white"
+            app:cornerRadius="8dp" />
+
+    </RelativeLayout>
+</com.google.android.material.card.MaterialCardView>

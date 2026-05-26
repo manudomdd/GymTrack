@@ -74,6 +74,8 @@ public class LoginActivity extends AppCompatActivity {
                     Class<?> targetActivity = HomeActivity.class;
                     if ("ENTRENADOR".equals(authRepository.getRole())) {
                         targetActivity = TrainerHomeActivity.class;
+                    } else if ("ADMIN".equals(authRepository.getRole())) {
+                        targetActivity = AdminDashboardActivity.class;
                     }
 
                     Intent intent = new Intent(LoginActivity.this, targetActivity);
