@@ -3,9 +3,22 @@ package app.entity;
 import jakarta.persistence.*;
 import java.time.LocalDate;
 
+/**
+ * Entidad JPA que representa el registro diario de sueño de un cliente.
+ * <p>
+ * Almacena información sobre las horas dormidas y una puntuación (score) 
+ * que indica la calidad subjetiva del descanso en una fecha específica.
+ * Se mapea a la tabla {@code sleep_logs} en la base de datos.
+ * </p>
+ *
+ * @author Manuel Dominguez
+ * @version 1.0
+ * @since 26/05/2025
+ */
 @Entity
 @Table(name = "sleep_logs")
 public class SleepLog {
+
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

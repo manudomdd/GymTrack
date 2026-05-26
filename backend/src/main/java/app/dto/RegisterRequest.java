@@ -2,7 +2,22 @@ package app.dto;
 
 import app.entity.TipoUsuario;
 
+/**
+ * Objeto de transferencia de datos (DTO) encargado de recopilar todos
+ * los datos requeridos para el registro de un nuevo usuario en el sistema.
+ * <p>
+ * Centraliza tanto los campos comunes de cuenta (nombre, username, password)
+ * como los datos específicos del perfil biométrico (peso, altura, fecha de nacimiento).
+ * Si el usuario se registra como cliente, puede incluir el código de un entrenador
+ * (trainerCode) para establecer la relación jerárquica de forma automática.
+ * </p>
+ *
+ * @author Manuel Dominguez
+ * @version 1.0
+ * @since 26/05/2025
+ */
 public class RegisterRequest {
+
 	
 	private String nombre; 
 	private String username; 

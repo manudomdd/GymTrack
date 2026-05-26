@@ -18,6 +18,19 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import java.util.List;
 
+/**
+ * Entidad abstracta base que representa a un usuario genérico del sistema.
+ * <p>
+ * Implementa {@link UserDetails} para integrarse nativamente con Spring Security.
+ * Utiliza la estrategia de herencia {@code InheritanceType.JOINED} para mapear
+ * las entidades derivadas (como Client y Trainer) en tablas separadas, 
+ * relacionándolas a través de la clave primaria.
+ * </p>
+ *
+ * @author Manuel Dominguez
+ * @version 1.0
+ * @since 26/05/2025
+ */
 @Entity
 @Table (name = "users")
 @Inheritance(strategy = InheritanceType.JOINED)
@@ -27,6 +40,7 @@ public abstract class User implements UserDetails {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
     
     private String nombre;
     

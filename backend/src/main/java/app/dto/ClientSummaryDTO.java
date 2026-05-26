@@ -1,6 +1,19 @@
 package app.dto;
 
+/**
+ * Objeto de transferencia de datos (DTO) que encapsula un resumen del perfil de un cliente.
+ * <p>
+ * Se utiliza principalmente en el panel del entrenador para mostrar un listado
+ * rápido de sus clientes vinculados, reduciendo la cantidad de datos transmitidos
+ * al omitir campos sensibles (como contraseñas) o innecesarios para esa vista específica.
+ * </p>
+ *
+ * @author Manuel Dominguez
+ * @version 1.0
+ * @since 26/05/2025
+ */
 public class ClientSummaryDTO {
+
     private Long id;
     private String nombre;
     private String username;

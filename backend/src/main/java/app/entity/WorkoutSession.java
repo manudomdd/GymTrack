@@ -3,9 +3,23 @@ package app.entity;
 import jakarta.persistence.*;
 import java.time.LocalDate;
 
+/**
+ * Entidad JPA que representa una sesión de entrenamiento individual de un cliente.
+ * <p>
+ * Cada registro corresponde a una serie específica de un ejercicio, almacenando 
+ * datos como repeticiones, RIR (Repeticiones en Reserva) y carga utilizada (peso total). 
+ * Contiene además un campo para el feedback opcional del entrenador.
+ * Se mapea en la base de datos a través de la tabla {@code workout_sessions}.
+ * </p>
+ *
+ * @author Manuel Dominguez
+ * @version 1.0
+ * @since 26/05/2025
+ */
 @Entity
 @Table(name = "workout_sessions")
 public class WorkoutSession {
+
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

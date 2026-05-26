@@ -1,6 +1,20 @@
 package app.dto;
 
+/**
+ * Objeto de transferencia de datos (DTO) que encapsula las métricas de resumen
+ * para el panel principal del entrenador.
+ * <p>
+ * Proporciona estadísticas globales sobre su cartera de clientes, incluyendo 
+ * el total de clientes vinculados, los que han registrado actividad hoy, y un 
+ * recuento de los entrenamientos completados (tanto totales como semanales).
+ * </p>
+ *
+ * @author Manuel Dominguez
+ * @version 1.0
+ * @since 26/05/2025
+ */
 public class DashboardTrainerDTO {
+
     private int clientesTotales;
     private int activosHoy;
     private int entrenamientos;

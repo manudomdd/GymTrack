@@ -1,6 +1,20 @@
 package app.dto;
 
+/**
+ * Objeto de transferencia de datos (DTO) que encapsula las métricas agregadas
+ * para el panel principal del cliente.
+ * <p>
+ * Agrupa la cantidad de entrenamientos realizados, los pasos dados hoy, 
+ * el cálculo de calorías y las horas de sueño, proporcionando todos los 
+ * datos necesarios para renderizar el dashboard en una sola petición HTTP.
+ * </p>
+ *
+ * @author Manuel Dominguez
+ * @version 1.0
+ * @since 26/05/2025
+ */
 public class DashboardClientDTO {
+
     private int entrenamientos;
     private int pasosHoy;
     private int calorias;

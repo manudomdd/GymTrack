@@ -14,12 +14,26 @@ import java.time.Period;
 import java.util.List;
 import jakarta.persistence.Transient;
 
+/**
+ * Entidad JPA que representa a un usuario con rol de cliente en el sistema.
+ * <p>
+ * Extiende de {@link User} e incorpora atributos físicos y métricas relevantes
+ * para el seguimiento de la salud y el entrenamiento. Los datos específicos 
+ * del cliente se almacenan en la tabla {@code clients}.
+ * Además, un cliente puede estar vinculado a un único entrenador ({@link Trainer}).
+ * </p>
+ *
+ * @author Manuel Dominguez
+ * @version 1.0
+ * @since 26/05/2025
+ */
 @Entity
 @Table(name = "clients")
 @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
 public class Client extends User {
 
     @jakarta.persistence.Column(name = "fecha_nacimiento")
+
     private LocalDate fechaNacimiento; 
     
     private double peso; 
