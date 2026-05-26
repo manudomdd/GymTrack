@@ -3,17 +3,41 @@ package app.dto;
 import app.entity.TipoUsuario;
 
 /**
- * DTO para el listado de usuarios en el Panel de Administrador.
+ * Objeto de transferencia de datos utilizado por el panel de administración
+ * para listar los usuarios del sistema.
+ * <p>
+ * Expone únicamente los campos necesarios para la vista de gestión de usuarios,
+ * evitando serializar información sensible como la contraseña cifrada.
+ * </p>
+ *
+ * @author Manuel Dominguez
+ * @version 1.0
+ * @since 26/05/2025
  */
 public class UserAdminDTO {
 
+    /** Identificador único del usuario en base de datos. */
     private Long id;
+
+    /** Nombre completo o alias del usuario. */
     private String nombre;
+
+    /** Nombre de usuario empleado para el inicio de sesión. */
     private String username;
+
+    /** Rol asignado al usuario dentro del sistema. */
     private TipoUsuario tipoUsuario;
 
     public UserAdminDTO() {}
 
+    /**
+     * Constructor que inicializa todos los campos del DTO.
+     *
+     * @param id          identificador del usuario
+     * @param nombre      nombre completo del usuario
+     * @param username    nombre de usuario para el login
+     * @param tipoUsuario rol del usuario ({@code CLIENTE} o {@code ENTRENADOR})
+     */
     public UserAdminDTO(Long id, String nombre, String username, TipoUsuario tipoUsuario) {
         this.id = id;
         this.nombre = nombre;
