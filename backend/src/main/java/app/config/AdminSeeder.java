@@ -1,7 +1,5 @@
 package app.config;
 
-import app.entity.User;
-import app.repository.UserRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.boot.CommandLineRunner;
@@ -13,7 +11,8 @@ import org.springframework.transaction.annotation.Transactional;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 
-import java.util.Optional;
+import java.math.BigInteger;
+import java.util.List;
 
 @Configuration
 public class AdminSeeder {
@@ -24,25 +23,54 @@ public class AdminSeeder {
     private EntityManager entityManager;
 
     @Bean
-    public CommandLineRunner seedAdmin(UserRepository userRepository, PasswordEncoder passwordEncoder) {
-        return args -> {
-            Optional<User> adminOpt = userRepository.findByUsername("admin");
-            if (adminOpt.isEmpty()) {
-                insertAdmin(passwordEncoder.encode("admin"));
-            } else {
-                log.info("ℹ️ Usuario admin ya existe, se omite el seeder.");
-            }
-        };
+    public CommandLineRunner seedAdmin(PasswordEncoder passwordEncoder) {
+        return args -> createAdminIfNeeded(passwordEncoder.encode("admin"));
     }
 
     @Transactional
-    public void insertAdmin(String encodedPassword) {
+    public void createAdminIfNeeded(String encodedPassword) {
         try {
-            entityManager.createNativeQuery(
-                "INSERT INTO users (nombre, username, password, tipo_usuario) " +
-                "VALUES ('Administrador Sistema', 'admin', :pwd, 'ADMIN')"
-            ).setParameter("pwd", encodedPassword).executeUpdate();
-            log.info("✅ Usuario admin creado correctamente via SQL nativo.");
+            // 1. Buscar si ya existe en users
+            List<?> rows = entityManager.createNativeQuery(
+                "SELECT id FROM users WHERE username = 'admin'"
+            ).getResultList();
+
+            Long userId = null;
+
+            if (rows.isEmpty()) {
+                // 2a. No existe en users → insertar en users
+                entityManager.createNativeQuery(
+                    "INSERT INTO users (nombre, username, password, tipo_usuario) " +
+                    "VALUES ('Administrador Sistema', 'admin', :pwd, 'ADMIN')"
+                ).setParameter("pwd", encodedPassword).executeUpdate();
+
+                // Obtener el ID generado
+                Object idResult = entityManager.createNativeQuery(
+                    "SELECT LAST_INSERT_ID()"
+                ).getSingleResult();
+                userId = ((BigInteger) idResult).longValue();
+                log.info("✅ Fila en 'users' creada para admin con id={}", userId);
+            } else {
+                // 2b. Ya existe en users → obtener su ID
+                Object idResult = rows.get(0);
+                userId = ((BigInteger) idResult).longValue();
+                log.info("ℹ️ Admin ya existe en 'users' con id={}", userId);
+            }
+
+            // 3. Verificar si existe en admins (necesario para JOINED inheritance)
+            List<?> adminRows = entityManager.createNativeQuery(
+                "SELECT id FROM admins WHERE id = :id"
+            ).setParameter("id", userId).getResultList();
+
+            if (adminRows.isEmpty()) {
+                entityManager.createNativeQuery(
+                    "INSERT INTO admins (id) VALUES (:id)"
+                ).setParameter("id", userId).executeUpdate();
+                log.info("✅ Fila en 'admins' creada para id={} — admin listo.", userId);
+            } else {
+                log.info("ℹ️ Admin ya tiene fila en 'admins', nada que hacer.");
+            }
+
         } catch (Exception e) {
             log.error("❌ Error al crear usuario admin: {}", e.getMessage(), e);
         }
