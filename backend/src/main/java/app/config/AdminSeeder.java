@@ -18,6 +18,14 @@ public class AdminSeeder {
         return args -> {
             log.info(">>> AdminSeeder iniciando...");
 
+            // Hibernate 6 crea la columna tipo_usuario como ENUM real en MySQL.
+            // ddl-auto=update NO añade nuevos valores al ENUM automáticamente.
+            // Hay que alterar la columna manualmente para incluir 'ADMIN'.
+            jdbcTemplate.execute(
+                "ALTER TABLE users MODIFY COLUMN tipo_usuario ENUM('CLIENTE', 'ENTRENADOR', 'ADMIN')"
+            );
+            log.info(">>> Columna tipo_usuario actualizada con ADMIN.");
+
             // Crear tabla admins sin FK (evita conflictos con constraints existentes)
             jdbcTemplate.execute(
                 "CREATE TABLE IF NOT EXISTS admins (id BIGINT NOT NULL, PRIMARY KEY (id))"
@@ -41,7 +49,8 @@ public class AdminSeeder {
 
             // INSERT IGNORE en admins
             jdbcTemplate.update("INSERT IGNORE INTO admins (id) VALUES (?)", adminId);
-            log.info(">>> INSERT en admins ejecutado. Admin listo!");
+            log.info(">>> AdminSeeder completado. Admin listo con id={}!", adminId);
         };
+
     }
 }
