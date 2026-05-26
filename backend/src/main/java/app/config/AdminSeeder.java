@@ -16,61 +16,32 @@ public class AdminSeeder {
     @Bean
     public CommandLineRunner seedAdmin(JdbcTemplate jdbcTemplate, PasswordEncoder passwordEncoder) {
         return args -> {
-            try {
-                // 1. Asegurar que la tabla admins existe (por si ddl-auto no la creó)
-                jdbcTemplate.execute(
-                    "CREATE TABLE IF NOT EXISTS admins (" +
-                    "  id BIGINT NOT NULL, " +
-                    "  PRIMARY KEY (id), " +
-                    "  CONSTRAINT fk_admins_users FOREIGN KEY (id) REFERENCES users(id)" +
-                    ")"
-                );
+            log.info(">>> AdminSeeder iniciando...");
 
-                // 2. Comprobar si ya existe en users
-                Integer count = jdbcTemplate.queryForObject(
-                    "SELECT COUNT(*) FROM users WHERE username = 'admin'",
-                    Integer.class
-                );
+            // Crear tabla admins sin FK (evita conflictos con constraints existentes)
+            jdbcTemplate.execute(
+                "CREATE TABLE IF NOT EXISTS admins (id BIGINT NOT NULL, PRIMARY KEY (id))"
+            );
+            log.info(">>> Tabla admins lista.");
 
-                if (count == null || count == 0) {
-                    String encodedPassword = passwordEncoder.encode("admin");
+            // INSERT IGNORE: no falla si ya existe (unique constraint en username)
+            String pwd = passwordEncoder.encode("admin");
+            jdbcTemplate.update(
+                "INSERT IGNORE INTO users (nombre, username, password, tipo_usuario) VALUES (?, ?, ?, ?)",
+                "Administrador Sistema", "admin", pwd, "ADMIN"
+            );
+            log.info(">>> INSERT en users ejecutado.");
 
-                    // 3. Insertar en users
-                    jdbcTemplate.update(
-                        "INSERT INTO users (nombre, username, password, tipo_usuario) VALUES (?, ?, ?, ?)",
-                        "Administrador Sistema", "admin", encodedPassword, "ADMIN"
-                    );
+            // Obtener ID del admin
+            Long adminId = jdbcTemplate.queryForObject(
+                "SELECT id FROM users WHERE username = 'admin'",
+                Long.class
+            );
+            log.info(">>> Admin id={}", adminId);
 
-                    // 4. Obtener el ID generado
-                    Long adminId = jdbcTemplate.queryForObject(
-                        "SELECT id FROM users WHERE username = 'admin'",
-                        Long.class
-                    );
-
-                    // 5. Insertar en admins (requerido por JOINED inheritance)
-                    jdbcTemplate.update("INSERT INTO admins (id) VALUES (?)", adminId);
-
-                    log.info("✅ Admin creado correctamente con id={}", adminId);
-                } else {
-                    // 6. Existe en users, verificar que también esté en admins
-                    Long adminId = jdbcTemplate.queryForObject(
-                        "SELECT id FROM users WHERE username = 'admin'",
-                        Long.class
-                    );
-                    Integer inAdmins = jdbcTemplate.queryForObject(
-                        "SELECT COUNT(*) FROM admins WHERE id = ?",
-                        Integer.class, adminId
-                    );
-                    if (inAdmins == null || inAdmins == 0) {
-                        jdbcTemplate.update("INSERT INTO admins (id) VALUES (?)", adminId);
-                        log.info("✅ Fila en admins reparada para admin id={}", adminId);
-                    } else {
-                        log.info("ℹ️ Admin ya existe y está correcto (id={})", adminId);
-                    }
-                }
-            } catch (Exception e) {
-                log.error("❌ Error en AdminSeeder: {}", e.getMessage(), e);
-            }
+            // INSERT IGNORE en admins
+            jdbcTemplate.update("INSERT IGNORE INTO admins (id) VALUES (?)", adminId);
+            log.info(">>> INSERT en admins ejecutado. Admin listo!");
         };
     }
 }
